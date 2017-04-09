@@ -2,8 +2,9 @@
  * Created by azertypow on 09/04/2017.
  */
 
-import ClassExample from "./classExample";
-
-ClassExample.run();
+import VoiceGenerator from "./voiceGenerator.js"
 
 console.log("nodeApp/main.js");
+
+VoiceGenerator.run();
+

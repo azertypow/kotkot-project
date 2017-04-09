@@ -1,11 +1,16 @@
 {
   "compilerOptions": {
+    "allowJs": true,
     "module": "commonjs",
     "target": "es5",
     "noImplicitAny": true,
     "removeComments": true,
-    "sourceMap": true
+    "sourceMap": false,
+    "outDir": "prod/nodeApp/"
   },
+  "files": [
+    "dev/nodeApp/main.ts"
+  ],
   "exclude": [
     "node_modules"
   ]

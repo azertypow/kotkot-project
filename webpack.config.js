@@ -4,7 +4,7 @@ var path = require("path");
 module.exports = {
     entry: {
         browser: "./dev/browser/main.ts",
-        nodeApp: "./dev/nodeApp/main.ts"
+        // nodeApp: "./dev/nodeApp/main.ts"
     },
 
     output: {
