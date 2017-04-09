@@ -1,0 +1,1 @@
+// main global application file synchroniser la partie browser et la partie node

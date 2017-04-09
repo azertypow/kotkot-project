@@ -1,0 +1,38 @@
+{
+  "name": "kotkot-project",
+  "version": "1.0.0",
+  "description": "application pour jeu projet kötköt",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo ok",
+    "install-dev-environement": "npm install -g rimraf",
+    "clean-main-js": "rimraf ./prod/browser/main.js",
+    "clean-main-js-map": "rimraf ./prod/browser/main.js.map",
+    "clean": "npm-run-all clean-main-js clean-main-js-map",
+    "webpack": "webpack",
+    "build": "npm-run-all clean webpack",
+    "build-dev": "webpack --devtool source-map",
+    "start-dev-compilation": "webpack --devtool source-map --watch",
+    "start-dev-server": "webpack-dev-server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "null"
+  },
+  "keywords": [
+    "kötköt",
+    "typescript",
+    "webAudioApi",
+    "play"
+  ],
+  "author": "kötköt",
+  "license": "ISC",
+  "devDependencies": {
+    "npm-run-all": "^4.0.2",
+    "source-map-loader": "^0.2.1",
+    "ts-loader": "^2.0.3",
+    "typescript": "^2.2.2",
+    "webpack": "^2.3.3",
+    "webpack-dev-server": "^2.4.2"
+  }
+}
