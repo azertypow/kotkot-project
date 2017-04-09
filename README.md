@@ -18,7 +18,7 @@ lancer depuis le terminal :
 
 ## 2. utilisation
 
-###2.2 browser app
+###2.1 browser app
 
 supprimer le ./prod/browser/main.js.map et le ./prod/browser/main.js 
 
@@ -43,6 +43,12 @@ compiler les fichier typescript a chaque modification d'un fichier typescript
 creer un serveur de devellopement, compiller a chaque modification et rafraichir automatiquement la page du navigatuer
     
     npm run start-dev-server
+    
+###2.2 nodeApp
+
+compiler les fichier pour la partie nodeJs
+
+    build-nodeApp
 
 #### notes
 si utilisation du server phpStorm, regler l'autorisation de requette sans autorisation pour ne pas bloquer les fichier source map 
