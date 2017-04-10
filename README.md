@@ -2,15 +2,15 @@
 
 ## 1. installation du projet
 
-###1.1 ce placer avec le terminal dans le dossier racine du projet en cour
+### 1.1 ce placer avec le terminal dans le dossier racine du projet en cour
 
-###1.2 installer les dependences
+### 1.2 installer les dependences
 
 lancer depuis le terminal :
 
     npm install
 
-###1.3 installer utilitaire pour le developement
+### 1.3 installer utilitaire pour le developement
 
 lancer depuis le terminal :
 
@@ -18,7 +18,7 @@ lancer depuis le terminal :
 
 ## 2. utilisation
 
-###2.1 browser app
+### 2.1 browser app
 
 supprimer le ./prod/browser/main.js.map et le ./prod/browser/main.js 
 
@@ -44,7 +44,7 @@ creer un serveur de devellopement, compiller a chaque modification et rafraichir
     
     npm run start-dev-server
     
-###2.2 nodeApp
+### 2.2 nodeApp
 
 compiler les fichier pour la partie nodeJs
 
