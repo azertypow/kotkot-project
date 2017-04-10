@@ -19,7 +19,7 @@ let speed = 0.92;
 const base_speed = 175;
 const speedToReturn = Math.ceil(base_speed * speed);
 
-say.speak(`[[rate ${speedToReturn}]]bonjour, vous etes un poutcheur`, 'Thomas', 1);
+say.speak(`[[rate ${speedToReturn}]]bonjour Mathilde, tu es un poutcheur`, 'Thomas', 1);
 
 // // Fire a callback once the text has completed being spoken
 // say.speak('whats up, dog?', 'Amelie', 1.0, function(err) {
