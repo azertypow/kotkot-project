@@ -39,6 +39,7 @@
     "webpack-dev-server": "^2.4.2"
   },
   "dependencies": {
-    "say": "^0.11.0"
+    "say": "^0.11.0",
+    "socket.io": "^1.7.3"
   }
 }
