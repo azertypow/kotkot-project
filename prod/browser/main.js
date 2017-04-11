@@ -77,7 +77,7 @@ var SocketClientApp = (function () {
     function SocketClientApp() {
     }
     SocketClientApp.run = function () {
-        var socket = io.connect('http://localhost:1337/socket.io/socket.io.js');
+        var socket = io.connect('http://localhost:1337');
         document.querySelector("h1").addEventListener("click", function (e) {
             console.log("clicked");
             e.preventDefault();

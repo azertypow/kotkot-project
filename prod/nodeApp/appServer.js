@@ -10,6 +10,9 @@ var AppServer = (function () {
         var ioServer = io.listen(httpServer);
         ioServer.sockets.on("connection", function (socket) {
             console.log("nouvelle utilisateur connecté");
+            socket.on("disconnect", function () {
+                console.log("un joueur s'est deconnecté");
+            });
             socket.on("click", function (user) {
                 console.log("click");
                 console.log(user);

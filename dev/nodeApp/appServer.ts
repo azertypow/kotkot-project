@@ -20,6 +20,10 @@ export default class AppServer {
             // tout ce qui est citué ici est donc propre a chaque connection
             console.log("nouvelle utilisateur connecté");
 
+            socket.on("disconnect", ()=>{
+                console.log("un joueur s'est deconnecté");
+            });
+
             // click sur page
             socket.on("click", (user: Object)=>{
                 console.log("click");
