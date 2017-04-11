@@ -2,8 +2,6 @@
  * Created by azertypow on 06/04/2017.
  */
 
-import ClassExample from "./classExample";
+import SocketClientApp from "./socketClientApp";
 
-ClassExample.run();
-
-console.log("browser/main.js");
+SocketClientApp.run();

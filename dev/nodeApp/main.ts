@@ -3,8 +3,10 @@
  */
 
 import VoiceGenerator from "./voiceGenerator.js"
+import AppServer from "./appServer"
 
-console.log("nodeApp/main.js");
-
+// voie
 VoiceGenerator.run();
 
+// socket
+AppServer.run(1337);

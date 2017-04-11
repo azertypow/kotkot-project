@@ -5,7 +5,7 @@ var VoiceGenerator = (function () {
     }
     VoiceGenerator.run = function () {
         var say = require('say');
-        say.speak("hello boy");
+        say.speak("Le jeu, démare", "Thomas");
     };
     return VoiceGenerator;
 }());

@@ -73,15 +73,22 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var ClassExample = (function () {
-    function ClassExample() {
+var SocketClientApp = (function () {
+    function SocketClientApp() {
     }
-    ClassExample.run = function () {
-        console.log("browser/classExample");
+    SocketClientApp.run = function () {
+        var socket = io.connect('http://localhost:1337/socket.io/socket.io.js');
+        document.querySelector("h1").addEventListener("click", function (e) {
+            console.log("clicked");
+            e.preventDefault();
+            socket.emit('click', {
+                username: "nom"
+            });
+        });
     };
-    return ClassExample;
+    return SocketClientApp;
 }());
-exports.default = ClassExample;
+exports.default = SocketClientApp;
 
 
 /***/ }),
@@ -91,9 +98,8 @@ exports.default = ClassExample;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var classExample_1 = __webpack_require__(0);
-classExample_1.default.run();
-console.log("browser/main.js");
+var socketClientApp_1 = __webpack_require__(0);
+socketClientApp_1.default.run();
 
 
 /***/ })

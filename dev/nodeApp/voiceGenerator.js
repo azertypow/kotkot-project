@@ -5,6 +5,6 @@
 export default class VoiceGenerator {
     static run () {
         let say = require('say');
-        say.speak("hello boy");
+        say.speak("Le jeu, démare", "Thomas");
     }
 }
