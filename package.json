@@ -29,6 +29,7 @@
   "author": "kötköt",
   "license": "ISC",
   "devDependencies": {
+    "@types/mustache": "^0.8.29",
     "@types/node": "^7.0.12",
     "@types/socket.io": "^1.4.29",
     "@types/socket.io-client": "^1.4.29",
