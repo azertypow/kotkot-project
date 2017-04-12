@@ -4,6 +4,15 @@
 
 /// <reference types="mustache" />
 
+    interface InitParam {
+    setIndex: string;
+    setStatus: string;
+    setRules: string;
+    indexElement: HTMLElement;
+    statusElement: HTMLElement;
+    rulesElement: HTMLElement;
+}
+
     interface Player_info {
         index: string;
         status: string;
@@ -28,12 +37,16 @@ export default class PlayerTemplate {
     player_elements: Player_elements;
     player_elementsTemplate: Player_elementsTemplate;
 
-    constructor(setIndex: string, setStatus: string, setRules: string) {
+    constructor(initParam: InitParam) {
         this.player_info = {
-            index : setIndex,
-            status : setStatus,
-            rules : setRules
-        }
+            index : initParam.setIndex,
+            status : initParam.setStatus,
+            rules : initParam.setRules
+        };
+
+        this.setElements(initParam.indexElement, initParam.statusElement, initParam.rulesElement);
+        this.initTemplate();
+        this.setValues(this.player_info);
     }
 
     public setElements(indexElement: HTMLElement, statusElement: HTMLElement, rulesElement: HTMLElement){
@@ -44,7 +57,7 @@ export default class PlayerTemplate {
         }
     }
 
-    public initValues () {
+    public initTemplate () {
         this.player_elementsTemplate = {
             index: this.player_elements.index.innerHTML,
             status: this.player_elements.status.innerHTML,

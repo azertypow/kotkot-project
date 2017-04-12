@@ -101,18 +101,23 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var socketClientApp_1 = __webpack_require__(0);
 var playerTemplate_1 = __webpack_require__(3);
 socketClientApp_1.default.run();
-var playerTemplate = new playerTemplate_1.default('1', 'pusher', 'attend ton tour pour jouer');
-var playerElementIndex = document.querySelector("#index");
-var playerElementStatus = document.querySelector("#status");
-var playerElementRules = document.querySelector("#rules");
-playerTemplate.setElements(playerElementIndex, playerElementStatus, playerElementRules);
-playerTemplate.initValues();
-var patern = {
-    index: 1,
-    status: "pusher",
-    rules: "attend les ordre que l'on va te dicter petite merde d'humain"
+var initParam = {
+    setIndex: 'en attente…',
+    setStatus: 'en attente…',
+    setRules: 'attend les propositions que je te proposerais. =)',
+    indexElement: document.querySelector("#index"),
+    statusElement: document.querySelector("#status"),
+    rulesElement: document.querySelector("#rules")
 };
-playerTemplate.setValues(patern);
+var playerTemplate = new playerTemplate_1.default(initParam);
+document.querySelector("h1").addEventListener("click", function () {
+    var patern = {
+        index: 1,
+        status: "pusher",
+        rules: "attend les ordre que l'on va te dicter petite merde d'humain"
+    };
+    playerTemplate.setValues(patern);
+});
 
 
 /***/ }),
@@ -124,12 +129,15 @@ playerTemplate.setValues(patern);
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var PlayerTemplate = (function () {
-    function PlayerTemplate(setIndex, setStatus, setRules) {
+    function PlayerTemplate(initParam) {
         this.player_info = {
-            index: setIndex,
-            status: setStatus,
-            rules: setRules
+            index: initParam.setIndex,
+            status: initParam.setStatus,
+            rules: initParam.setRules
         };
+        this.setElements(initParam.indexElement, initParam.statusElement, initParam.rulesElement);
+        this.initTemplate();
+        this.setValues(this.player_info);
     }
     PlayerTemplate.prototype.setElements = function (indexElement, statusElement, rulesElement) {
         this.player_elements = {
@@ -138,7 +146,7 @@ var PlayerTemplate = (function () {
             rules: rulesElement
         };
     };
-    PlayerTemplate.prototype.initValues = function () {
+    PlayerTemplate.prototype.initTemplate = function () {
         this.player_elementsTemplate = {
             index: this.player_elements.index.innerHTML,
             status: this.player_elements.status.innerHTML,
