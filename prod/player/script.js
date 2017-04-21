@@ -51,7 +51,7 @@ setup();
 
 function setup() {
     addPlayers();
-    tellSentences();
+    tellOneSentence();
 }
 
 
@@ -60,28 +60,14 @@ function addPlayers() {
     for (var i=0; i<nombreDeJoueurs; i++)  {
         players.push(new Player());
     }
-    console.log(players);
+    //console.log(players);
 
 }
 
 
-function tellSentences() {
+function tellOneSentence() {
 
-
-    // Si on est dans la première phase
-    if (currentStage == "firstStage") {
-        var randomPlayer = Math.floor(Math.random()*nombreDeJoueurs);
-        tellOneSentence(currentStage, randomPlayer); // on choisit le joueur à qui la machine va parler
-    }
-
-    // if (currentStage == "secondStage") {
-    //
-    // }
-
-}
-
-function tellOneSentence(currentStage, player) {
-
+    var randomPlayer = Math.floor(Math.random()*nombreDeJoueurs);
 
     if (currentStage == "firstStage") {
         var array = sentencesFirstStage; // on va chercher le tableau contenant les phrases de la phase en cours
@@ -89,12 +75,14 @@ function tellOneSentence(currentStage, player) {
 
     var randomSentence = Math.floor(Math.random()*array.length); // On choisit une phrase au hasard
 
-    say(player, array[randomSentence]);
+    say(randomPlayer, array[randomSentence]);
 
 
 }
 
 function say(player, sentence) {
+
+    console.log("player " + player + " sentence " + sentence);
 
     var sentenceId = sentence[0];
     var sentenceToSay = sentence[1];
