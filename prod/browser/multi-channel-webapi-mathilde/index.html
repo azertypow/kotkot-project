@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+</head>
+<body>
+
+
+
+<script type="text/javascript">
+
+
+
+    var source = []; // on crée un tableau pour pouvoir stocker plusieurs fichiers mp3
+    var context = new AudioContext();
+    var maxChannelCount = context.destination.maxChannelCount;
+    console.log("maxChannelCount " + maxChannelCount);
+
+    context.destination.channelCount = maxChannelCount;
+    var merger = context.createChannelMerger(maxChannelCount);
+    merger.connect(context.destination);
+
+
+
+    getData("hello.mp3", 0, 0);
+    getData("bonjour.mp3", 1, 1);
+
+
+	function getData(filename, sortie, i) {
+
+	    source[i] = context.createBufferSource();
+	    var request = new XMLHttpRequest();
+
+	    request.open('GET', filename, true);
+	    request.responseType = 'arraybuffer';
+
+        request.onload = function() {
+            var audioData = request.response;
+            context.decodeAudioData(audioData, function(buffer) {
+                    source[i].buffer = buffer;
+
+                    //source.connect(context.destination);
+                    source[i].connect(merger, 0, sortie);
+                    source[i].loop = true;
+                },
+
+                function(e){ console.log("Error with decoding audio data" + e.err); });
+
+        }
+
+        request.send();
+
+        console.log(source[i]);
+        //source.connect(merger, 0, 0);
+        //source.connect(merger, 0, 1);
+        source[i].start();
+    }
+
+
+
+
+	//source.stop(2.0);
+
+</script>
+
+</body>
+</html>
