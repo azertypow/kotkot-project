@@ -2,17 +2,22 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>App</title>
+    <title>control</title>
 </head>
 <body>
-    <h1 id="index" >salut joueur {{index}}</h1>
-    <h2 id="status" >tu es: {{status}}</h2>
-    <h3>régle:</h3>
-    <p id="rules" >{{rules}}</p>
+    <h1 id="index" >control</h1>
+    <section id="players" >
+        {{#players}}
+            <section>
+                <p>{{player}}</p>
+                <p>{{ip}}</p>
+            </section>
+        {{/players}}
+    </section>
 
     <script type="text/javascript" src="../../node_modules/mustache/mustache.min.js"></script>
     <script type="text/javascript" src="../../node_modules/nosleep.js/NoSleep.js" ></script>
     <script type="text/javascript" src="http://192.168.1.91:1337/socket.io/socket.io.js" ></script>
-    <script type="text/javascript" src="http://192.168.1.91:1337/prod/browser/main.js" ></script>
+    <script type="text/javascript" src="./control/main.js" ></script>
 </body>
 </html>
