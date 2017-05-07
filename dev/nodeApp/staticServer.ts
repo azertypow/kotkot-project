@@ -26,7 +26,7 @@ export default class StaticServer {
                     return;
                 }
 
-                if (fs.statSync(filename).isDirectory()) {
+                else if (fs.statSync(filename).isDirectory()) {
                     filename += '/index.html';
                 }
 

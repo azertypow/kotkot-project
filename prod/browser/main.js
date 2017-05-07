@@ -63,66 +63,11 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 6);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var SocketClientApp = (function () {
-    function SocketClientApp() {
-    }
-    SocketClientApp.run = function () {
-        var socket = io.connect('http://localhost:1337');
-        document.querySelector("h1").addEventListener("click", function (e) {
-            console.log("clicked");
-            e.preventDefault();
-            socket.emit('click', {
-                username: "nom"
-            });
-        });
-    };
-    return SocketClientApp;
-}());
-exports.default = SocketClientApp;
-
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var socketClientApp_1 = __webpack_require__(0);
-var playerTemplate_1 = __webpack_require__(3);
-socketClientApp_1.default.run();
-var initParam = {
-    setIndex: 'en attente…',
-    setStatus: 'en attente…',
-    setRules: 'attend les propositions que je te proposerais. =)',
-    indexElement: document.querySelector("#index"),
-    statusElement: document.querySelector("#status"),
-    rulesElement: document.querySelector("#rules")
-};
-var playerTemplate = new playerTemplate_1.default(initParam);
-document.querySelector("h1").addEventListener("click", function () {
-    var patern = {
-        index: 1,
-        status: "pusher",
-        rules: "attend les ordre que l'on va te dicter petite merde d'humain"
-    };
-    playerTemplate.setValues(patern);
-});
-
-
-/***/ }),
-/* 2 */,
-/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -164,6 +109,104 @@ var PlayerTemplate = (function () {
     return PlayerTemplate;
 }());
 exports.default = PlayerTemplate;
+
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var removeSleepMode = (function () {
+    function removeSleepMode() {
+    }
+    removeSleepMode.run = function () {
+        var noSleep = new NoSleep();
+        noSleep.enable();
+        console.log("sleep cut");
+    };
+    return removeSleepMode;
+}());
+exports.default = removeSleepMode;
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var locationInfo_1 = __webpack_require__(5);
+var SocketClientApp = (function () {
+    function SocketClientApp() {
+    }
+    SocketClientApp.run = function () {
+        var locationInfo = new locationInfo_1.default("window.location.href");
+        var currentHostname = locationInfo.parse.hostname;
+        var socket = io.connect("http://" + currentHostname + ":1337");
+        document.querySelector("h1").addEventListener("click", function (e) {
+            console.log("clicked");
+            e.preventDefault();
+            socket.emit('click', {
+                username: "nom"
+            });
+        });
+    };
+    return SocketClientApp;
+}());
+exports.default = SocketClientApp;
+
+
+/***/ }),
+/* 3 */,
+/* 4 */,
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var LocationInfo = (function () {
+    function LocationInfo(urlToParse) {
+        this.parse = document.createElement("a");
+        this.parse.href = urlToParse;
+    }
+    return LocationInfo;
+}());
+exports.default = LocationInfo;
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var socketClientApp_1 = __webpack_require__(2);
+var playerTemplate_1 = __webpack_require__(0);
+var removeSleepMode_1 = __webpack_require__(1);
+socketClientApp_1.default.run();
+removeSleepMode_1.default.run();
+var initParam = {
+    setIndex: 'en attente…',
+    setStatus: 'en attente…',
+    setRules: 'attend les propositions que je te proposerais. =)',
+    indexElement: document.querySelector("#index"),
+    statusElement: document.querySelector("#status"),
+    rulesElement: document.querySelector("#rules")
+};
+var playerTemplate = new playerTemplate_1.default(initParam);
+document.querySelector("h1").addEventListener("click", function () {
+    var patern = {
+        index: 1,
+        status: "pusher",
+        rules: "attend les ordre que l'on va te dicter petite merde d'humain"
+    };
+    playerTemplate.setValues(patern);
+});
 
 
 /***/ })
