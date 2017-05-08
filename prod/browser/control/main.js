@@ -73,7 +73,40 @@
 
 console.log("control connected");
 var players = document.querySelector("#players");
-console.log(players);
+var playersPattern = players.innerHTML;
+console.log(playersPattern);
+var patern = {
+    "players": [
+        {
+            "range": "1",
+            "ip": "null",
+            "current-rule": "empty"
+        },
+        {
+            "range": "2",
+            "ip": "null",
+            "current-rule": "empty"
+        },
+        {
+            "range": "3",
+            "ip": "null",
+            "current-rule": "empty"
+        },
+        {
+            "range": "4",
+            "ip": "null",
+            "current-rule": "empty"
+        },
+        {
+            "range": "5",
+            "ip": "null",
+            "current-rule": "empty"
+        },
+    ]
+};
+var renderPlayers = Mustache.render(playersPattern, patern);
+players.innerHTML = renderPlayers;
+console.log(renderPlayers);
 
 
 /***/ })
