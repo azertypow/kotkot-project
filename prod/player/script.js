@@ -69,7 +69,8 @@ function tellOneSentence() {
 
     var randomPlayer = Math.floor(Math.random()*nombreDeJoueurs);
 
-    if (currentStage == "firstStage") {
+    if (currentStage === "firstStage") {
+        console.log("currentStage === firstStage");
         var array = sentencesFirstStage; // on va chercher le tableau contenant les phrases de la phase en cours
     }
 
@@ -95,7 +96,7 @@ function say(player, sentence) {
     var answer = "yes";
 
     // en fonction de la réponse donnée par le joueur, on change ses traits de personnalité
-    if (answer == "yes") {
+    if (answer === "yes") {
         players[player].personnalite[facet] += coef;
     } else {
         players[playera].personnalite[facet] -= coef;
