@@ -51,7 +51,7 @@ setup();
 
 function setup() {
     addPlayers();
-    tellSentences();
+    tellOneSentence();
 }
 
 
@@ -60,41 +60,30 @@ function addPlayers() {
     for (var i=0; i<nombreDeJoueurs; i++)  {
         players.push(new Player());
     }
-    console.log(players);
+    //console.log(players);
 
 }
 
 
-function tellSentences() {
+function tellOneSentence() {
 
+    var randomPlayer = Math.floor(Math.random()*nombreDeJoueurs);
 
-    // Si on est dans la première phase
-    if (currentStage == "firstStage") {
-        var randomPlayer = Math.floor(Math.random()*nombreDeJoueurs);
-        tellOneSentence(currentStage, randomPlayer); // on choisit le joueur à qui la machine va parler
-    }
-
-    // if (currentStage == "secondStage") {
-    //
-    // }
-
-}
-
-function tellOneSentence(currentStage, player) {
-
-
-    if (currentStage == "firstStage") {
+    if (currentStage === "firstStage") {
+        console.log("currentStage === firstStage");
         var array = sentencesFirstStage; // on va chercher le tableau contenant les phrases de la phase en cours
     }
 
     var randomSentence = Math.floor(Math.random()*array.length); // On choisit une phrase au hasard
 
-    say(player, array[randomSentence]);
+    say(randomPlayer, array[randomSentence]);
 
 
 }
 
 function say(player, sentence) {
+
+    console.log("player " + player + " sentence " + sentence);
 
     var sentenceId = sentence[0];
     var sentenceToSay = sentence[1];
@@ -107,7 +96,7 @@ function say(player, sentence) {
     var answer = "yes";
 
     // en fonction de la réponse donnée par le joueur, on change ses traits de personnalité
-    if (answer == "yes") {
+    if (answer === "yes") {
         players[player].personnalite[facet] += coef;
     } else {
         players[playera].personnalite[facet] -= coef;
