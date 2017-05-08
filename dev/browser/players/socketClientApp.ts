@@ -5,9 +5,10 @@
 /// <reference types="socket.io-client" />
 
 import LocationInfo from "../locationInfo";
+import PlayerTemplate from "./playerTemplate";
 
 export default class SocketClientApp {
-    public static run() {
+    public static run(playerTemplate: PlayerTemplate) {
 
         // récupérer les info sur l'url courrant
         const locationInfo: LocationInfo = new LocationInfo("window.location.href");
@@ -25,6 +26,12 @@ export default class SocketClientApp {
             socket.emit('player-connected',{
                 name: "player"
             });
+        });
+
+        // initialisation status joueur
+        socket.on("init", (data: Object)=>{
+            console.log(data);
+            playerTemplate.setValues(data);
         });
     }
 }

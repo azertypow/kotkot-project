@@ -28,13 +28,30 @@ var SocketControl = (function () {
                     return element === socketIp;
                 }
                 if (!_this.players.allIp.some(checkIp)) {
-                    var player = new player_1.default(socketIp);
+                    var player = new player_1.default(_this.players.count, socketIp, socketId);
                     _this.players.allIp.push(socketIp);
                     _this.players.count++;
                     _this.players.player.push(player);
                     console.log(_this.players);
                     console.log("\n");
+                    socket.emit("init", {
+                        index: _this.players.count,
+                        status: "en attente de la connection de tous les joueurs",
+                        rules: "les règles s'afficherons ici"
+                    });
                 }
+                else {
+                    for (var key in _this.players.player) {
+                        var currentPlayer = _this.players.player[key];
+                        if (currentPlayer.ipValue === socketIp) {
+                            console.log("le joueur " + (currentPlayer.id + 1) + " s'est reconnect\u00E9");
+                        }
+                    }
+                }
+            });
+            socket.on("control-clicked", function (data) {
+                console.log(_this.players.player[0].socketId);
+                socket.to(_this.players.player[0].socketId).emit("init", data);
             });
         });
     };

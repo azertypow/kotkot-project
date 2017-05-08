@@ -58,9 +58,10 @@ export default class SocketControl{
                     return element === socketIp;
                 }
 
+                // la connection vient d'un nouveau joueur
                 if(! this.players.allIp.some(checkIp)){
                     // creer un Player
-                    let player = new Player(socketIp);
+                    let player = new Player( this.players.count ,socketIp, socketId);
 
                     // ajouter l'ip a la liste des ip
                     this.players.allIp.push(socketIp);
@@ -74,7 +75,28 @@ export default class SocketControl{
                     // regarder ou en est la liste
                     console.log(this.players);
                     console.log("\n");
+
+                    // mettre a jour l'affichage du client
+                    socket.emit("init",{
+                        index: this.players.count,
+                        status: "en attente de la connection de tous les joueurs",
+                        rules: "les règles s'afficherons ici"
+                    });
                 }
+                // la connection vient d'un joueur deja existant
+                else {
+                    for (let key in this.players.player){
+                        const currentPlayer = this.players.player[key];
+                        if( currentPlayer.ipValue === socketIp ){
+                            console.log(`le joueur ${currentPlayer.id + 1} s'est reconnecté`);
+                        }
+                    }
+                }
+            });
+
+            socket.on("control-clicked", (data: Object)=>{
+                console.log(this.players.player[0].socketId);
+                socket.to(this.players.player[0].socketId).emit("init", data);
             });
         });
     }

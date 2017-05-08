@@ -26,5 +26,16 @@ export default class socketControlApp {
                 name: "control"
             });
         });
+
+        document.querySelector(".rul").addEventListener("click", ()=>{
+
+            console.log("click");
+
+            socket.emit("control-clicked", {
+                index:1,
+                rules:"ok",
+                status: "haha"
+            });
+        });
     }
 }

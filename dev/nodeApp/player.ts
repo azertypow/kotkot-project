@@ -3,9 +3,13 @@
  */
 
 export default class Player {
+    id: number;
     ipValue: string;
+    socketId: string;
 
-    constructor(ipValue: string){
+    constructor(id: number, ipValue: string, socketId: string){
+        this.id = id;
         this.ipValue = ipValue;
+        this.socketId = socketId;
     }
 }

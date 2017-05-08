@@ -63,74 +63,11 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 4);
+/******/ 	return __webpack_require__(__webpack_require__.s = 6);
 /******/ })
 /************************************************************************/
 /******/ ([
-/* 0 */,
-/* 1 */,
-/* 2 */,
-/* 3 */,
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var socketControlApp_1 = __webpack_require__(8);
-var removeSleepMode_1 = __webpack_require__(9);
-removeSleepMode_1.default.run();
-socketControlApp_1.default.run();
-
-
-/***/ }),
-/* 5 */,
-/* 6 */,
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var LocationInfo = (function () {
-    function LocationInfo(urlToParse) {
-        this.parse = document.createElement("a");
-        this.parse.href = urlToParse;
-    }
-    return LocationInfo;
-}());
-exports.default = LocationInfo;
-
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var locationInfo_1 = __webpack_require__(7);
-var socketControlApp = (function () {
-    function socketControlApp() {
-    }
-    socketControlApp.run = function () {
-        var locationInfo = new locationInfo_1.default("window.location.href");
-        var currentHostname = locationInfo.parse.hostname;
-        var socket = io.connect("http://" + currentHostname + ":1337");
-        socket.on("connect", function () {
-            console.log("socket control connected");
-            socket.emit('control-connected', {
-                name: "control"
-            });
-        });
-    };
-    return socketControlApp;
-}());
-exports.default = socketControlApp;
-
-
-/***/ }),
-/* 9 */
+/* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -147,6 +84,74 @@ var removeSleepMode = (function () {
     return removeSleepMode;
 }());
 exports.default = removeSleepMode;
+
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var LocationInfo = (function () {
+    function LocationInfo(urlToParse) {
+        this.parse = document.createElement("a");
+        this.parse.href = urlToParse;
+    }
+    return LocationInfo;
+}());
+exports.default = LocationInfo;
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var locationInfo_1 = __webpack_require__(1);
+var socketControlApp = (function () {
+    function socketControlApp() {
+    }
+    socketControlApp.run = function () {
+        var locationInfo = new locationInfo_1.default("window.location.href");
+        var currentHostname = locationInfo.parse.hostname;
+        var socket = io.connect("http://" + currentHostname + ":1337");
+        socket.on("connect", function () {
+            console.log("socket control connected");
+            socket.emit('control-connected', {
+                name: "control"
+            });
+        });
+        document.querySelector(".rul").addEventListener("click", function () {
+            console.log("click");
+            socket.emit("control-clicked", {
+                index: 1,
+                rules: "ok",
+                status: "haha"
+            });
+        });
+    };
+    return socketControlApp;
+}());
+exports.default = socketControlApp;
+
+
+/***/ }),
+/* 3 */,
+/* 4 */,
+/* 5 */,
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var socketControlApp_1 = __webpack_require__(2);
+var removeSleepMode_1 = __webpack_require__(0);
+removeSleepMode_1.default.run();
+socketControlApp_1.default.run();
 
 
 /***/ })

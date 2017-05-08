@@ -9,8 +9,6 @@ import removeSleepMode from "../removeSleepMode";
 // remove sleep mode
 removeSleepMode.run();
 
-SocketClientApp.run();
-
 // joueur
 
 /// initialiser l'affichage du joueur :
@@ -24,13 +22,5 @@ const initParam = {
 };
 let playerTemplate: PlayerTemplate = new PlayerTemplate(initParam);
 
-//// mise a jour du template
-document.querySelector("h1").addEventListener("click", ()=>{
-    let patern: Object = {
-        index: 1,
-        status: "pusher",
-        rules: "attend les ordre que l'on va te dicter petite merde d'humain"
-    };
-
-    playerTemplate.setValues(patern);
-});
+// lancer le socket
+SocketClientApp.run(playerTemplate);

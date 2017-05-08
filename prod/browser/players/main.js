@@ -63,11 +63,49 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 6);
+/******/ 	return __webpack_require__(__webpack_require__.s = 7);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var removeSleepMode = (function () {
+    function removeSleepMode() {
+    }
+    removeSleepMode.run = function () {
+        var noSleep = new NoSleep();
+        noSleep.enable();
+        console.log("sleep cut");
+    };
+    return removeSleepMode;
+}());
+exports.default = removeSleepMode;
+
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var LocationInfo = (function () {
+    function LocationInfo(urlToParse) {
+        this.parse = document.createElement("a");
+        this.parse.href = urlToParse;
+    }
+    return LocationInfo;
+}());
+exports.default = LocationInfo;
+
+
+/***/ }),
+/* 2 */,
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -112,18 +150,17 @@ exports.default = PlayerTemplate;
 
 
 /***/ }),
-/* 1 */,
-/* 2 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var locationInfo_1 = __webpack_require__(7);
+var locationInfo_1 = __webpack_require__(1);
 var SocketClientApp = (function () {
     function SocketClientApp() {
     }
-    SocketClientApp.run = function () {
+    SocketClientApp.run = function (playerTemplate) {
         var locationInfo = new locationInfo_1.default("window.location.href");
         var currentHostname = locationInfo.parse.hostname;
         var socket = io.connect("http://" + currentHostname + ":1337");
@@ -133,6 +170,10 @@ var SocketClientApp = (function () {
                 name: "player"
             });
         });
+        socket.on("init", function (data) {
+            console.log(data);
+            playerTemplate.setValues(data);
+        });
     };
     return SocketClientApp;
 }());
@@ -140,20 +181,18 @@ exports.default = SocketClientApp;
 
 
 /***/ }),
-/* 3 */,
-/* 4 */,
 /* 5 */,
-/* 6 */
+/* 6 */,
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var socketClientApp_1 = __webpack_require__(2);
-var playerTemplate_1 = __webpack_require__(0);
-var removeSleepMode_1 = __webpack_require__(9);
+var socketClientApp_1 = __webpack_require__(4);
+var playerTemplate_1 = __webpack_require__(3);
+var removeSleepMode_1 = __webpack_require__(0);
 removeSleepMode_1.default.run();
-socketClientApp_1.default.run();
 var initParam = {
     setIndex: 'en attente…',
     setStatus: 'en attente…',
@@ -163,52 +202,7 @@ var initParam = {
     rulesElement: document.querySelector("#rules")
 };
 var playerTemplate = new playerTemplate_1.default(initParam);
-document.querySelector("h1").addEventListener("click", function () {
-    var patern = {
-        index: 1,
-        status: "pusher",
-        rules: "attend les ordre que l'on va te dicter petite merde d'humain"
-    };
-    playerTemplate.setValues(patern);
-});
-
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var LocationInfo = (function () {
-    function LocationInfo(urlToParse) {
-        this.parse = document.createElement("a");
-        this.parse.href = urlToParse;
-    }
-    return LocationInfo;
-}());
-exports.default = LocationInfo;
-
-
-/***/ }),
-/* 8 */,
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var removeSleepMode = (function () {
-    function removeSleepMode() {
-    }
-    removeSleepMode.run = function () {
-        var noSleep = new NoSleep();
-        noSleep.enable();
-        console.log("sleep cut");
-    };
-    return removeSleepMode;
-}());
-exports.default = removeSleepMode;
+socketClientApp_1.default.run(playerTemplate);
 
 
 /***/ })
