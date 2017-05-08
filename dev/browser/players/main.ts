@@ -4,11 +4,12 @@
 
 import SocketClientApp from "./socketClientApp";
 import PlayerTemplate from "./playerTemplate";
-import removeSleepMode from "./removeSleepMode";
+import removeSleepMode from "../removeSleepMode";
+
+// remove sleep mode
+removeSleepMode.run();
 
 SocketClientApp.run();
-
-removeSleepMode.run();
 
 // joueur
 

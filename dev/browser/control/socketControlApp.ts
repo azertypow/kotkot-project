@@ -1,13 +1,13 @@
 /**
- * Created by azertypow on 06/04/2017.
+ * Created by azertypow on 08/05/2017.
  */
 
 /// <reference types="socket.io-client" />
 
 import LocationInfo from "../locationInfo";
 
-export default class SocketClientApp {
-    public static run() {
+export default class socketControlApp {
+    public static run(){
 
         // récupérer les info sur l'url courrant
         const locationInfo: LocationInfo = new LocationInfo("window.location.href");
@@ -20,10 +20,10 @@ export default class SocketClientApp {
 
         // envois info de connection
         socket.on("connect", ()=>{
-            console.log("socket client player connected");
+            console.log("socket control connected");
 
-            socket.emit('player-connected',{
-                name: "player"
+            socket.emit('control-connected',{
+                name: "control"
             });
         });
     }

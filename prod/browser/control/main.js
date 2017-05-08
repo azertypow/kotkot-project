@@ -66,50 +66,89 @@
 /******/ 	return __webpack_require__(__webpack_require__.s = 4);
 /******/ })
 /************************************************************************/
-/******/ ({
+/******/ ([
+/* 0 */,
+/* 1 */,
+/* 2 */,
+/* 3 */,
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
 
-/***/ 4:
-/***/ (function(module, exports) {
+"use strict";
 
-console.log("control connected");
-var players = document.querySelector("#players");
-var playersPattern = players.innerHTML;
-console.log(playersPattern);
-var patern = {
-    "players": [
-        {
-            "range": "1",
-            "ip": "null",
-            "current-rule": "empty"
-        },
-        {
-            "range": "2",
-            "ip": "null",
-            "current-rule": "empty"
-        },
-        {
-            "range": "3",
-            "ip": "null",
-            "current-rule": "empty"
-        },
-        {
-            "range": "4",
-            "ip": "null",
-            "current-rule": "empty"
-        },
-        {
-            "range": "5",
-            "ip": "null",
-            "current-rule": "empty"
-        },
-    ]
-};
-var renderPlayers = Mustache.render(playersPattern, patern);
-players.innerHTML = renderPlayers;
-console.log(renderPlayers);
+Object.defineProperty(exports, "__esModule", { value: true });
+var socketControlApp_1 = __webpack_require__(8);
+var removeSleepMode_1 = __webpack_require__(9);
+removeSleepMode_1.default.run();
+socketControlApp_1.default.run();
+
+
+/***/ }),
+/* 5 */,
+/* 6 */,
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var LocationInfo = (function () {
+    function LocationInfo(urlToParse) {
+        this.parse = document.createElement("a");
+        this.parse.href = urlToParse;
+    }
+    return LocationInfo;
+}());
+exports.default = LocationInfo;
+
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var locationInfo_1 = __webpack_require__(7);
+var socketControlApp = (function () {
+    function socketControlApp() {
+    }
+    socketControlApp.run = function () {
+        var locationInfo = new locationInfo_1.default("window.location.href");
+        var currentHostname = locationInfo.parse.hostname;
+        var socket = io.connect("http://" + currentHostname + ":1337");
+        socket.on("connect", function () {
+            console.log("socket control connected");
+            socket.emit('control-connected', {
+                name: "control"
+            });
+        });
+    };
+    return socketControlApp;
+}());
+exports.default = socketControlApp;
+
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var removeSleepMode = (function () {
+    function removeSleepMode() {
+    }
+    removeSleepMode.run = function () {
+        var noSleep = new NoSleep();
+        noSleep.enable();
+        console.log("sleep cut");
+    };
+    return removeSleepMode;
+}());
+exports.default = removeSleepMode;
 
 
 /***/ })
-
-/******/ });
+/******/ ]);
 //# sourceMappingURL=main.js.map

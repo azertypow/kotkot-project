@@ -5,13 +5,13 @@
 /// <reference types="mustache" />
 
     interface InitParam {
-    setIndex: string;
-    setStatus: string;
-    setRules: string;
-    indexElement: HTMLElement;
-    statusElement: HTMLElement;
-    rulesElement: HTMLElement;
-}
+        setIndex: string;
+        setStatus: string;
+        setRules: string;
+        indexElement: HTMLElement;
+        statusElement: HTMLElement;
+        rulesElement: HTMLElement;
+    }
 
     interface Player_info {
         index: string;

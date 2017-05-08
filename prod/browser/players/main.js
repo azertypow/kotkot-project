@@ -112,33 +112,14 @@ exports.default = PlayerTemplate;
 
 
 /***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var removeSleepMode = (function () {
-    function removeSleepMode() {
-    }
-    removeSleepMode.run = function () {
-        var noSleep = new NoSleep();
-        noSleep.enable();
-        console.log("sleep cut");
-    };
-    return removeSleepMode;
-}());
-exports.default = removeSleepMode;
-
-
-/***/ }),
+/* 1 */,
 /* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var locationInfo_1 = __webpack_require__(5);
+var locationInfo_1 = __webpack_require__(7);
 var SocketClientApp = (function () {
     function SocketClientApp() {
     }
@@ -146,11 +127,10 @@ var SocketClientApp = (function () {
         var locationInfo = new locationInfo_1.default("window.location.href");
         var currentHostname = locationInfo.parse.hostname;
         var socket = io.connect("http://" + currentHostname + ":1337");
-        document.querySelector("h1").addEventListener("click", function (e) {
-            console.log("clicked");
-            e.preventDefault();
-            socket.emit('click', {
-                username: "nom"
+        socket.on("connect", function () {
+            console.log("socket client player connected");
+            socket.emit('player-connected', {
+                name: "player"
             });
         });
     };
@@ -162,23 +142,7 @@ exports.default = SocketClientApp;
 /***/ }),
 /* 3 */,
 /* 4 */,
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var LocationInfo = (function () {
-    function LocationInfo(urlToParse) {
-        this.parse = document.createElement("a");
-        this.parse.href = urlToParse;
-    }
-    return LocationInfo;
-}());
-exports.default = LocationInfo;
-
-
-/***/ }),
+/* 5 */,
 /* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -187,9 +151,9 @@ exports.default = LocationInfo;
 Object.defineProperty(exports, "__esModule", { value: true });
 var socketClientApp_1 = __webpack_require__(2);
 var playerTemplate_1 = __webpack_require__(0);
-var removeSleepMode_1 = __webpack_require__(1);
-socketClientApp_1.default.run();
+var removeSleepMode_1 = __webpack_require__(9);
 removeSleepMode_1.default.run();
+socketClientApp_1.default.run();
 var initParam = {
     setIndex: 'en attente…',
     setStatus: 'en attente…',
@@ -207,6 +171,44 @@ document.querySelector("h1").addEventListener("click", function () {
     };
     playerTemplate.setValues(patern);
 });
+
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var LocationInfo = (function () {
+    function LocationInfo(urlToParse) {
+        this.parse = document.createElement("a");
+        this.parse.href = urlToParse;
+    }
+    return LocationInfo;
+}());
+exports.default = LocationInfo;
+
+
+/***/ }),
+/* 8 */,
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var removeSleepMode = (function () {
+    function removeSleepMode() {
+    }
+    removeSleepMode.run = function () {
+        var noSleep = new NoSleep();
+        noSleep.enable();
+        console.log("sleep cut");
+    };
+    return removeSleepMode;
+}());
+exports.default = removeSleepMode;
 
 
 /***/ })
