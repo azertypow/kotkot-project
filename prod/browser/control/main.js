@@ -203,7 +203,9 @@ var SocketEmitButton = (function () {
             propositions[j].addEventListener('click', sendProposition);
         }
         function sendProposition(e) {
-            console.log(e.target.textContent);
+            socket.emit('control-directive', {
+                "buttonValue": e.target.textContent
+            });
         }
         function displayPropositions(e) {
             if ((e.target.classList[0]) !== "control") {
@@ -231,9 +233,6 @@ var SocketEmitButton = (function () {
                 sentence.textContent = json[currentClass][i];
                 propositions.appendChild(sentence);
             }
-            socket.emit('control-click', {
-                name: "control"
-            });
         }
     };
     return SocketEmitButton;

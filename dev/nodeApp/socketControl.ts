@@ -98,6 +98,10 @@ export default class SocketControl{
                 console.log(this.players.player[0].socketId);
                 socket.to(this.players.player[0].socketId).emit("init", data);
             });
+
+            socket.on("control-directive", (data: Object)=>{
+                console.log(data);
+            });
         });
     }
 }

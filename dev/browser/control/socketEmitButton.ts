@@ -58,8 +58,10 @@ export default class SocketEmitButton{
 
         // Envoie la proposition choisie par le maître du jeu
         function sendProposition(e: any) {
-
-            console.log(e.target.textContent);
+            //console.log(e.target.textContent);
+            socket.emit('control-directive', {
+                "buttonValue": e.target.textContent
+            });
 
         }
 
@@ -102,10 +104,6 @@ export default class SocketEmitButton{
                 sentence.textContent = json[currentClass][i];
                 propositions.appendChild(sentence);
             }
-
-            socket.emit('control-click', {
-                name: "control"
-            });
         }
     }
 }
