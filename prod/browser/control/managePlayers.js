@@ -14,6 +14,7 @@ function setup () {
 
 }
 
+// quand on clic sur un joueur déjà sélectionné, ça le déselectionne
 function removePlayer(playerToRemove, playerId) {
 
     console.log("removeplayer");
@@ -26,15 +27,18 @@ function removePlayer(playerToRemove, playerId) {
 
 }
 
+
+// quand on clic sur un joueur ça modifie sa couleur de fond et l'ajoute dans le tableau "selectedPlayers"
 function addPlayers(e) {
 
     console.log(e.target.className);
 
     var list = e.target.className;
     var lastCharacter = e.target.textContent.length;
-    var selectedPlayer = e.target.textContent[lastCharacter - 1];
+    var selectedPlayer = e.target.textContent[lastCharacter - 1];  // on récupère le dernier caractère du contenu pour avoir le numéro du joueur
 
 
+    // si reclic sur un joueur déjà sélectionné, on lance la fonction pour le déselectionner
     if (list.indexOf('playerSelected') !== -1) {
         console.log('deja');
         removePlayer(e.target, selectedPlayer);
@@ -46,7 +50,6 @@ function addPlayers(e) {
         var player = e.target;
         player.className += " playerSelected";
         player.style.backgroundColor = "#0ff";
-         // on récupère le dernier caractère du contenu pour avoir le numéro du joueur
 
         selectedPlayers.push(selectedPlayer);
 
@@ -55,6 +58,8 @@ function addPlayers(e) {
 
 }
 
+
+// on ajoute à l'interface html
 function addPlayersToInterface(nbPlayers) {
 
     console.log("addplayers");
