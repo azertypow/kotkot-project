@@ -9,6 +9,11 @@
 <body>
     <h1 class="rul" >control</h1>
     <section id="players" class="container" >
+
+        <div id="choice-player">
+
+        </div>
+
         {{#players}}
             <section class="player coll rul" >
                 <h3>jouer</h3>
@@ -53,5 +58,6 @@
     <script type="text/javascript" src="http://172.20.4.172:1337/socket.io/socket.io.js" ></script>
     <script type="text/javascript" src="./control/main.js" ></script>
     <script type="text/javascript" src="./socket-emit.js" ></script>
+    <script type="text/javascript" src="./managePlayers.js" ></script>
 </body>
 </html>
