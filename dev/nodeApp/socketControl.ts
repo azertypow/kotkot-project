@@ -2,15 +2,13 @@
  * Created by azertypow on 08/05/2017.
  */
 
+/// <reference path="../typescriptDeclaration/PlayerData.d.ts" />
+
 import io = require("socket.io");
 import {Server} from "http";
 import Player from "./player";
-
-interface Players {
-    allIp: Array<string>;
-    count: number;
-    player: Array<Player>;
-}
+import Players from "./players";
+import SetPlayerData from "./setPlayerData"
 
 export default class SocketControl{
 
@@ -61,7 +59,7 @@ export default class SocketControl{
                 // la connection vient d'un nouveau joueur
                 if(! this.players.allIp.some(checkIp)){
                     // creer un Player
-                    let player = new Player( this.players.count ,socketIp, socketId);
+                    let player = new Player( this.players.count ,socketIp, socketId, {index: 1, rules: "empty", status: "empty"});
 
                     // ajouter l'ip a la liste des ip
                     this.players.allIp.push(socketIp);
@@ -77,11 +75,12 @@ export default class SocketControl{
                     console.log("\n");
 
                     // mettre a jour l'affichage du client
-                    socket.emit("init",{
+                    const data: PlayerData = {
                         index: this.players.count,
                         status: "en attente de la connection de tous les joueurs",
                         rules: "les règles s'afficherons ici"
-                    });
+                    };
+                    SetPlayerData.send(socket, player, data);
                 }
                 // la connection vient d'un joueur deja existant
                 else {
@@ -89,14 +88,23 @@ export default class SocketControl{
                         const currentPlayer = this.players.player[key];
                         if( currentPlayer.ipValue === socketIp ){
                             console.log(`le joueur ${currentPlayer.id + 1} s'est reconnecté`);
+
+                            // mettre a jour le socketId
+                            currentPlayer.socketId = socketId;
+
+                            // mettre a jour les data ecran du joueur
+                            SetPlayerData.send(socket, currentPlayer, currentPlayer.data);
+
+                            // sortir
+                            break;
                         }
                     }
                 }
             });
 
-            socket.on("control-clicked", (data: Object)=>{
-                console.log(this.players.player[0].socketId);
-                socket.to(this.players.player[0].socketId).emit("init", data);
+            socket.on("control-clicked", (data: PlayerData)=>{
+                // SetPlayerData
+                SetPlayerData.sendTo(socket, this.players, 1, data);
             });
 
             socket.on("control-directive", (data: Object)=>{
