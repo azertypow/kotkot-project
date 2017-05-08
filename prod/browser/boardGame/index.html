@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>boardGame</title>
+    <link rel="stylesheet" type="text/css" href="./main.css" >
+</head>
+<body>
+    <h1 id="index" >salut joueur {{index}}</h1>
+    <h2 id="status" >tu es: {{status}}</h2>
+    <h3>régle:</h3>
+    <p id="rules" >{{rules}}</p>
+
+    <script type="text/javascript" src="../../node_modules/mustache/mustache.min.js"></script>
+    <script type="text/javascript" src="../../node_modules/nosleep.js/NoSleep.js" ></script>
+    <script type="text/javascript" src="http://192.168.1.91:1337/socket.io/socket.io.js" ></script>
+    <script type="text/javascript" src="./boardGame/main.js" ></script>
+</body>
+</html>

@@ -9,7 +9,9 @@ var AppServer = (function () {
         var httpServer = staticServer_1.default.run("1337");
         var ioServer = io.listen(httpServer);
         ioServer.sockets.on("connection", function (socket) {
-            console.log("nouvelle utilisateur connecté");
+            var socketId = socket.id;
+            var socketIp = socket.request.connection.remoteAddress;
+            console.log("nouvelle utilisateur " + socketId + " connect\u00E9 \n\t [ IP: " + socketIp + " ]");
             socket.on("disconnect", function () {
                 console.log("un joueur s'est deconnecté");
             });

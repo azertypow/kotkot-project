@@ -18,7 +18,9 @@ export default class AppServer {
         ioServer.sockets.on("connection",(socket: SocketIO.Socket)=>{
             // socket est la socket de l'utilisateur en ligne
             // tout ce qui est citué ici est donc propre a chaque connection
-            console.log("nouvelle utilisateur connecté");
+            let socketId = socket.id;
+            let socketIp = socket.request.connection.remoteAddress;
+            console.log(`nouvelle utilisateur ${socketId} connecté \n\t [ IP: ${socketIp} ]`);
 
             socket.on("disconnect", ()=>{
                 console.log("un joueur s'est deconnecté");

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>control</title>
+    <link rel="stylesheet" type="text/css" href="./main.css" >
+</head>
+<body>
+    <h1 class="rul" >control</h1>
+    <section id="players" class="container" >
+        {{#players}}
+            <section class="player coll rul" >
+                <h3>jouer</h3>
+                <p class="range" >range {{range}}</p>
+                <p class="ip" >{{ip}}</p>
+                <section class="current-rule-component" >
+                    <h4>regle en cour</h4>
+                    <p class="current-rule" >{{current-rule}}</p>
+                </section>
+            </section>
+        {{/players}}
+    </section>
+
+    <section id="controls" >
+        <form class="control lois" >
+            //mmm
+            //mmp
+            //mpp
+            //ppp
+            <button>send</button>
+        </form>
+        <form class="control narrations" >
+            <input type="text" placeholder="rules" >
+            //m
+            //p
+            <button>send</button>
+        </form>
+        <form class="control questions" >
+            <input type="text" placeholder="rules" >
+            //m
+            //p
+            <button>send</button>
+        </form>
+        <form class="control remarks" >
+            <input type="text" placeholder="rules" >
+            <button>send</button>
+        </form>
+        <form class="control bonus" >
+            <input type="text" placeholder="rules" >
+            <button>send</button>
+        </form>
+
+    </section>
+
+    <script type="text/javascript" src="../../node_modules/mustache/mustache.min.js"></script>
+    <script type="text/javascript" src="../../node_modules/nosleep.js/NoSleep.js" ></script>
+    <script type="text/javascript" src="http://192.168.1.91:1337/socket.io/socket.io.js" ></script>
+    <script type="text/javascript" src="./control/main.js" ></script>
+</body>
+</html>

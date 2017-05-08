@@ -3,12 +3,13 @@ var path = require("path");
 // browser app
 module.exports = {
     entry: {
-        browser: "./dev/browser/main.ts",
-        // nodeApp: "./dev/nodeApp/main.ts"
+        players: "./dev/browser/players/main.ts",
+        boardGame: "./dev/browser/boardGame/main.ts",
+        control: "./dev/browser/control/main.ts"
     },
 
     output: {
-        path: path.resolve(__dirname, "prod"),
+        path: path.resolve(__dirname, "prod/browser"),
         filename: "./[name]/main.js"
     },
 
