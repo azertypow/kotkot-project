@@ -1,0 +1,41 @@
+/* l0-0 = phrases données au J1 */
+
+/* l1-0 = réponses données par J1 à J2 */
+
+/* l2-0 = phrases données à J2 */
+
+/* l3-0 = réponses données par J2 (choix final) */
+
+{
+  "lois": [
+    {
+      "id":"l0-0",
+      "sentence":"Je te propose trois lois de gauche",
+      "gauche": "3",
+      "droite": "0"
+    },
+
+    {
+      "id":"l0-1",
+      "sentence":"Je te propose deux lois de gauche et une loi de droite",
+      "gauche": "2",
+      "droite": "1"
+    },
+
+    {
+      "id":"l0-2",
+      "sentence":"Je te propose deux lois de droite et une loi de gauche",
+      "gauche": "1",
+      "droite": "2"
+    },
+
+    {
+      "id":"l0-3",
+      "sentence":"Je te propose trois lois de droite",
+      "gauche": "0",
+      "droite": "3"
+    }
+
+
+  ]
+}
