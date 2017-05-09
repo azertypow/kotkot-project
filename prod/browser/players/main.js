@@ -171,7 +171,6 @@ var SocketClientApp = (function () {
             });
         });
         socket.on("init", function (data) {
-            console.log(data);
             playerTemplate.setValues(data);
         });
     };

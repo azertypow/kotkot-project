@@ -69,7 +69,7 @@ function addPlayersToInterface(nbPlayers) {
     boxPlayers.setAttribute('id', 'boxplayers');
     playerSection.appendChild(boxPlayers);
 
-    for (var i=0; i<nbPlayers; i++) {
+    for (var i=1; i<nbPlayers + 1; i++) {
             var aPlayer = document.createElement("p");
             aPlayer.setAttribute("class", "aPlayer" + " aPlayer-" + i);
             aPlayer.textContent = "Joueur " + i;

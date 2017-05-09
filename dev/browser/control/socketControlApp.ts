@@ -3,9 +3,12 @@
  */
 
 /// <reference types="socket.io-client" />
+/// <reference path="../../typescriptDeclaration/controlTemplateMustachFormat.d.ts"/>
+/// <reference path="../../typescriptDeclaration/controlTemplateMustachFormatPlayers.d.ts"/>
 
 import LocationInfo from "../locationInfo";
 import SocketEmitButton from "./socketEmitButton";
+import ControlTemplate from "./controlTemplate";
 
 export default class socketControlApp {
     public static run(){
@@ -28,15 +31,31 @@ export default class socketControlApp {
             });
         });
 
-        document.querySelector(".rul").addEventListener("click", ()=>{
+        // initialiser template control
+        let controlTemplate: ControlTemplate = new ControlTemplate(<HTMLElement>document.querySelector("#players-status"));
+        console.log(controlTemplate);
 
-            console.log("click");
+        // mise a jour des données sur les joueurs afficher
+        socket.on("init-control-players-status", (data: any)=>{
+            console.log(data);
 
-            socket.emit("control-clicked", {
-                index:1,
-                rules:"ok",
-                status: "haha"
-            });
+            let dataToSend: ControlTemplateMustachFormatPlayers = {
+                players: [],
+            };
+
+            for(let key in data.player){
+                const mustashPatern: ControlTemplateMustachFormat = {
+                    "range": data.player[key].id + 1,
+                    "ip": data.player[key].ipValue,
+                    "current-rule": data.player[key].data.rules,
+                };
+
+                dataToSend.players.push(mustashPatern);
+            }
+
+            console.log(dataToSend);
+
+            controlTemplate.render(dataToSend);
         });
 
         // interraction avec les boutons

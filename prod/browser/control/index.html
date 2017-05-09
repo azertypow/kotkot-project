@@ -13,34 +13,29 @@
         <div id="choice-player">
 
         </div>
-
-        {{#players}}
-            <section class="player coll rul" >
-                <h3>jouer</h3>
-                <p class="range" >range {{range}}</p>
-                <p class="ip" >{{ip}}</p>
-                <section class="current-rule-component" >
-                    <h4>regle en cour</h4>
-                    <p class="current-rule" >{{current-rule}}</p>
+        <div id="players-status" >
+            {{#players}}
+                <section class="player coll rul" >
+                    <h3>jouer {{range}}</h3>
+                    <p class="ip" >{{ip}}</p>
+                    <section class="current-rule-component" >
+                        <h4>regle en cour</h4>
+                        <p class="current-rule" >{{current-rule}}</p>
+                    </section>
                 </section>
-            </section>
-        {{/players}}
+            {{/players}}
+        </div>
     </section>
 
     <section id="controls" >
         <form class="control loisJ1" >
             LoisJ1
-            <button>send</button>
         </form>
         <form class="control loisJ2" >
-            <input type="text" placeholder="rules" >
             LoisJ2
-            <button>send</button>
         </form>
         <form class="control narration" >
-            <input type="text" placeholder="rules" >
             Narrations
-            <button>send</button>
         </form>
         <form class="control remarks" >
             <input type="text" placeholder="rules" >
@@ -57,7 +52,6 @@
     <script type="text/javascript" src="../../../node_modules/nosleep.js/NoSleep.js" ></script>
     <script type="text/javascript" src="http://172.20.4.172:1337/socket.io/socket.io.js" ></script>
     <script type="text/javascript" src="./main.js" ></script>
-    <script type="text/javascript" src="./socket-emit.js" ></script>
     <script type="text/javascript" src="./managePlayers.js" ></script>
 </body>
 </html>

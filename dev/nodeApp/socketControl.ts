@@ -3,12 +3,14 @@
  */
 
 /// <reference path="../typescriptDeclaration/PlayerData.d.ts" />
+/// <reference path="../typescriptDeclaration/dataRules.d.ts"/>
 
-import io = require("socket.io");
-import {Server} from "http";
-import Player from "./player";
-import Players from "./players";
+import io = require("socket.io")
+import {Server} from "http"
+import Player from "./player"
+import Players from "./players"
 import SetPlayerData from "./setPlayerData"
+import Control from "./Control"
 
 export default class SocketControl{
 
@@ -17,6 +19,8 @@ export default class SocketControl{
         count: 0,
         player: []
     };
+
+    static controller: Control;
 
     public static connection(httpServer: Server){
         // socket.io
@@ -41,6 +45,9 @@ export default class SocketControl{
                 console.log(`control ${socketId} connecté \n[ IP: ${socketIp} ]`);
                 console.log(info);
                 console.log("\n");
+
+                // mettre a jour les information du Control controler
+                this.controller = new Control(socketIp, socketId);
             });
 
             // client
@@ -80,7 +87,7 @@ export default class SocketControl{
                         status: "en attente de la connection de tous les joueurs",
                         rules: "les règles s'afficherons ici"
                     };
-                    SetPlayerData.send(socket, player, data);
+                    SetPlayerData.send(socket, player, data, this.players, this.controller, true);
                 }
                 // la connection vient d'un joueur deja existant
                 else {
@@ -93,7 +100,7 @@ export default class SocketControl{
                             currentPlayer.socketId = socketId;
 
                             // mettre a jour les data ecran du joueur
-                            SetPlayerData.send(socket, currentPlayer, currentPlayer.data);
+                            SetPlayerData.send(socket, currentPlayer, currentPlayer.data, this.players, this.controller, true);
 
                             // sortir
                             break;
@@ -102,13 +109,24 @@ export default class SocketControl{
                 }
             });
 
-            socket.on("control-clicked", (data: PlayerData)=>{
-                // SetPlayerData
-                SetPlayerData.sendTo(socket, this.players, 1, data);
-            });
+            // emit du control
+            socket.on("control-directive", (data: DataRules)=> {
+                const listOfPlayersToSend: Array<number> = data.selectedPlayers;
 
-            socket.on("control-directive", (data: Object)=>{
-                console.log(data);
+                for(let i:number = 0; i < listOfPlayersToSend.length; i++){
+
+                    const playerToSend: number =  listOfPlayersToSend[i];
+                    const player: Player = SetPlayerData.getPlayer(this.players, playerToSend );
+
+                    let dataToSend: PlayerData = {
+                        status: player.data.status,
+                        rules: data.rules,
+                        index: player.data.index,
+                    };
+
+                    // SetPlayerData
+                    SetPlayerData.sendTo(socket, this.players, playerToSend, dataToSend, this.controller, false);
+                }
             });
         });
     }

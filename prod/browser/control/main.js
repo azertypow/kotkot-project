@@ -112,6 +112,7 @@ exports.default = LocationInfo;
 Object.defineProperty(exports, "__esModule", { value: true });
 var locationInfo_1 = __webpack_require__(1);
 var socketEmitButton_1 = __webpack_require__(7);
+var controlTemplate_1 = __webpack_require__(9);
 var socketControlApp = (function () {
     function socketControlApp() {
     }
@@ -125,13 +126,23 @@ var socketControlApp = (function () {
                 name: "control"
             });
         });
-        document.querySelector(".rul").addEventListener("click", function () {
-            console.log("click");
-            socket.emit("control-clicked", {
-                index: 1,
-                rules: "ok",
-                status: "haha"
-            });
+        var controlTemplate = new controlTemplate_1.default(document.querySelector("#players-status"));
+        console.log(controlTemplate);
+        socket.on("init-control-players-status", function (data) {
+            console.log(data);
+            var dataToSend = {
+                players: [],
+            };
+            for (var key in data.player) {
+                var mustashPatern = {
+                    "range": data.player[key].id + 1,
+                    "ip": data.player[key].ipValue,
+                    "current-rule": data.player[key].data.rules,
+                };
+                dataToSend.players.push(mustashPatern);
+            }
+            console.log(dataToSend);
+            controlTemplate.render(dataToSend);
         });
         socketEmitButton_1.default.run(socket);
     };
@@ -203,9 +214,12 @@ var SocketEmitButton = (function () {
             propositions[j].addEventListener('click', sendProposition);
         }
         function sendProposition(e) {
-            socket.emit('control-directive', {
-                "buttonValue": e.target.textContent
-            });
+            console.log(selectedPlayers);
+            var data = {
+                rules: e.target.textContent,
+                selectedPlayers: selectedPlayers,
+            };
+            socket.emit('control-directive', data);
         }
         function displayPropositions(e) {
             if ((e.target.classList[0]) !== "control") {
@@ -238,6 +252,29 @@ var SocketEmitButton = (function () {
     return SocketEmitButton;
 }());
 exports.default = SocketEmitButton;
+
+
+/***/ }),
+/* 8 */,
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var ControlTemplate = (function () {
+    function ControlTemplate(element) {
+        this.playerTemplate = element.innerHTML;
+        this.element = element;
+    }
+    ControlTemplate.prototype.render = function (data) {
+        var renderStatus = Mustache.render(this.playerTemplate, data);
+        this.element.innerHTML = renderStatus;
+        console.log(renderStatus);
+    };
+    return ControlTemplate;
+}());
+exports.default = ControlTemplate;
 
 
 /***/ })

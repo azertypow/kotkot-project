@@ -3,6 +3,9 @@
  */
 
 /// <reference types="socket.io-client" />
+    /// <reference path="../../typescriptDeclaration/dataRules.d.ts"/>
+
+declare let selectedPlayers: Array<number>;
 
 export default class SocketEmitButton{
 
@@ -59,9 +62,15 @@ export default class SocketEmitButton{
         // Envoie la proposition choisie par le maître du jeu
         function sendProposition(e: any) {
             //console.log(e.target.textContent);
-            socket.emit('control-directive', {
-                "buttonValue": e.target.textContent
-            });
+
+            console.log(selectedPlayers);
+
+            const data: DataRules = {
+                rules: e.target.textContent,
+                selectedPlayers: selectedPlayers,
+            };
+
+            socket.emit('control-directive', data);
 
         }
 

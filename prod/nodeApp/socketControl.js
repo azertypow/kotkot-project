@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var io = require("socket.io");
 var player_1 = require("./player");
 var setPlayerData_1 = require("./setPlayerData");
+var Control_1 = require("./Control");
 var SocketControl = (function () {
     function SocketControl() {
     }
@@ -20,6 +21,7 @@ var SocketControl = (function () {
                 console.log("control " + socketId + " connect\u00E9 \n[ IP: " + socketIp + " ]");
                 console.log(info);
                 console.log("\n");
+                _this.controller = new Control_1.default(socketIp, socketId);
             });
             socket.on("player-connected", function (info) {
                 console.log("player " + socketId + " connect\u00E9 \n[ IP: " + socketIp + " ]");
@@ -40,7 +42,7 @@ var SocketControl = (function () {
                         status: "en attente de la connection de tous les joueurs",
                         rules: "les règles s'afficherons ici"
                     };
-                    setPlayerData_1.default.send(socket, player, data);
+                    setPlayerData_1.default.send(socket, player, data, _this.players, _this.controller, true);
                 }
                 else {
                     for (var key in _this.players.player) {
@@ -48,17 +50,24 @@ var SocketControl = (function () {
                         if (currentPlayer.ipValue === socketIp) {
                             console.log("le joueur " + (currentPlayer.id + 1) + " s'est reconnect\u00E9");
                             currentPlayer.socketId = socketId;
-                            setPlayerData_1.default.send(socket, currentPlayer, currentPlayer.data);
+                            setPlayerData_1.default.send(socket, currentPlayer, currentPlayer.data, _this.players, _this.controller, true);
                             break;
                         }
                     }
                 }
             });
-            socket.on("control-clicked", function (data) {
-                setPlayerData_1.default.sendTo(socket, _this.players, 1, data);
-            });
             socket.on("control-directive", function (data) {
-                console.log(data);
+                var listOfPlayersToSend = data.selectedPlayers;
+                for (var i = 0; i < listOfPlayersToSend.length; i++) {
+                    var playerToSend = listOfPlayersToSend[i];
+                    var player = setPlayerData_1.default.getPlayer(_this.players, playerToSend);
+                    var dataToSend = {
+                        status: player.data.status,
+                        rules: data.rules,
+                        index: player.data.index,
+                    };
+                    setPlayerData_1.default.sendTo(socket, _this.players, playerToSend, dataToSend, _this.controller, false);
+                }
             });
         });
     };

@@ -30,7 +30,6 @@ export default class SocketClientApp {
 
         // initialisation status joueur
         socket.on("init", (data: Object)=>{
-            console.log(data);
             playerTemplate.setValues(data);
         });
     }
