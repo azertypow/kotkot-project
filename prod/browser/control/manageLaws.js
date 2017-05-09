@@ -90,8 +90,10 @@ var json = {
         {text: "Il fait beau dehors ?", buttons: ["oui", "non"]},
         {text: "tous se passe bien?", buttons: ["oui", "non"]},
         {text: "Il fait beau dehors ?", buttons: ["oui", "non"]},
-        {text: "Votre partie est en minorité, il faudrait se remuer"},
-        {text: "Votre partie est en minorité, mais vous avez plus de poids dans le vote"},
+        {text: "Votre parti est en minorité, il faudrait se remuer"},
+        {text: "Votre parti est en minorité, mais vous avez plus de poids dans le vote"},
+        {text: "Votre parti est en majorité, ne vous reposez pas sur vos lauriers"},
+        {text: "Vous devriez vous méfier de votre voisin"}, //à ne pas dire s'il y a un cyborg à côté
     ],
 
 };
