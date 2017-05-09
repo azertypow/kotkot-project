@@ -53,6 +53,9 @@ var SocketControl = (function () {
                 console.log(_this.players.player[0].socketId);
                 socket.to(_this.players.player[0].socketId).emit("init", data);
             });
+            socket.on("control-directive", function (data) {
+                console.log(data);
+            });
         });
     };
     return SocketControl;

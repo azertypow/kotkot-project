@@ -5,6 +5,7 @@
 /// <reference types="socket.io-client" />
 
 import LocationInfo from "../locationInfo";
+import SocketEmitButton from "./socketEmitButton";
 
 export default class socketControlApp {
     public static run(){
@@ -37,5 +38,8 @@ export default class socketControlApp {
                 status: "haha"
             });
         });
+
+        // interraction avec les boutons
+        SocketEmitButton.run(socket);
     }
 }
