@@ -135,9 +135,10 @@ var socketControlApp = (function () {
             };
             for (var key in data.player) {
                 var mustashPatern = {
-                    "range": data.player[key].id + 1,
+                    "range": data.player[key].data.index,
                     "ip": data.player[key].ipValue,
                     "current-rule": data.player[key].data.rules,
+                    "status": data.player[key].data.status,
                 };
                 dataToSend.players.push(mustashPatern);
             }

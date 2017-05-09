@@ -9,6 +9,7 @@
 import LocationInfo from "../locationInfo";
 import SocketEmitButton from "./socketEmitButton";
 import ControlTemplate from "./controlTemplate";
+import Players from "../../nodeApp/players";
 
 export default class socketControlApp {
     public static run(selectedPlayers: Array<number>){
@@ -36,7 +37,7 @@ export default class socketControlApp {
         console.log(controlTemplate);
 
         // mise a jour des données sur les joueurs afficher
-        socket.on("init-control-players-status", (data: any)=>{
+        socket.on("init-control-players-status", (data: Players)=>{
             console.log(data);
 
             let dataToSend: ControlTemplateMustachFormatPlayers = {
@@ -45,9 +46,10 @@ export default class socketControlApp {
 
             for(let key in data.player){
                 const mustashPatern: ControlTemplateMustachFormat = {
-                    "range": data.player[key].id + 1,
+                    "range": data.player[key].data.index,
                     "ip": data.player[key].ipValue,
                     "current-rule": data.player[key].data.rules,
+                    "status": data.player[key].data.status,
                 };
 
                 dataToSend.players.push(mustashPatern);

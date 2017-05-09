@@ -4,6 +4,7 @@
 
 interface ControlTemplateMustachFormat {
     "range": number,
-    "ip": number,
+    "ip": string,
     "current-rule": string,
+    "status": string,
 }
