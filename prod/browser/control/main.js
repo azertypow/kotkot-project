@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 6);
+/******/ 	return __webpack_require__(__webpack_require__.s = 7);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -111,8 +111,8 @@ exports.default = LocationInfo;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var locationInfo_1 = __webpack_require__(1);
-var socketEmitButton_1 = __webpack_require__(7);
-var controlTemplate_1 = __webpack_require__(9);
+var socketEmitButton_1 = __webpack_require__(8);
+var controlTemplate_1 = __webpack_require__(6);
 var socketControlApp = (function () {
     function socketControlApp() {
     }
@@ -161,6 +161,28 @@ exports.default = socketControlApp;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var ControlTemplate = (function () {
+    function ControlTemplate(element) {
+        this.playerTemplate = element.innerHTML;
+        this.element = element;
+    }
+    ControlTemplate.prototype.render = function (data) {
+        var renderStatus = Mustache.render(this.playerTemplate, data);
+        this.element.innerHTML = renderStatus;
+        console.log(renderStatus);
+    };
+    return ControlTemplate;
+}());
+exports.default = ControlTemplate;
+
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 var socketControlApp_1 = __webpack_require__(2);
 var removeSleepMode_1 = __webpack_require__(0);
 removeSleepMode_1.default.run();
@@ -168,7 +190,7 @@ socketControlApp_1.default.run();
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -252,29 +274,6 @@ var SocketEmitButton = (function () {
     return SocketEmitButton;
 }());
 exports.default = SocketEmitButton;
-
-
-/***/ }),
-/* 8 */,
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var ControlTemplate = (function () {
-    function ControlTemplate(element) {
-        this.playerTemplate = element.innerHTML;
-        this.element = element;
-    }
-    ControlTemplate.prototype.render = function (data) {
-        var renderStatus = Mustache.render(this.playerTemplate, data);
-        this.element.innerHTML = renderStatus;
-        console.log(renderStatus);
-    };
-    return ControlTemplate;
-}());
-exports.default = ControlTemplate;
 
 
 /***/ })
