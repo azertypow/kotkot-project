@@ -8,10 +8,8 @@
 
 export default class ManagePlayers{
 
-    static run(){
+    static run(selectedPlayers: Array<number>){
         let nbPlayers: number = 8;
-        let selectedPlayers: Array<string> = [];
-
 
         setup();
 
@@ -22,7 +20,7 @@ export default class ManagePlayers{
         }
 
         // quand on clic sur un joueur déjà sélectionné, ça le déselectionne
-        function removePlayer(playerToRemove: Element, playerId: string) {
+        function removePlayer(playerToRemove: Element, playerId: number) {
 
             console.log("removeplayer");
 
@@ -42,7 +40,7 @@ export default class ManagePlayers{
 
             let list: string = (<HTMLElement>e.target).className;
             let lastCharacter: number = (<HTMLElement>e.target).textContent.length;
-            let selectedPlayer: string = (<HTMLElement>e.target).textContent[lastCharacter - 1];  // on récupère le dernier caractère du contenu pour avoir le numéro du joueur
+            let selectedPlayer: number = parseInt( (<HTMLElement>e.target).textContent[lastCharacter - 1] );  // on récupère le dernier caractère du contenu pour avoir le numéro du joueur
 
 
             // si reclic sur un joueur déjà sélectionné, on lance la fonction pour le déselectionner

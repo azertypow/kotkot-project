@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var io = require("socket.io");
+var assigningRoles_1 = require("./assigningRoles");
 var player_1 = require("./player");
 var setPlayerData_1 = require("./setPlayerData");
 var Control_1 = require("./Control");
@@ -31,18 +32,52 @@ var SocketControl = (function () {
                     return element === socketIp;
                 }
                 if (!_this.players.allIp.some(checkIp)) {
-                    var player = new player_1.default(_this.players.count, socketIp, socketId, { index: 1, rules: "empty", status: "empty" });
-                    _this.players.allIp.push(socketIp);
-                    _this.players.count++;
-                    _this.players.player.push(player);
-                    console.log(_this.players);
-                    console.log("\n");
-                    var data = {
-                        index: _this.players.count,
-                        status: "en attente de la connection de tous les joueurs",
-                        rules: "les règles s'afficherons ici"
-                    };
-                    setPlayerData_1.default.send(socket, player, data, _this.players, _this.controller, true);
+                    if (_this.ilManqueDesJoueurs) {
+                        var player = new player_1.default(_this.players.count, socketIp, socketId, { index: 1, rules: "empty", status: "empty" });
+                        _this.players.allIp.push(socketIp);
+                        _this.players.count++;
+                        _this.players.player.push(player);
+                        var data = {
+                            index: _this.players.count,
+                            status: "en attente de la connection de tous les joueurs",
+                            rules: "les règles s'afficherons ici"
+                        };
+                        setPlayerData_1.default.send(socket, player, data, _this.players, _this.controller, true);
+                        console.log(_this.players);
+                        console.log("\n");
+                        if (_this.players.count === _this.numberOfPlayers) {
+                            console.log("total des joeurs connecté!\n");
+                            var roles = ["jambon", "beurre"];
+                            if (_this.numberOfPlayers !== roles.length) {
+                                console.error("le nombre de role n'est pas égale au nombre de joueur !!");
+                                process.exit(1);
+                            }
+                            var rolesAssigned = assigningRoles_1.default.generate(roles);
+                            console.log(roles);
+                            for (var j = 0; j < rolesAssigned.length; j++) {
+                                var currentPlayerSettings = setPlayerData_1.default.getPlayer(_this.players, rolesAssigned[j].playerIndex);
+                                var dataToSend = {
+                                    index: rolesAssigned[j].playerIndex,
+                                    rules: currentPlayerSettings.data.rules,
+                                    status: rolesAssigned[j].playerRole,
+                                };
+                                if (currentPlayerSettings.socketId === socketId) {
+                                    console.log("meme socket");
+                                    console.log(currentPlayerSettings);
+                                    console.log(socketIp);
+                                    var currentPlayer = _this.players.player[j];
+                                    setPlayerData_1.default.send(socket, currentPlayer, dataToSend, _this.players, _this.controller, true);
+                                }
+                                else {
+                                    console.log("diff");
+                                    console.log(currentPlayerSettings);
+                                    console.log(socketIp);
+                                    setPlayerData_1.default.sendTo(socket, _this.players, rolesAssigned[j].playerIndex, dataToSend, _this.controller, true);
+                                }
+                            }
+                            _this.ilManqueDesJoueurs = false;
+                        }
+                    }
                 }
                 else {
                     for (var key in _this.players.player) {
@@ -73,6 +108,8 @@ var SocketControl = (function () {
     };
     return SocketControl;
 }());
+SocketControl.numberOfPlayers = 2;
+SocketControl.ilManqueDesJoueurs = true;
 SocketControl.players = {
     allIp: [],
     count: 0,

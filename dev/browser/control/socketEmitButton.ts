@@ -3,13 +3,11 @@
  */
 
 /// <reference types="socket.io-client" />
-    /// <reference path="../../typescriptDeclaration/dataRules.d.ts"/>
-
-declare let selectedPlayers: Array<number>;
+/// <reference path="../../typescriptDeclaration/dataRules.d.ts"/>
 
 export default class SocketEmitButton{
 
-    public static run(socket: SocketIOClient.Socket){
+    public static run(socket: SocketIOClient.Socket, selectedPlayers: Array<number>){
 
         let json:any = {
 

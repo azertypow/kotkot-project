@@ -6,50 +6,15 @@
 
 import socketControlApp from "./socketControlApp";
 import removeSleepMode from "../removeSleepMode";
+import ManagePlayers from "./managePlayers";
+
+let selectedPlayers: Array<number> = [];
 
 // remove sleep mode
 removeSleepMode.run();
 
+// initialiser socket
+socketControlApp.run(selectedPlayers);
 
-socketControlApp.run();
-
-// const players: HTMLElement = <HTMLElement> document.querySelector("#players");
-// const playersPattern: string = players.innerHTML;
-//
-// console.log(playersPattern);
-//
-// let patern: Object = {
-//     "players" : [
-//         {
-//             "range": "1",
-//             "ip": "null",
-//             "current-rule": "empty"
-//         },
-//         {
-//             "range": "2",
-//             "ip": "null",
-//             "current-rule": "empty"
-//         },
-//         {
-//             "range": "3",
-//             "ip": "null",
-//             "current-rule": "empty"
-//         },
-//         {
-//             "range": "4",
-//             "ip": "null",
-//             "current-rule": "empty"
-//         },
-//         {
-//             "range": "5",
-//             "ip": "null",
-//             "current-rule": "empty"
-//         },
-//     ]
-// };
-//
-// let renderPlayers: string = Mustache.render(playersPattern, patern);
-//
-// players.innerHTML = renderPlayers;
-//
-// console.log(renderPlayers);
+// manage player
+ManagePlayers.run(selectedPlayers);

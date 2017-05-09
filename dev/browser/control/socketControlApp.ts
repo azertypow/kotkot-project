@@ -11,7 +11,7 @@ import SocketEmitButton from "./socketEmitButton";
 import ControlTemplate from "./controlTemplate";
 
 export default class socketControlApp {
-    public static run(){
+    public static run(selectedPlayers: Array<number>){
 
         // récupérer les info sur l'url courrant
         const locationInfo: LocationInfo = new LocationInfo("window.location.href");
@@ -59,6 +59,6 @@ export default class socketControlApp {
         });
 
         // interraction avec les boutons
-        SocketEmitButton.run(socket);
+        SocketEmitButton.run(socket, selectedPlayers);
     }
 }

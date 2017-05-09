@@ -116,7 +116,7 @@ var controlTemplate_1 = __webpack_require__(6);
 var socketControlApp = (function () {
     function socketControlApp() {
     }
-    socketControlApp.run = function () {
+    socketControlApp.run = function (selectedPlayers) {
         var locationInfo = new locationInfo_1.default("window.location.href");
         var currentHostname = locationInfo.parse.hostname;
         var socket = io.connect("http://" + currentHostname + ":1337");
@@ -144,7 +144,7 @@ var socketControlApp = (function () {
             console.log(dataToSend);
             controlTemplate.render(dataToSend);
         });
-        socketEmitButton_1.default.run(socket);
+        socketEmitButton_1.default.run(socket, selectedPlayers);
     };
     return socketControlApp;
 }());
@@ -185,8 +185,11 @@ exports.default = ControlTemplate;
 Object.defineProperty(exports, "__esModule", { value: true });
 var socketControlApp_1 = __webpack_require__(2);
 var removeSleepMode_1 = __webpack_require__(0);
+var managePlayers_1 = __webpack_require__(10);
+var selectedPlayers = [];
 removeSleepMode_1.default.run();
-socketControlApp_1.default.run();
+socketControlApp_1.default.run(selectedPlayers);
+managePlayers_1.default.run(selectedPlayers);
 
 
 /***/ }),
@@ -199,7 +202,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var SocketEmitButton = (function () {
     function SocketEmitButton() {
     }
-    SocketEmitButton.run = function (socket) {
+    SocketEmitButton.run = function (socket, selectedPlayers) {
         var json = {
             loisJ1: [
                 "Je te propose trois lois de Gauche",
@@ -274,6 +277,70 @@ var SocketEmitButton = (function () {
     return SocketEmitButton;
 }());
 exports.default = SocketEmitButton;
+
+
+/***/ }),
+/* 9 */,
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var ManagePlayers = (function () {
+    function ManagePlayers() {
+    }
+    ManagePlayers.run = function (selectedPlayers) {
+        var nbPlayers = 8;
+        setup();
+        function setup() {
+            addPlayersToInterface(nbPlayers);
+        }
+        function removePlayer(playerToRemove, playerId) {
+            console.log("removeplayer");
+            playerToRemove.classList.remove('playerSelected');
+            playerToRemove.removeAttribute('style');
+            var id = selectedPlayers.indexOf(playerId);
+            selectedPlayers.splice(id, 1);
+        }
+        function addPlayers(e) {
+            console.log(e.target.className);
+            var list = e.target.className;
+            var lastCharacter = e.target.textContent.length;
+            var selectedPlayer = parseInt(e.target.textContent[lastCharacter - 1]);
+            if (list.indexOf('playerSelected') !== -1) {
+                console.log('deja');
+                removePlayer(e.target, selectedPlayer);
+                return;
+            }
+            console.log(e.target.textContent.length);
+            var player = e.target;
+            player.className += " playerSelected";
+            player.style.backgroundColor = "#0ff";
+            selectedPlayers.push(selectedPlayer);
+            console.log(selectedPlayers);
+        }
+        function addPlayersToInterface(nbPlayers) {
+            console.log("addplayers");
+            var playerSection = document.getElementById('players');
+            var boxPlayers = document.createElement('div');
+            boxPlayers.setAttribute('id', 'boxplayers');
+            playerSection.appendChild(boxPlayers);
+            for (var i = 1; i < nbPlayers + 1; i++) {
+                var aPlayer = document.createElement("p");
+                aPlayer.setAttribute("class", "aPlayer" + " aPlayer-" + i);
+                aPlayer.textContent = "Joueur " + i;
+                boxPlayers.appendChild(aPlayer);
+            }
+            var players = document.getElementsByClassName('aPlayer');
+            for (var j = 0; j < players.length; j++) {
+                players[j].addEventListener('click', addPlayers);
+            }
+        }
+    };
+    return ManagePlayers;
+}());
+exports.default = ManagePlayers;
 
 
 /***/ })

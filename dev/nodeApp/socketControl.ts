@@ -4,15 +4,20 @@
 
 /// <reference path="../typescriptDeclaration/PlayerData.d.ts" />
 /// <reference path="../typescriptDeclaration/dataRules.d.ts"/>
+/// <reference path="../typescriptDeclaration/RoleAssigned.d.ts" />
 
 import io = require("socket.io")
 import {Server} from "http"
+import AssigningRoles from "./assigningRoles"
 import Player from "./player"
 import Players from "./players"
 import SetPlayerData from "./setPlayerData"
 import Control from "./Control"
 
 export default class SocketControl{
+
+    private static numberOfPlayers: number = 2;
+    private static ilManqueDesJoueurs: boolean = true;
 
     static players: Players = {
         allIp: [],
@@ -65,29 +70,81 @@ export default class SocketControl{
 
                 // la connection vient d'un nouveau joueur
                 if(! this.players.allIp.some(checkIp)){
-                    // creer un Player
-                    let player = new Player( this.players.count ,socketIp, socketId, {index: 1, rules: "empty", status: "empty"});
+                    // creer un Player tant qu'on est pas au nombre demandé
+                    if(this.ilManqueDesJoueurs){
+                        let player = new Player( this.players.count ,socketIp, socketId, {index: 1, rules: "empty", status: "empty"});
 
-                    // ajouter l'ip a la liste des ip
-                    this.players.allIp.push(socketIp);
+                        // ajouter l'ip a la liste des ip
+                        this.players.allIp.push(socketIp);
 
-                    // incrémenté le nombre total de players
-                    this.players.count++;
+                        // incrémenté le nombre total de players
+                        this.players.count++;
 
-                    // ajouter a la list total de players
-                    this.players.player.push(player);
+                        // ajouter a la list total de players
+                        this.players.player.push(player);
 
-                    // regarder ou en est la liste
-                    console.log(this.players);
-                    console.log("\n");
+                        // mettre a jour l'affichage du client
+                        const data: PlayerData = {
+                            index: this.players.count,
+                            status: "en attente de la connection de tous les joueurs",
+                            rules: "les règles s'afficherons ici"
+                        };
+                        SetPlayerData.send(socket, player, data, this.players, this.controller, true);
 
-                    // mettre a jour l'affichage du client
-                    const data: PlayerData = {
-                        index: this.players.count,
-                        status: "en attente de la connection de tous les joueurs",
-                        rules: "les règles s'afficherons ici"
-                    };
-                    SetPlayerData.send(socket, player, data, this.players, this.controller, true);
+                        // regarder ou en est la liste
+                        console.log(this.players);
+                        console.log("\n");
+
+                        if(this.players.count === this.numberOfPlayers){
+                            console.log("total des joeurs connecté!\n");
+
+                            // générer les roles de chaques joueurs
+                            /// lister les roles
+                            const roles: Array<string> = ["jambon", "beurre"];
+
+                            /// vérifier que le nombre de role soit identique au nombre de joueur
+                            if(this.numberOfPlayers !== roles.length){
+                                console.error("le nombre de role n'est pas égale au nombre de joueur !!");
+                                process.exit(1);
+                            }
+
+                            /// assignation des roles
+                            const rolesAssigned: Array<RoleAssigned> = AssigningRoles.generate(roles);
+                            console.log(roles);
+
+                            /// envoyer les roles aux joeurs
+                            for(let j: number = 0; j < rolesAssigned.length; j++){
+
+                                const currentPlayerSettings: Player = SetPlayerData.getPlayer(this.players, rolesAssigned[j].playerIndex);
+
+                                const dataToSend: PlayerData = {
+                                    index: rolesAssigned[j].playerIndex,
+                                    rules: currentPlayerSettings.data.rules,
+                                    status: rolesAssigned[j].playerRole,
+                                };
+
+                                // regarder si les data en cour son a envoyer au socket du client actuel ou a un autre
+                                if( currentPlayerSettings.socketId === socketId ){
+                                    console.log("meme socket");
+                                    console.log(currentPlayerSettings);
+                                    console.log(socketIp);
+                                    // socket du joueur a metre a jour est celui sur lequel on est connecté
+                                    const currentPlayer = this.players.player[j];
+                                    SetPlayerData.send(socket, currentPlayer, dataToSend, this.players, this.controller, true);
+                                }
+                                else {
+                                    console.log("diff");
+                                    console.log(currentPlayerSettings);
+                                    console.log(socketIp);
+                                    // socket autre, on doit donner un identifiant pour envoyer les data
+                                    SetPlayerData.sendTo(socket, this.players, rolesAssigned[j].playerIndex, dataToSend, this.controller, true);
+                                }
+                            }
+
+                            //enregistrer le fait que l'on ai tous les joueurs
+                            this.ilManqueDesJoueurs = false;
+                        }
+                    }
                 }
                 // la connection vient d'un joueur deja existant
                 else {
