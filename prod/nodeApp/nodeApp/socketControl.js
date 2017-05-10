@@ -5,6 +5,7 @@ var assigningRoles_1 = require("./assigningRoles");
 var player_1 = require("./player");
 var setPlayerData_1 = require("./setPlayerData");
 var Control_1 = require("./Control");
+var jsonData_1 = require("../general-data/jsonData");
 var SocketControl = (function () {
     function SocketControl() {
     }
@@ -33,21 +34,29 @@ var SocketControl = (function () {
                 }
                 if (!_this.players.allIp.some(checkIp)) {
                     if (_this.ilManqueDesJoueurs) {
-                        var player = new player_1.default(_this.players.count, socketIp, socketId, { index: 1, rules: "empty", status: "empty" });
+                        var player = new player_1.default(_this.players.count, socketIp, socketId, { index: 1, rules: "empty", status: "empty", buttons: [] });
                         _this.players.allIp.push(socketIp);
                         _this.players.count++;
                         _this.players.player.push(player);
                         var data = {
                             index: _this.players.count,
                             status: "en attente de la connection de tous les joueurs",
-                            rules: "les règles s'afficherons ici"
+                            rules: "les règles s'afficherons ici",
+                            buttons: [],
                         };
                         setPlayerData_1.default.send(socket, player, data, _this.players, _this.controller, true);
                         console.log(_this.players);
                         console.log("\n");
                         if (_this.players.count === _this.numberOfPlayers) {
                             console.log("total des joeurs connecté!\n");
-                            var roles = ["jambon", "beurre"];
+                            var roles = [
+                                "membre du parti de gauche",
+                                "membre du parti de gauche",
+                                "cyborg, membre du parti de gauche",
+                                "membre du parti de droite",
+                                "membre du parti de droite",
+                                "cyborg, membre du parti de droite",
+                            ];
                             if (_this.numberOfPlayers !== roles.length) {
                                 console.error("le nombre de role n'est pas égale au nombre de joueur !!");
                                 process.exit(1);
@@ -60,6 +69,7 @@ var SocketControl = (function () {
                                     index: rolesAssigned[j].playerIndex,
                                     rules: currentPlayerSettings.data.rules,
                                     status: rolesAssigned[j].playerRole,
+                                    buttons: currentPlayerSettings.data.buttons,
                                 };
                                 if (currentPlayerSettings.socketId === socketId) {
                                     console.log("meme socket");
@@ -100,15 +110,19 @@ var SocketControl = (function () {
                         status: player.data.status,
                         rules: data.rules,
                         index: player.data.index,
+                        buttons: jsonData_1.default.rulesAndButtons[data.category][data.indexCategory].buttons,
                     };
                     setPlayerData_1.default.sendTo(socket, _this.players, playerToSend, dataToSend, _this.controller, false);
                 }
+            });
+            socket.on("player-responses", function (data) {
+                socket.to(_this.controller.socketId).emit("player-responses", data);
             });
         });
     };
     return SocketControl;
 }());
-SocketControl.numberOfPlayers = 2;
+SocketControl.numberOfPlayers = 6;
 SocketControl.ilManqueDesJoueurs = true;
 SocketControl.players = {
     allIp: [],

@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 9);
+/******/ 	return __webpack_require__(__webpack_require__.s = 10);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -105,7 +105,8 @@ exports.default = LocationInfo;
 
 /***/ }),
 /* 2 */,
-/* 3 */
+/* 3 */,
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -116,33 +117,39 @@ var PlayerTemplate = (function () {
         this.player_info = {
             index: initParam.setIndex,
             status: initParam.setStatus,
-            rules: initParam.setRules
+            rules: initParam.setRules,
+            buttons: initParam.setButtons,
         };
-        this.setElements(initParam.indexElement, initParam.statusElement, initParam.rulesElement);
+        this.setElements(initParam.indexElement, initParam.statusElement, initParam.rulesElement, initParam.buttonsElement);
         this.initTemplate();
         this.setValues(this.player_info);
     }
-    PlayerTemplate.prototype.setElements = function (indexElement, statusElement, rulesElement) {
+    PlayerTemplate.prototype.setElements = function (indexElement, statusElement, rulesElement, buttonsElement) {
         this.player_elements = {
             index: indexElement,
             status: statusElement,
-            rules: rulesElement
+            rules: rulesElement,
+            buttons: buttonsElement,
         };
     };
     PlayerTemplate.prototype.initTemplate = function () {
         this.player_elementsTemplate = {
             index: this.player_elements.index.innerHTML,
             status: this.player_elements.status.innerHTML,
-            rules: this.player_elements.rules.innerHTML
+            rules: this.player_elements.rules.innerHTML,
+            buttons: this.player_elements.buttons.innerHTML,
         };
     };
     PlayerTemplate.prototype.setValues = function (patern) {
+        console.log(patern);
         var renderIndex = Mustache.render(this.player_elementsTemplate.index, patern);
         var renderStatus = Mustache.render(this.player_elementsTemplate.status, patern);
         var renderRules = Mustache.render(this.player_elementsTemplate.rules, patern);
+        var renderButtons = Mustache.render(this.player_elementsTemplate.buttons, patern);
         this.player_elements.index.innerHTML = renderIndex;
         this.player_elements.status.innerHTML = renderStatus;
         this.player_elements.rules.innerHTML = renderRules;
+        this.player_elements.buttons.innerHTML = renderButtons;
     };
     return PlayerTemplate;
 }());
@@ -150,7 +157,7 @@ exports.default = PlayerTemplate;
 
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -172,6 +179,12 @@ var SocketClientApp = (function () {
         });
         socket.on("init", function (data) {
             playerTemplate.setValues(data);
+            var allButtons = document.querySelectorAll(".buttons button");
+            for (var i = 0; i < allButtons.length; i++) {
+                allButtons[i].addEventListener("click", function (e) {
+                    socket.emit("player-responses", e.target.innerHTML);
+                });
+            }
         });
     };
     return SocketClientApp;
@@ -180,27 +193,29 @@ exports.default = SocketClientApp;
 
 
 /***/ }),
-/* 5 */,
 /* 6 */,
 /* 7 */,
 /* 8 */,
-/* 9 */
+/* 9 */,
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var socketClientApp_1 = __webpack_require__(4);
-var playerTemplate_1 = __webpack_require__(3);
+var socketClientApp_1 = __webpack_require__(5);
+var playerTemplate_1 = __webpack_require__(4);
 var removeSleepMode_1 = __webpack_require__(0);
 removeSleepMode_1.default.run();
 var initParam = {
     setIndex: 'en attente…',
     setStatus: 'en attente…',
     setRules: 'attend les propositions que je te proposerais. =)',
+    setButtons: [],
     indexElement: document.querySelector("#index"),
     statusElement: document.querySelector("#status"),
-    rulesElement: document.querySelector("#rules")
+    rulesElement: document.querySelector("#rules"),
+    buttonsElement: document.querySelector(".buttons"),
 };
 var playerTemplate = new playerTemplate_1.default(initParam);
 socketClientApp_1.default.run(playerTemplate);

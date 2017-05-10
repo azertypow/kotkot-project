@@ -7,7 +7,7 @@
 /// <reference path="../../typescriptDeclaration/controlTemplateMustachFormatPlayers.d.ts"/>
 
 import LocationInfo from "../locationInfo";
-import SocketEmitButton from "./socketEmitButton";
+import SocketRulesButtonEmit from "./socketRulesButtonEmit"
 import ControlTemplate from "./controlTemplate";
 import Players from "../../nodeApp/players";
 
@@ -61,6 +61,13 @@ export default class socketControlApp {
         });
 
         // interraction avec les boutons
-        SocketEmitButton.run(socket, selectedPlayers);
+        // SocketEmitButton.run(socket, selectedPlayers);
+        SocketRulesButtonEmit.run(socket, selectedPlayers);
+
+        // a la reception de reponse boutton
+        socket.on("player-responses", (data: string)=>{
+            document.querySelector(".user-response").innerHTML = data;
+        });
+
     }
 }

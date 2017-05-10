@@ -25,33 +25,50 @@
                     </section>
                 </section>
             {{/players}}
+
+            <section class="responses" >
+                <h4>réponse</h4>
+                <p class="user-response" ></p>
+            </section>
         </div>
     </section>
 
     <section id="controls" >
-        <form class="control loisJ1" >
-            LoisJ1
-        </form>
-        <form class="control loisJ2" >
-            LoisJ2
-        </form>
-        <form class="control narration" >
-            Narrations
-        </form>
-        <form class="control remarks" >
-            <input type="text" placeholder="rules" >
-            <button>send</button>
-        </form>
-        <form class="control bonus" >
-            <input type="text" placeholder="rules" >
-            <button>send</button>
-        </form>
-
+        <div class="loisJ1" >
+            {{#loisJ1}}
+            <p class="data-button" data-index="" data-array="loisJ1" >{{text}}</p>
+            {{/loisJ1}}
+        </div>
+        <div class="loisJ2" >
+            {{#loisJ2}}
+            <p class="data-button" data-index="" data-array="loisJ2" >{{text}}</p>
+            {{/loisJ2}}
+        </div>
+        <div class="annonces" >
+            {{#annonces}}
+            <p class="data-button" data-index="" data-array="annonces" >{{text}}</p>
+            {{/annonces}}
+        </div>
+        <div class="narration" >
+            {{#narration}}
+            <p class="data-button" data-index="" data-array="narration" >{{text}}</p>
+            {{/narration}}
+        </div>
+        <div class="cyborg" >
+            {{#cyborg}}
+            <p class="data-button" data-index="" data-array="cyborg" >{{text}}</p>
+            {{/cyborg}}
+        </div>
+        <div class="humain" >
+            {{#humain}}
+            <p class="data-button" data-index="" data-array="humain" >{{text}}</p>
+            {{/humain}}
+        </div>
     </section>
 
     <script type="text/javascript" src="../../../node_modules/mustache/mustache.min.js"></script>
     <script type="text/javascript" src="../../../node_modules/nosleep.js/NoSleep.js" ></script>
-    <script type="text/javascript" src="http://192.168.1.91:1337/socket.io/socket.io.js" ></script>
+    <script type="text/javascript" src="http://172.20.4.172:1337/socket.io/socket.io.js" ></script>
     <script type="text/javascript" src="./control/main.js" ></script>
 </body>
 </html>

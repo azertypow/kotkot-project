@@ -5,4 +5,6 @@
 interface DataRules {
     rules: string,
     selectedPlayers: Array<number>,
+    category: string,
+    indexCategory: number,
 }

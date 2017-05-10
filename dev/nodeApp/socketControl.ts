@@ -13,10 +13,11 @@ import Player from "./player"
 import Players from "./players"
 import SetPlayerData from "./setPlayerData"
 import Control from "./Control"
+import JsonData from "../general-data/jsonData"
 
 export default class SocketControl{
 
-    private static numberOfPlayers: number = 2;
+    private static numberOfPlayers: number = 6;
     private static ilManqueDesJoueurs: boolean = true;
 
     static players: Players = {
@@ -72,7 +73,7 @@ export default class SocketControl{
                 if(! this.players.allIp.some(checkIp)){
                     // creer un Player tant qu'on est pas au nombre demandé
                     if(this.ilManqueDesJoueurs){
-                        let player = new Player( this.players.count ,socketIp, socketId, {index: 1, rules: "empty", status: "empty"});
+                        let player = new Player( this.players.count ,socketIp, socketId, {index: 1, rules: "empty", status: "empty", buttons: []});
 
                         // ajouter l'ip a la liste des ip
                         this.players.allIp.push(socketIp);
@@ -87,7 +88,8 @@ export default class SocketControl{
                         const data: PlayerData = {
                             index: this.players.count,
                             status: "en attente de la connection de tous les joueurs",
-                            rules: "les règles s'afficherons ici"
+                            rules: "les règles s'afficherons ici",
+                            buttons: [],
                         };
                         SetPlayerData.send(socket, player, data, this.players, this.controller, true);
 
@@ -100,7 +102,14 @@ export default class SocketControl{
 
                             // générer les roles de chaques joueurs
                             /// lister les roles
-                            const roles: Array<string> = ["jambon", "beurre"];
+                            const roles: Array<string> = [
+                                "membre du parti de gauche",
+                                "membre du parti de gauche",
+                                "cyborg, membre du parti de gauche",
+                                "membre du parti de droite",
+                                "membre du parti de droite",
+                                "cyborg, membre du parti de droite",
+                            ];
 
                             /// vérifier que le nombre de role soit identique au nombre de joueur
                             if(this.numberOfPlayers !== roles.length){
@@ -121,6 +130,7 @@ export default class SocketControl{
                                     index: rolesAssigned[j].playerIndex,
                                     rules: currentPlayerSettings.data.rules,
                                     status: rolesAssigned[j].playerRole,
+                                    buttons: currentPlayerSettings.data.buttons,
                                 };
 
                                 // regarder si les data en cour son a envoyer au socket du client actuel ou a un autre
@@ -179,11 +189,17 @@ export default class SocketControl{
                         status: player.data.status,
                         rules: data.rules,
                         index: player.data.index,
+                        buttons: JsonData.rulesAndButtons[data.category][data.indexCategory].buttons,
                     };
 
                     // SetPlayerData
                     SetPlayerData.sendTo(socket, this.players, playerToSend, dataToSend, this.controller, false);
                 }
+            });
+
+            // emition d'une reponse d'un player
+            socket.on("player-responses", (data: string)=>{
+                socket.to(this.controller.socketId).emit("player-responses", data);
             });
         });
     }

@@ -3,7 +3,8 @@
  */
 
 interface PlayerData {
-    index: number;
-    status: string;
-    rules: string;
+    index: number,
+    status: string,
+    rules: string,
+    buttons: Array<string>,
 }

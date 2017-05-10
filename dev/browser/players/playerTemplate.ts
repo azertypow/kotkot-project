@@ -3,33 +3,7 @@
  */
 
 /// <reference types="mustache" />
-
-    interface InitParam {
-        setIndex: string;
-        setStatus: string;
-        setRules: string;
-        indexElement: HTMLElement;
-        statusElement: HTMLElement;
-        rulesElement: HTMLElement;
-    }
-
-    interface Player_info {
-        index: string;
-        status: string;
-        rules: string
-    }
-
-    interface Player_elements {
-        index: HTMLElement;
-        status: HTMLElement;
-        rules: HTMLElement;
-    }
-
-    interface Player_elementsTemplate {
-        index: string;
-        status: string;
-        rules: string;
-    }
+/// <reference path="../../typescriptDeclaration/Player_template_dataToSend.d.ts" />
 
 export default class PlayerTemplate {
 
@@ -41,19 +15,21 @@ export default class PlayerTemplate {
         this.player_info = {
             index : initParam.setIndex,
             status : initParam.setStatus,
-            rules : initParam.setRules
+            rules : initParam.setRules,
+            buttons: initParam.setButtons,
         };
 
-        this.setElements(initParam.indexElement, initParam.statusElement, initParam.rulesElement);
+        this.setElements(initParam.indexElement, initParam.statusElement, initParam.rulesElement, initParam.buttonsElement);
         this.initTemplate();
         this.setValues(this.player_info);
     }
 
-    public setElements(indexElement: HTMLElement, statusElement: HTMLElement, rulesElement: HTMLElement){
+    public setElements(indexElement: HTMLElement, statusElement: HTMLElement, rulesElement: HTMLElement, buttonsElement: HTMLElement){
         this.player_elements = {
             index : indexElement,
             status : statusElement,
-            rules : rulesElement
+            rules : rulesElement,
+            buttons: buttonsElement,
         }
     }
 
@@ -61,18 +37,24 @@ export default class PlayerTemplate {
         this.player_elementsTemplate = {
             index: this.player_elements.index.innerHTML,
             status: this.player_elements.status.innerHTML,
-            rules: this.player_elements.rules.innerHTML
+            rules: this.player_elements.rules.innerHTML,
+            buttons: this.player_elements.buttons.innerHTML,
         }
     }
 
-    public setValues (patern: Object) {
+    public setValues (patern: Player_template_dataToSend) {
+
+        console.log(patern);
+
         const renderIndex: string = Mustache.render(this.player_elementsTemplate.index, patern);
         const renderStatus: string = Mustache.render(this.player_elementsTemplate.status, patern);
         const renderRules: string = Mustache.render(this.player_elementsTemplate.rules, patern);
+        const renderButtons: string = Mustache.render(this.player_elementsTemplate.buttons, patern);
 
 
         this.player_elements.index.innerHTML = renderIndex;
         this.player_elements.status.innerHTML = renderStatus;
         this.player_elements.rules.innerHTML = renderRules;
+        this.player_elements.buttons.innerHTML = renderButtons;
     }
 }

@@ -3,6 +3,7 @@
  */
 
 /// <reference types="socket.io-client" />
+/// <reference path="../../typescriptDeclaration/Player_template_dataToSend.d.ts" />
 
 import LocationInfo from "../locationInfo";
 import PlayerTemplate from "./playerTemplate";
@@ -29,8 +30,17 @@ export default class SocketClientApp {
         });
 
         // initialisation status joueur
-        socket.on("init", (data: Object)=>{
+        socket.on("init", (data: Player_template_dataToSend)=>{
             playerTemplate.setValues(data);
+
+            // event sur les boutons
+            const allButtons: NodeListOf<Element> = document.querySelectorAll(".buttons button");
+
+            for(let i: number = 0; i<allButtons.length; i++){
+                (<HTMLElement>allButtons[i]).addEventListener("click", (e)=>{
+                    socket.emit("player-responses", (<HTMLElement>e.target).innerHTML);
+                });
+            }
         });
     }
 }

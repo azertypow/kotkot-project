@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 7);
+/******/ 	return __webpack_require__(__webpack_require__.s = 8);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -105,184 +105,6 @@ exports.default = LocationInfo;
 
 /***/ }),
 /* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var locationInfo_1 = __webpack_require__(1);
-var socketEmitButton_1 = __webpack_require__(8);
-var controlTemplate_1 = __webpack_require__(6);
-var socketControlApp = (function () {
-    function socketControlApp() {
-    }
-    socketControlApp.run = function (selectedPlayers) {
-        var locationInfo = new locationInfo_1.default("window.location.href");
-        var currentHostname = locationInfo.parse.hostname;
-        var socket = io.connect("http://" + currentHostname + ":1337");
-        socket.on("connect", function () {
-            console.log("socket control connected");
-            socket.emit('control-connected', {
-                name: "control"
-            });
-        });
-        var controlTemplate = new controlTemplate_1.default(document.querySelector("#players-status"));
-        console.log(controlTemplate);
-        socket.on("init-control-players-status", function (data) {
-            console.log(data);
-            var dataToSend = {
-                players: [],
-            };
-            for (var key in data.player) {
-                var mustashPatern = {
-                    "range": data.player[key].data.index,
-                    "ip": data.player[key].ipValue,
-                    "current-rule": data.player[key].data.rules,
-                    "status": data.player[key].data.status,
-                };
-                dataToSend.players.push(mustashPatern);
-            }
-            console.log(dataToSend);
-            controlTemplate.render(dataToSend);
-        });
-        socketEmitButton_1.default.run(socket, selectedPlayers);
-    };
-    return socketControlApp;
-}());
-exports.default = socketControlApp;
-
-
-/***/ }),
-/* 3 */,
-/* 4 */,
-/* 5 */,
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var ControlTemplate = (function () {
-    function ControlTemplate(element) {
-        this.playerTemplate = element.innerHTML;
-        this.element = element;
-    }
-    ControlTemplate.prototype.render = function (data) {
-        var renderStatus = Mustache.render(this.playerTemplate, data);
-        this.element.innerHTML = renderStatus;
-        console.log(renderStatus);
-    };
-    return ControlTemplate;
-}());
-exports.default = ControlTemplate;
-
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var socketControlApp_1 = __webpack_require__(2);
-var removeSleepMode_1 = __webpack_require__(0);
-var managePlayers_1 = __webpack_require__(10);
-var selectedPlayers = [];
-removeSleepMode_1.default.run();
-socketControlApp_1.default.run(selectedPlayers);
-managePlayers_1.default.run(selectedPlayers);
-
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var SocketEmitButton = (function () {
-    function SocketEmitButton() {
-    }
-    SocketEmitButton.run = function (socket, selectedPlayers) {
-        var json = {
-            loisJ1: [
-                "Je te propose trois lois de Gauche",
-                "Je te propose deux lois de Gauche et une loi de Droite",
-                "Je te propose une loi Gauche et deux lois de Droite",
-                "Je te propose trois lois de Droite",
-                "Premier choix : veux-tu proposer une loi de Gauche ?",
-                "Premier choix : veux-tu proposer une loi de Droite ?",
-                "Deuxième choix : veux-tu proposer une loi de Gauche ?",
-                "Deuxième choix : veux-tu proposer une loi de Droite ?",
-                "Choix validé",
-                "Choix refusé, cette option n'est pas disponible"
-            ],
-            loisJ2: ["L'autre joueur te propose deux lois de Gauche",
-                "L'autre joueur te propose une loi de Gauche et une loi de Droite",
-                "L'autre joueur te propose deux lois de Droite",
-                "Veux-tu proposer une loi de Gauche ?",
-                "Veux-tu proposer une loi de Droite ?",
-                "Choix validé",
-                "Choix refusé, cette option n'est pas disponible"
-            ],
-            narration: [
-                "Bienvenue dans le jeu",
-                "Vous appartenez au Parti de Gauche. Votre but est de...",
-                "Vous appartenez au Parti de Droite. Votre but est de..."
-            ]
-        };
-        var singleControl = document.getElementsByClassName("control");
-        var propositions = document.getElementsByClassName("proposition");
-        for (var i = 0; i < singleControl.length; i++) {
-            singleControl[i].addEventListener('click', displayPropositions);
-        }
-        for (var j = 0; j < propositions.length; j++) {
-            propositions[j].addEventListener('click', sendProposition);
-        }
-        function sendProposition(e) {
-            console.log(selectedPlayers);
-            var data = {
-                rules: e.target.textContent,
-                selectedPlayers: selectedPlayers,
-            };
-            socket.emit('control-directive', data);
-        }
-        function displayPropositions(e) {
-            if ((e.target.classList[0]) !== "control") {
-                if ((e.target.classList[0]) === "proposition") {
-                    sendProposition(e);
-                    return;
-                }
-                else {
-                    console.log("wrong element - l'élément n'a pas la class 'control'");
-                    return;
-                }
-            }
-            var currentElement = e.target;
-            var currentClass = e.target.classList[1];
-            if (document.getElementById('proposition') !== null) {
-                var prop = document.getElementById('proposition');
-                prop.parentNode.removeChild(prop);
-            }
-            var propositions = document.createElement("div");
-            propositions.setAttribute("id", "proposition");
-            currentElement.appendChild(propositions);
-            for (var i = 0; i < json[currentClass].length; i++) {
-                var sentence = document.createElement("p");
-                sentence.setAttribute("class", "proposition" + " proposition-" + i);
-                sentence.textContent = json[currentClass][i];
-                propositions.appendChild(sentence);
-            }
-        }
-    };
-    return SocketEmitButton;
-}());
-exports.default = SocketEmitButton;
-
-
-/***/ }),
-/* 9 */,
-/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -342,6 +164,249 @@ var ManagePlayers = (function () {
     return ManagePlayers;
 }());
 exports.default = ManagePlayers;
+
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var locationInfo_1 = __webpack_require__(1);
+var socketRulesButtonEmit_1 = __webpack_require__(9);
+var controlTemplate_1 = __webpack_require__(7);
+var socketControlApp = (function () {
+    function socketControlApp() {
+    }
+    socketControlApp.run = function (selectedPlayers) {
+        var locationInfo = new locationInfo_1.default("window.location.href");
+        var currentHostname = locationInfo.parse.hostname;
+        var socket = io.connect("http://" + currentHostname + ":1337");
+        socket.on("connect", function () {
+            console.log("socket control connected");
+            socket.emit('control-connected', {
+                name: "control"
+            });
+        });
+        var controlTemplate = new controlTemplate_1.default(document.querySelector("#players-status"));
+        console.log(controlTemplate);
+        socket.on("init-control-players-status", function (data) {
+            console.log(data);
+            var dataToSend = {
+                players: [],
+            };
+            for (var key in data.player) {
+                var mustashPatern = {
+                    "range": data.player[key].data.index,
+                    "ip": data.player[key].ipValue,
+                    "current-rule": data.player[key].data.rules,
+                    "status": data.player[key].data.status,
+                };
+                dataToSend.players.push(mustashPatern);
+            }
+            console.log(dataToSend);
+            controlTemplate.render(dataToSend);
+        });
+        socketRulesButtonEmit_1.default.run(socket, selectedPlayers);
+        socket.on("player-responses", function (data) {
+            document.querySelector(".user-response").innerHTML = data;
+        });
+    };
+    return socketControlApp;
+}());
+exports.default = socketControlApp;
+
+
+/***/ }),
+/* 4 */,
+/* 5 */,
+/* 6 */,
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var ControlTemplate = (function () {
+    function ControlTemplate(element) {
+        this.playerTemplate = element.innerHTML;
+        this.element = element;
+    }
+    ControlTemplate.prototype.render = function (data) {
+        var renderStatus = Mustache.render(this.playerTemplate, data);
+        this.element.innerHTML = renderStatus;
+        console.log(renderStatus);
+    };
+    return ControlTemplate;
+}());
+exports.default = ControlTemplate;
+
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var socketControlApp_1 = __webpack_require__(3);
+var removeSleepMode_1 = __webpack_require__(0);
+var managePlayers_1 = __webpack_require__(2);
+var selectedPlayers = [];
+removeSleepMode_1.default.run();
+socketControlApp_1.default.run(selectedPlayers);
+managePlayers_1.default.run(selectedPlayers);
+
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var jsonData_1 = __webpack_require__(11);
+var SocketRulesButtonEmit = (function () {
+    function SocketRulesButtonEmit() {
+    }
+    SocketRulesButtonEmit.run = function (socket, selectedPlayers) {
+        var _this = this;
+        var controls = document.querySelector("#controls").innerHTML;
+        document.querySelector("#controls").innerHTML = Mustache.render(controls, jsonData_1.default.rulesAndButtons);
+        var controlSubCategories = document.querySelectorAll("#controls div");
+        for (var i = 0; i < controlSubCategories.length; i++) {
+            var buttonChild = controlSubCategories[i].querySelectorAll(".data-button");
+            for (var j = 0; j < buttonChild.length; j++) {
+                buttonChild[j].setAttribute("data-index", j.toString());
+            }
+        }
+        var buttons = document.querySelectorAll(".data-button");
+        for (var i = 0; i < buttons.length; i++) {
+            buttons[i].addEventListener("click", function (e) {
+                _this.sendProposition(e, socket, selectedPlayers);
+            });
+        }
+    };
+    SocketRulesButtonEmit.sendProposition = function (e, socket, selectedPlayers) {
+        console.log(selectedPlayers);
+        console.log(e.target);
+        var data = {
+            rules: e.target.textContent,
+            selectedPlayers: selectedPlayers,
+            category: e.target.getAttribute("data-array"),
+            indexCategory: e.target.getAttribute("data-index"),
+        };
+        socket.emit('control-directive', data);
+    };
+    return SocketRulesButtonEmit;
+}());
+exports.default = SocketRulesButtonEmit;
+
+
+/***/ }),
+/* 10 */,
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var JsonData = (function () {
+    function JsonData() {
+    }
+    return JsonData;
+}());
+JsonData.rulesAndButtons = {
+    loisJ1: [
+        { text: "Je te propose trois lois de Gauche",
+            buttons: [
+                "Proposer deux lois de gauche",
+            ]
+        },
+        { text: "Je te propose deux lois de Gauche et une loi de Droite",
+            buttons: [
+                "Proposer deux lois de gauche",
+                "Proposer une loi de gauche et une loi de droite"
+            ]
+        },
+        { text: "Je te propose une loi Gauche et deux lois de Droite",
+            buttons: [
+                "Proposer deux lois de droite",
+                "Proposer une loi de gauche et une loi de droite"
+            ]
+        },
+        { text: "Je te propose trois lois de Droite",
+            buttons: [
+                "Proposer deux lois de droite",
+            ]
+        },
+    ],
+    loisJ2: [
+        { text: "L'autre joueur te propose deux lois de Gauche",
+            buttons: [
+                "Valider une loi de gauche",
+            ]
+        },
+        { text: "L'autre joueur te propose une loi de Gauche et une loi de Droite",
+            buttons: [
+                "Valider une loi de gauche",
+                "Valider une loi de droite",
+            ]
+        },
+        { text: "L'autre joueur te propose deux lois de Droite",
+            buttons: [
+                "Valider une loi de droite",
+            ]
+        },
+    ],
+    annonces: [
+        { text: "Une loi vient d'être votée. Vous pouvez maintenant la valider ou la rejeter. Souhaitez-vous la valider ?",
+            buttons: [
+                "oui",
+                "non"
+            ]
+        },
+        { text: "La loi a été acceptée", buttons: [] },
+        { text: "La loi a été refusée", buttons: [] },
+        { text: "C'est une loi de Gauche", buttons: [] },
+        { text: "C'est une loi de Droite", buttons: [] },
+    ],
+    narration: [
+        { text: "Bienvenue dans le jeu. Vous allez devoir voter assez de lois pour faire gagner votre parti. Vous serez amené à évincer des joueurs au cours de la partie. Méfiez-vous, une fois éliminés, ces joueurs peuvent donner leur droit de vote à un joueur restant. Attention, deux cyborgs se sont glissés dans chaque équipe, leur but est de prendre le pouvoir en obtenant le droit de vote le plus puissant.", buttons: [] },
+        { text: "Vous appartenez au Parti de Gauche. Votre but est de faire passer 5 lois de gauche ou d'éliminer tous les membres du parti de Droite. Attention, les cyborgs ne doivent pas prendre le pouvoir.", buttons: [] },
+        { text: "Vous appartenez au Parti de Droite. Votre but est de faire passer 5 lois de droite ou d'éliminer tous les membres du parti de Gauche. Attention, les cyborgs ne doivent pas prendre le pouvoir.", buttons: [] },
+        { text: "Vous appartenez au Parti de Gauche. Vous êtes un cyborg. Votre but est d'obtenir le droit de vote le plus puissant.", buttons: [] },
+        { text: "Vous appartenez au Parti de Droite. Vous êtes un cyborg. Votre but est d'obtenir le droit de vote le plus puissant.", buttons: [] },
+    ],
+    cyborg: [
+        { text: "La loi qui vient d'être refusée était de Gauche", buttons: [] },
+        { text: "La loi qui vient d'être refusée était de Droite", buttons: [] },
+        { text: "Trois membres du parti de gauche son côte à côte", buttons: [] },
+        { text: "Trois membres du parti de droite son côte à côte", buttons: [] },
+        { text: "Deux membres du parti de gauche son face à face", buttons: [] },
+        { text: "Deux membres du parti de droite son face à face", buttons: [] },
+        { text: "La personne qui vient d'être éliminée était de Droite", buttons: [] },
+        { text: "La personne qui vient d'être éliminée était de Gauche", buttons: [] },
+        { text: "La personne qui vient d'être éliminée a donné sa voix à un membre du parti de Gauche", buttons: [] },
+        { text: "La personne qui vient d'être éliminée a donné sa voix à un membre du parti de Droite", buttons: [] },
+        { text: "Il reste trois membres du parti de Gauche", buttons: [] },
+        { text: "Il reste trois membres du parti de Droite", buttons: [] },
+        { text: "Le cyborg adverse a été éliminé", buttons: [] },
+        { text: "Le cyborg adverse a plus d'une voix", buttons: [] },
+        { text: "Tu es proche de l'autre cyborg", buttons: [] },
+    ],
+    humain: [
+        { text: "Il fait beau dehors ?", buttons: ["oui", "non"] },
+        { text: "tous se passe bien?", buttons: ["oui", "non"] },
+        { text: "Il fait beau dehors ?", buttons: ["oui", "non"] },
+        { text: "Votre parti est en minorité, il faudrait se remuer", buttons: [] },
+        { text: "Votre parti est en minorité, mais vous avez plus de poids dans le vote", buttons: [] },
+        { text: "Votre parti est en majorité, ne vous reposez pas sur vos lauriers", buttons: [] },
+        { text: "Vous devriez vous méfier de votre voisin", buttons: [] },
+    ],
+};
+exports.default = JsonData;
 
 
 /***/ })
