@@ -1,6 +1,6 @@
 html, body{
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 5px;
+  font-size: 4px;
   margin: 0;
   padding: 0;
 }
@@ -98,10 +98,38 @@ form {
 
 /*players*/
 
+p.data-button {
+  cursor: pointer;
+}
+
+p.data-button:hover{
+  background-color: rgb(0, 255, 255);
+}
+
 .player {
-  width: calc(100% / 3);
+  width: calc(100% / 4);
+  vertical-align: top;
+  margin-top: 5rem;
 }
 
 .player+.player {
   margin-top: 8rem;
+}
+
+p.ip {
+  font-size: 3rem;
+}
+
+section#controls>div {
+  margin-top: 10rem;
+}
+
+section#controls>div>h4{
+  border-bottom: solid 2px;
+  display: inline-block;
+}
+
+#boxplayers {
+  padding-left: 10px;
+  padding-right: 10px;
 }

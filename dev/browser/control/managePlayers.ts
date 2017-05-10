@@ -9,7 +9,7 @@
 export default class ManagePlayers{
 
     static run(selectedPlayers: Array<number>){
-        let nbPlayers: number = 8;
+        let nbPlayers: number = 6;
 
         setup();
 

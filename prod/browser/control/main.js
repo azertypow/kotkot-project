@@ -114,7 +114,7 @@ var ManagePlayers = (function () {
     function ManagePlayers() {
     }
     ManagePlayers.run = function (selectedPlayers) {
-        var nbPlayers = 8;
+        var nbPlayers = 6;
         setup();
         function setup() {
             addPlayersToInterface(nbPlayers);
