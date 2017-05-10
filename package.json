@@ -2,9 +2,10 @@
   "name": "kotkot-project",
   "version": "1.0.0",
   "description": "application pour jeu projet kötköt",
-  "main": "index.js",
+  "main": "prod/nodeApp/main.js",
   "scripts": {
     "test": "echo ok",
+    "start": "node prod/nodeApp/main.js",
     "install-dev-environement": "npm install -g rimraf",
     "clean-main-js": "rimraf ./prod/browser/main.js",
     "clean-main-js-map": "rimraf ./prod/browser/main.js.map",
