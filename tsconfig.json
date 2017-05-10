@@ -6,7 +6,7 @@
     "noImplicitAny": true,
     "removeComments": true,
     "sourceMap": false,
-    "outDir": "prod/nodeApp/",
+    "outDir": "prod/",
     "watch": true
   },
   "files": [
