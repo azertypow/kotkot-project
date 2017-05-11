@@ -10,7 +10,8 @@
     "watch": true
   },
   "files": [
-    "dev/nodeApp/main.ts"
+    "dev/nodeApp/main.ts",
+    "dev/arduino/main.ts"
   ],
   "exclude": [
     "node_modules"
