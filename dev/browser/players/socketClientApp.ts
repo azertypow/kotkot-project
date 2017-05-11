@@ -39,6 +39,10 @@ export default class SocketClientApp {
             for(let i: number = 0; i<allButtons.length; i++){
                 (<HTMLElement>allButtons[i]).addEventListener("click", (e)=>{
                     socket.emit("player-responses", (<HTMLElement>e.target).innerHTML);
+
+                    for(let j: number = 0; j<allButtons.length; j++){
+                        (<HTMLElement>allButtons[j]).style.display = "none";
+                    }
                 });
             }
         });
