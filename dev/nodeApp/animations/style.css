@@ -1,0 +1,12 @@
+.leds {
+    width:15px;
+    height:15px;
+    border-radius: 100%;
+    position: absolute;
+    background: rgb(50,50,50);
+}
+
+html {
+    background-color: black;
+}
+
