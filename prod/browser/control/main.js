@@ -173,15 +173,12 @@ exports.default = ManagePlayers;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var locationInfo_1 = __webpack_require__(1);
 var socketRulesButtonEmit_1 = __webpack_require__(9);
 var controlTemplate_1 = __webpack_require__(7);
 var socketControlApp = (function () {
     function socketControlApp() {
     }
-    socketControlApp.run = function (selectedPlayers) {
-        var locationInfo = new locationInfo_1.default("window.location.href");
-        var currentHostname = locationInfo.parse.hostname;
+    socketControlApp.run = function (selectedPlayers, currentHostname) {
         var socket = io.connect("http://" + currentHostname + ":1337");
         socket.on("connect", function () {
             console.log("socket control connected");
@@ -253,10 +250,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var socketControlApp_1 = __webpack_require__(3);
 var removeSleepMode_1 = __webpack_require__(0);
 var managePlayers_1 = __webpack_require__(2);
+var LoadJs_1 = __webpack_require__(12);
+var locationInfo_1 = __webpack_require__(1);
 var selectedPlayers = [];
 removeSleepMode_1.default.run();
-socketControlApp_1.default.run(selectedPlayers);
-managePlayers_1.default.run(selectedPlayers);
+var locationInfo = new locationInfo_1.default(window.location.href);
+var currentHostname = locationInfo.parse.hostname;
+LoadJs_1.default.load("http://" + currentHostname + ":1337/socket.io/socket.io.js").addEventListener("load", function () {
+    socketControlApp_1.default.run(selectedPlayers, currentHostname);
+    managePlayers_1.default.run(selectedPlayers);
+});
 
 
 /***/ }),
@@ -407,6 +410,28 @@ JsonData.rulesAndButtons = {
     ],
 };
 exports.default = JsonData;
+
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var LoadJs = (function () {
+    function LoadJs() {
+    }
+    LoadJs.load = function (file) {
+        var jsElement = document.createElement("script");
+        jsElement.type = "text/javascript";
+        jsElement.src = file;
+        document.body.appendChild(jsElement);
+        return jsElement;
+    };
+    return LoadJs;
+}());
+exports.default = LoadJs;
 
 
 /***/ })

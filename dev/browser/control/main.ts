@@ -4,17 +4,27 @@
 
 /// <reference types="mustache" />
 
-import socketControlApp from "./socketControlApp";
-import removeSleepMode from "../removeSleepMode";
-import ManagePlayers from "./managePlayers";
+import socketControlApp from "./socketControlApp"
+import removeSleepMode from "../removeSleepMode"
+import ManagePlayers from "./managePlayers"
+import LoadJs from "../LoadJs"
+import LocationInfo from "../locationInfo"
+
+import child_process = require("child_process");
 
 let selectedPlayers: Array<number> = [];
 
 // remove sleep mode
 removeSleepMode.run();
 
-// initialiser socket
-socketControlApp.run(selectedPlayers);
+// ajouter js dinamiqument le file pour la connection socket (à cause de l'adresse ip)
+const locationInfo: LocationInfo = new LocationInfo(window.location.href);
+const currentHostname = locationInfo.parse.hostname;
 
-// manage player
-ManagePlayers.run(selectedPlayers);
+LoadJs.load(`http://${currentHostname}:1337/socket.io/socket.io.js`).addEventListener("load", ()=>{
+    // initialise socket
+    socketControlApp.run(selectedPlayers, currentHostname);
+
+    // manage player
+    ManagePlayers.run(selectedPlayers);
+});

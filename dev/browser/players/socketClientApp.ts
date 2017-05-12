@@ -5,18 +5,10 @@
 /// <reference types="socket.io-client" />
 /// <reference path="../../typescriptDeclaration/Player_template_dataToSend.d.ts" />
 
-import LocationInfo from "../locationInfo";
 import PlayerTemplate from "./playerTemplate";
 
 export default class SocketClientApp {
-    public static run(playerTemplate: PlayerTemplate) {
-
-        // récupérer les info sur l'url courrant
-        const locationInfo: LocationInfo = new LocationInfo("window.location.href");
-
-        // récupérer le hostname
-        const currentHostname = locationInfo.parse.hostname;
-
+    public static run(playerTemplate: PlayerTemplate, currentHostname: string) {
         // initialiser le socket
         let socket: SocketIOClient.Socket = io.connect(`http://${currentHostname}:1337`);
 
