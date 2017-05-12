@@ -4,6 +4,7 @@
 
 function setColor(ledId, ColorRGB) {
 
+    // console.log("ledId" + ledId);
 
     var currentLed = document.getElementById("led-" + ledId);
     currentLed.style.background = "rgb(" + ColorRGB.r + "," + ColorRGB.g + "," + ColorRGB.b + ")";
@@ -16,7 +17,7 @@ function clearLedColor() {
 
     counter++;
 
-    console.log("clear");
+    // console.log("clear");
 
     var totalLedNumber = document.getElementsByClassName("leds");
 

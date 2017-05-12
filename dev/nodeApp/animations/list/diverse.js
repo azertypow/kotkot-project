@@ -13,8 +13,6 @@ var Green =         { r:0, g:255, b:0};
 var myAnimationFunction;
 var delayMillis = 500;
 
-//var selectedPlayers=[1,3];
-// playerSelection(players, selectedPlayers);
 
 function chooseColor(colors) {
 
@@ -59,23 +57,5 @@ function animationPlayerSelection() {
 
 }
 
-var centerToBorderCounter = 0;
-
-function animationFromCenterToBorder() {
-
-        for (var i=0; i<players; i++) {
-            var ledId = centerToBorderCounter + i*numberOfLeds;
-            ColorRGB = Red;
-            setColor(ledId, ColorRGB);
-        }
-
-        centerToBorderCounter++;
-
-        if(centerToBorderCounter > numberOfLeds-1) {
-            console.log("counter > numberofleds");
-            centerToBorderCounter = 0;
-        }
-
-}
 
 
