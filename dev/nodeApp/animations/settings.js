@@ -9,3 +9,5 @@ var spaceBetweenLeds = 30;
 
 var counter = 0;
 
+/* Paramètres de durée */
+var durationPlayerSelection = 100;
