@@ -6,7 +6,11 @@
 
 import SerialPort = require("serialport");
 import Events = require("events");
-const threshold : number = 100;
+import ReadLine = require("readline");
+
+const threshold: number = 100;
+const maxPotentiometer: number = 1024;
+const minPotentiometer: number = 0;
 
 export default class PortSerial {
 
@@ -17,15 +21,20 @@ export default class PortSerial {
     constructor (serialPort: string, options: SerialPort.options){
         this.myUsb = new SerialPort(serialPort, options);
         this.data = new Events();
+
         this.myUsb.on("data", (value: string)=>{
 
-            let value_toString = parseInt(value);
+            ReadLine.clearLine(process.stdout, 0);
+            ReadLine.cursorTo(process.stdout, 0, null);
+            process.stdout.write(value);
 
-            if( value_toString < (this.valueStocked - threshold) || value_toString > ( this.valueStocked + threshold) ){
-                this.data.emit("received", value);
-                this.valueStocked = value_toString;
-                console.log("OK");
-            }
+            // let value_toInt = parseInt(value);
+            //
+            // if( value_toInt < (this.valueStocked - threshold) || value_toInt > ( this.valueStocked + threshold) ){
+            //     this.data.emit("received", value);
+            //     this.valueStocked = value_toInt;
+            //     console.log("OK");
+            // }
         });
     }
 }
