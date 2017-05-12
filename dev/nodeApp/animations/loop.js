@@ -21,5 +21,5 @@ function loop() {
 
 }
 
-//selectTwoPlayers();
+selectTwoPlayers(selectedPlayers);
 //voteTimer(voteDuration);

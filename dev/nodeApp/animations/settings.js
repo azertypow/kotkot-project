@@ -3,9 +3,8 @@
  */
 
 /* Variables de test */
-// Problème non-identifié avec cette variable rentrée en paramètre de la fonction selectTwoPlayers()
-// => c'est à cause de requestAnimationFrame qui agit bizarrement avec les fonctions qui ont des paramètres, à corriger
-// selectedPlayers = [0,3];
+
+var selectedPlayers = [0,3];
 
 
 /* Toutes les variables globales */
