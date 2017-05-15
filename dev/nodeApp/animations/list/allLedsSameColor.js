@@ -33,6 +33,7 @@ function calcColorDiff(firstColor, secondColor, Diff) {
 
 function allLedsSameColor(firstColor, secondColor, thirdColor, currentColor, Diff, divider) {
 
+    // si le rouge/vert/bleu de la 1ere couleur est plus élevé que celui de la 2e, alors on fait baisser la valeur et inversement
     if (firstColor.r !== secondColor.r) {
         currentColor.r = (firstColor.r > secondColor.r) ? currentColor.r -= Math.floor(Diff.r/divider) : currentColor.r += Math.floor(Diff.r/divider);
     }
@@ -45,12 +46,7 @@ function allLedsSameColor(firstColor, secondColor, thirdColor, currentColor, Dif
         currentColor.b = (firstColor.b > secondColor.b) ? currentColor.b -= Math.floor(Diff.b/divider) : currentColor.b += Math.floor(Diff.b/divider);
     }
 
-    console.log("firstColor"),
-    console.log(firstColor);
-    console.log("secondColor"),
-    console.log(secondColor);
-
-
+    // /!\ la valeur de Math.floor(Diff.b/divider) peut entraîner des valeurs approximatives
     if (currentColor.r === secondColor.r && currentColor.g === secondColor.g && currentColor.b === secondColor.b) {
         firstColor = secondColor;
         secondColor = thirdColor;
