@@ -6,20 +6,12 @@
 /// <reference path="../../typescriptDeclaration/controlTemplateMustachFormat.d.ts"/>
 /// <reference path="../../typescriptDeclaration/controlTemplateMustachFormatPlayers.d.ts"/>
 
-import LocationInfo from "../locationInfo";
 import SocketRulesButtonEmit from "./socketRulesButtonEmit"
 import ControlTemplate from "./controlTemplate";
 import Players from "../../nodeApp/players";
 
 export default class socketControlApp {
-    public static run(selectedPlayers: Array<number>){
-
-        // récupérer les info sur l'url courrant
-        const locationInfo: LocationInfo = new LocationInfo("window.location.href");
-
-        // récupérer le hostname
-        const currentHostname = locationInfo.parse.hostname;
-
+    public static run(selectedPlayers: Array<number>, currentHostname: string){
         // initialiser le socket
         let socket: SocketIOClient.Socket = io.connect(`http://${currentHostname}:1337`);
 

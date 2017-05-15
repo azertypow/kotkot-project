@@ -163,13 +163,10 @@ exports.default = PlayerTemplate;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var locationInfo_1 = __webpack_require__(1);
 var SocketClientApp = (function () {
     function SocketClientApp() {
     }
-    SocketClientApp.run = function (playerTemplate) {
-        var locationInfo = new locationInfo_1.default("window.location.href");
-        var currentHostname = locationInfo.parse.hostname;
+    SocketClientApp.run = function (playerTemplate, currentHostname) {
         var socket = io.connect("http://" + currentHostname + ":1337");
         socket.on("connect", function () {
             console.log("socket client player connected");
@@ -183,6 +180,9 @@ var SocketClientApp = (function () {
             for (var i = 0; i < allButtons.length; i++) {
                 allButtons[i].addEventListener("click", function (e) {
                     socket.emit("player-responses", e.target.innerHTML);
+                    for (var j = 0; j < allButtons.length; j++) {
+                        allButtons[j].style.display = "none";
+                    }
                 });
             }
         });
@@ -206,6 +206,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var socketClientApp_1 = __webpack_require__(5);
 var playerTemplate_1 = __webpack_require__(4);
 var removeSleepMode_1 = __webpack_require__(0);
+var LoadJs_1 = __webpack_require__(12);
+var locationInfo_1 = __webpack_require__(1);
 removeSleepMode_1.default.run();
 var initParam = {
     setIndex: 'en attente…',
@@ -218,7 +220,34 @@ var initParam = {
     buttonsElement: document.querySelector(".buttons"),
 };
 var playerTemplate = new playerTemplate_1.default(initParam);
-socketClientApp_1.default.run(playerTemplate);
+var locationInfo = new locationInfo_1.default(window.location.href);
+var currentHostname = locationInfo.parse.hostname;
+LoadJs_1.default.load("http://" + currentHostname + ":1337/socket.io/socket.io.js").addEventListener("load", function () {
+    socketClientApp_1.default.run(playerTemplate, currentHostname);
+});
+
+
+/***/ }),
+/* 11 */,
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var LoadJs = (function () {
+    function LoadJs() {
+    }
+    LoadJs.load = function (file) {
+        var jsElement = document.createElement("script");
+        jsElement.type = "text/javascript";
+        jsElement.src = file;
+        document.body.appendChild(jsElement);
+        return jsElement;
+    };
+    return LoadJs;
+}());
+exports.default = LoadJs;
 
 
 /***/ })
