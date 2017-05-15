@@ -21,5 +21,5 @@ var centerToBorderCounter = 0; /* paramètre pour l'animation du temps de vote *
 
 /* Paramètres de durée */
 var durationPlayerSelection = 100;
-var voteDuration = 1000; /* doit être proportionnel à la variable numberOfLeds */
+
 

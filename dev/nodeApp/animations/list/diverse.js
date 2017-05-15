@@ -4,11 +4,11 @@
 
 var ColorRGB =      {r:0, g:0, b:0};
 var DefaultColor =  {r:50, g:50, b:50};
-var Red =           { r:255, g:0, b:0};
-var Blue =          { r:0, g:0, b:255};
-var Cyan =          { r:0, g:255, b:255};
-var Yellow =        { r:255, g:255, b:0};
-var Green =         { r:0, g:255, b:0};
+var Red =           {r:255, g:0, b:0};
+var Blue =          {r:0, g:0, b:255};
+var Cyan =          {r:0, g:255, b:255};
+var Yellow =        {r:255, g:255, b:0};
+var Green =         {r:0, g:255, b:0};
 
 var myAnimationFunction;
 var delayMillis = 500;
@@ -37,7 +37,6 @@ function gradient(colors) {
     var diffB = Math.abs(firstColor.b - secondColor.b);
 
     gradientExecute(firstColor, secondColor, currentColor, sens, diffR, diffG, diffB);
-
 
 }
 
@@ -72,6 +71,9 @@ function gradientExecute(firstColor, secondColor, currentColor, sens, diffR, dif
     })
 
 }
+
+
+
 
 function playerSelection(players, selectedPlayers) {
 

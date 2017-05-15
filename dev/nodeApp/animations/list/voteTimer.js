@@ -10,18 +10,20 @@ function voteTimer(voteDuration) {
 
     console.log("voteTimer");
     console.log("firstduration " + voteDuration)
-    animationFromCenterToBorder(currentVoteDuration);
+    var clearCanvas = false;
+    animationFromCenterToBorder(currentVoteDuration, voteDuration, clearCanvas, 1);
 
 }
 
 
 
-function animationFromCenterToBorder(currentVoteDuration) {
+function animationFromCenterToBorder(currentVoteDuration, voteDuration, clearCanvas, howManyTimes) {
 
     currentVoteDuration--;
 
-    // à décommenter si on ne veut pas que les couleurs s'accumulent
-    //clearLedColor();
+    if (clearCanvas) {
+        clearLedColor();
+    }
 
     for (var i=0; i<players; i++) {
         var ledId = centerToBorderCounter + i*numberOfLeds;
@@ -33,18 +35,30 @@ function animationFromCenterToBorder(currentVoteDuration) {
         centerToBorderCounter++;
     }
 
-    // if(centerToBorderCounter > numberOfLeds-1) {
-    //     centerToBorderCounter = 0;
-    // }
+    if(centerToBorderCounter === numberOfLeds) {
+        centerToBorderCounter = 0;
+        howManyTimes--;
+    }
 
-    if (currentVoteDuration === 0) {
+    console.log(howManyTimes);
+
+    // // if(centerToBorderCounter > numberOfLeds-1) {
+    // //     centerToBorderCounter = 0;
+    // // }
+    //
+    // // if (currentVoteDuration === 0) {
+    // //     return;
+    // // }
+    //
+
+    if(howManyTimes === 0) {
         return;
     }
 
     // requestAnimationFrame(myfunction(param)) ne marche pas
     // il faut utiliser une fonction anonyme : requestAnimationFrame(function() { myfunction(param); });
     requestAnimationFrame(function() {
-        animationFromCenterToBorder(currentVoteDuration);
+        animationFromCenterToBorder(currentVoteDuration, voteDuration, clearCanvas, howManyTimes);
     });
 
 }
