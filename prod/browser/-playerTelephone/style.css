@@ -1,0 +1,46 @@
+html {
+    background-color: blue;
+}
+
+#laws {
+    width: 70vw;
+    height: 50vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 30vh auto 20vh;
+
+}
+
+#laws .law {
+    width: 25%;
+    height: 100%;
+    background-color: blue;
+    padding:20px;
+    text-align: center;
+    font-family: monospace;
+    font-weight: bold;
+    font-size:36px;
+    animation: randomLaws 0.2s infinite;
+}
+
+
+@keyframes randomLaws { /* Tous les autres navigateurs */
+    0% {
+        background-color: cyan;
+    }
+
+    50% {
+        background-color: yellow;
+    }
+}
+
+.humaniste {
+    color: cyan;
+    border: 15px solid cyan;
+}
+
+.progressiste {
+    color: yellow;
+    border: 15px solid yellow;
+}

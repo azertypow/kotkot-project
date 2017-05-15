@@ -4,11 +4,11 @@
 
 function setColor(ledId, ColorRGB) {
 
-    // console.log("ledId" + ledId);
 
     var currentLed = document.getElementById("led-" + ledId);
     currentLed.style.background = "rgb(" + ColorRGB.r + "," + ColorRGB.g + "," + ColorRGB.b + ")";
 
+    // return ledId + " " + ColorRGB.r + " " + ColorRGB.g + " " + ColorRGB.b;
 
 }
 
