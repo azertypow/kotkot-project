@@ -21,5 +21,7 @@ function loop() {
 
 }
 
-selectTwoPlayers(selectedPlayers);
+//selectTwoPlayers(selectedPlayers);
 //voteTimer(voteDuration);
+
+gradient([Blue, Red]);

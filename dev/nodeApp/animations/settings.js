@@ -11,6 +11,8 @@ var selectedPlayers = [0,3];
 var players = 8;
 var numberOfLeds = 10; /* nombre de leds sur une seule bande */
 var spaceBetweenLeds = 30;
+var totalNumberOfLeds = players*numberOfLeds;
+// var totalLedNumber = document.getElementsByClassName("leds");
 
 
 
