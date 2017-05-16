@@ -27,6 +27,30 @@ for (var i=0; i<aLaw.length; i++) {
     aLaw[i].addEventListener('click', generateLaw);
 }
 
+document.getElementById('valider').addEventListener('click', sendChoicesToPlayerTwo)
+
+
+// Quand on clique sur "Valider" ça envoie les choix au J2
+function sendChoicesToPlayerTwo() {
+
+    var lawsArray = {   '0':'',
+                        '1':''};
+    var selectedLaws = document.getElementsByClassName("selectedLaw");
+
+    for(var i=0; i<selectedLaws.length; i++) {
+        console.log(selectedLaws[i].classList);
+        if (selectedLaws[i].classList[1] === "humaniste" || selectedLaws[i].classList[1] === "progressiste") {
+            lawsArray[i] = selectedLaws[i].classList[1]; // la class 1 correspond au type de loi
+        } else {
+            console.log("classList[1] ne correspond pas au type de loi");
+        }
+
+    }
+
+    console.log(lawsArray);
+
+}
+
 // crée les 3 emplacements pour les lois
 function createLaws(nbCards) {
 
@@ -71,10 +95,11 @@ function generateLaw(e) {
 
 var maxLawsToSelect = 2;
 
+
+// permet au J1 de sélectionner les deux lois à envoyer
 function selectTwoLaws(e) {
 
     var currentSelectedLaws = document.getElementsByClassName("selectedLaw").length;
-    console.log(currentSelectedLaws);
 
     var thisLaw = document.getElementById(e.target.id);
 
@@ -91,17 +116,25 @@ function selectTwoLaws(e) {
 
     }
 
-    if (currentSelectedLaws === 1) {
+    currentSelectedLaws = document.getElementsByClassName("selectedLaw").length;
+    console.log(currentSelectedLaws);
+
+    if (currentSelectedLaws === 2) {
         showValidationButton();
     } else {
         hideValidationButton();
     }
 
 
+
 }
 
-function showValidationButton() {
 
+
+
+// Affiche les différents éléments d'interface -
+
+function showValidationButton() {
     var button = document.getElementById('valider');
     button.classList.add('active');
 }
@@ -112,14 +145,12 @@ function hideValidationButton() {
 }
 
 function displayMessage(message) {
-
     var blocMessage = document.getElementById('message').getElementsByTagName('p')[0];
     blocMessage.textContent = message;
 
 }
 
 function displayWarning(warning) {
-
     var blocWarning = document.getElementById('warning');
     blocWarning.textContent = warning;
     blocWarning.classList.add('active');
@@ -128,7 +159,6 @@ function displayWarning(warning) {
 
 function removeWarning() {
     var blocWarning = document.getElementById('warning');
-    // blocWarning.textContent = "";
     blocWarning.classList.remove('active');
 }
 
