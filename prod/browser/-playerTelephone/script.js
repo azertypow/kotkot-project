@@ -91,12 +91,29 @@ function selectTwoLaws(e) {
 
     }
 
+    if (currentSelectedLaws === 1) {
+        showValidationButton();
+    } else {
+        hideValidationButton();
+    }
 
+
+}
+
+function showValidationButton() {
+
+    var button = document.getElementById('valider');
+    button.classList.add('active');
+}
+
+function hideValidationButton() {
+    var button = document.getElementById('valider');
+    button.classList.remove('active');
 }
 
 function displayMessage(message) {
 
-    var blocMessage = document.getElementById('message');
+    var blocMessage = document.getElementById('message').getElementsByTagName('p')[0];
     blocMessage.textContent = message;
 
 }

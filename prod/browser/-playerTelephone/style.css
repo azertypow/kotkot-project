@@ -1,31 +1,35 @@
+
+
 html {
     background-color: blue;
 }
 
 body {
-    width: 70vw;
-    margin: 10vh auto;
+    width: 85vw;
+    margin: 5vh auto;
 }
 
 #laws {
-    height: 50vh;
+    height: 55vh;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 10vh auto 5vh;
+    margin: 5vh auto 4vh;
+    /*border: 1px solid red;*/
 
 }
 
 #laws .law {
-    width: 25%;
-    height: 85%;
+    width: 30%;
+    height: 100%;
     background-color: blue;
     padding:20px;
     text-align: center;
     font-family: monospace;
     font-weight: bold;
-    font-size:36px;
-    border: 15px solid blue;
+    font-size:120%;
+    border: 5px solid blue;
+    box-sizing: border-box;
 }
 
 
@@ -76,23 +80,32 @@ body {
 /* Message */
 
 #message {
-    margin-left:15px;
-    font-size: 20px;
-    font-family: monospace;
-    color: white;
+    /*border: 1px solid yellow;*/
+    box-sizing: border-box;
+    height:50px;
+    width: 70%;
+    justify-content: end;
 }
 
-#message::before {
+#message p {
+    font-size: 120%;
+    font-family: monospace;
+    color: white;
+    /*border: 1px solid white;*/
+}
+
+#message p::before {
     content: "> ";
 }
 
 
 #warning {
     opacity: 0;
+    font-size: 90%;
     font-family: monospace;
     background-color: white;
     display: inline-block;
-    padding: 20px;
+    padding: 12px;
     margin-left: -20px;
     transition: margin-left 0.5s ease, opacity 0.5s ease;
 }
@@ -102,6 +115,27 @@ body {
 
 #warning.active {
     opacity: 1;
-    margin-left: 15px;
+    margin-left: 0px;
     transition: margin-left 0.5s ease, opacity 0.5s ease;
+}
+
+
+#controls button {
+    background-color: blue;
+    padding: 10px;
+    font-size: 80%;
+    text-transform: uppercase;
+    font-weight: bold;
+    border: 3px solid white;
+    color: white;
+    float: right;
+    margin-right: -15px;
+    opacity: 0;
+    transition: margin-right 0.5s ease, opacity 0.5s ease;
+}
+
+#controls button.active {
+    opacity: 1;
+    margin-right: 0;
+    transition: margin-right 0.5s ease, opacity 0.5s ease;
 }
