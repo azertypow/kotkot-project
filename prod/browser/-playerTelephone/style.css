@@ -2,13 +2,17 @@ html {
     background-color: blue;
 }
 
-#laws {
+body {
     width: 70vw;
+    margin: 20vh auto;
+}
+
+#laws {
     height: 50vh;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 30vh auto 20vh;
+    margin: 10vh auto 20vh;
 
 }
 
@@ -21,7 +25,22 @@ html {
     font-family: monospace;
     font-weight: bold;
     font-size:36px;
+    border: 15px solid blue;
+}
+
+
+
+.law:nth-child(1):not(.humaniste):not(.progressiste) {
     animation: randomLaws 0.2s infinite;
+}
+
+
+.law:nth-child(2):not(.humaniste):not(.progressiste) {
+    animation: randomLaws 0.2s infinite 0.07s;
+}
+
+.law:nth-child(3):not(.humaniste):not(.progressiste) {
+    animation: randomLaws 0.2s infinite 0.14s;
 }
 
 
@@ -37,10 +56,32 @@ html {
 
 .humaniste {
     color: cyan;
-    border: 15px solid cyan;
+    border-color: cyan !important;
 }
 
 .progressiste {
     color: yellow;
-    border: 15px solid yellow;
+    border-color: yellow !important;
+}
+
+
+.selectedLaw {
+    background-color: white !important;
+    border-color: black !important;
+    color: black;
+}
+
+
+
+/* Message */
+
+#message {
+    margin-left:15px;
+    font-size: 20px;
+    font-family: monospace;
+    color: white;
+}
+
+#message::before {
+    content: "> ";
 }
