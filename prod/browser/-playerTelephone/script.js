@@ -4,54 +4,62 @@
 
 
 var messages = {
-    "a":"Tire trois lois au hasard",
-    "b":"Choisis-en deux à envoyer à l'autre joueur"
+    "tireTroisLois":"Tire trois lois au hasard",
+    "choisiDeuxLois":"Choisis-en deux à envoyer à l'autre joueur",
+
 };
 
 var warnings = {
     "maxTwoLaws":"Tu ne peux pas sélectionner plus de deux lois",
+    "maxOneLaw":"Tu ne peux pas sélectionner plus d'une loi",
     "notEnoughLaws":"Tu dois sélectionner deux lois",
     "tooSlow":"Dépêche-toi, tu n'as bientôt plus de temps"
 }
 
 var displayedLaws = 0;
 
-displayMessage(messages.a);
+var lawsArray = {
+    '0':'humaniste',
+    '1':'progressiste'
+};
 
-createLaws(3);
+playerOneLawSelection();
+//playerTwoLawSelection();
 
 
-// Ajoute les listeners
-var aLaw = document.getElementsByClassName('law');
-for (var i=0; i<aLaw.length; i++) {
-    aLaw[i].addEventListener('click', generateLaw);
+// fonction à lancer pour que le joueur 2 puisse choisir sa loi parmi les 2 choix
+function playerTwoLawSelection() {
+
+    createLaws(2);
+    setLaws(lawsArray);
+
 }
 
-document.getElementById('valider').addEventListener('click', sendChoicesToPlayerTwo)
+// fonction à lancer pour que le joueur 1 puisse choisir ses 2 lois parmi les 3 choix
+function playerOneLawSelection() {
 
+    displayMessage(messages.tireTroisLois);
+    createLaws(3);
 
-// Quand on clique sur "Valider" ça envoie les choix au J2
-function sendChoicesToPlayerTwo() {
-
-    var lawsArray = {   '0':'',
-                        '1':''};
-    var selectedLaws = document.getElementsByClassName("selectedLaw");
-
-    for(var i=0; i<selectedLaws.length; i++) {
-        console.log(selectedLaws[i].classList);
-        if (selectedLaws[i].classList[1] === "humaniste" || selectedLaws[i].classList[1] === "progressiste") {
-            lawsArray[i] = selectedLaws[i].classList[1]; // la class 1 correspond au type de loi
-        } else {
-            console.log("classList[1] ne correspond pas au type de loi");
-        }
-
+    // Ajoute les listeners
+    var aLaw = document.getElementsByClassName('law');
+    for (var i=0; i<aLaw.length; i++) {
+        aLaw[i].addEventListener('click', generateLaw);
     }
-
-    console.log(lawsArray);
+    document.getElementById('valider').addEventListener('click', sendChoicesToPlayerTwo);
 
 }
 
-// crée les 3 emplacements pour les lois
+
+
+
+/***************
+ *
+ *   Fonctions communes aux deux phases de vote
+ *
+ ***************/
+
+// crée les x emplacements pour les lois
 function createLaws(nbCards) {
 
     var lawsBlock = document.getElementById('laws');
@@ -62,6 +70,76 @@ function createLaws(nbCards) {
         lawsBlock.appendChild(oneLaw);
     }
 }
+
+
+/***************
+ *
+ *   Fonctions relatives à la deuxième phase de vote (joueur 2 choisi 1 lois parmi 2)
+ *
+ ***************/
+
+// affiche les deux lois choisies par le J1
+function setLaws(lawsArray) {
+
+    var laws = document.getElementsByClassName('law');
+
+    for (var i=0; i<laws.length; i++) {
+        laws[i].classList.add(lawsArray[i]);
+        laws[i].addEventListener('click', selectOneLaw);
+        var lawContent = document.createElement("p");
+        var cardType = lawsArray[i];
+        if (cardType === "humaniste") {
+            cardType = "Humaniste"
+        } else if (cardType === "progressiste") {
+            cardType = "Progressiste";
+        }
+        lawContent.textContent = "Loi " + cardType;
+        laws[i].appendChild(lawContent);
+    }
+
+
+
+}
+
+// permet au J2 de sélectionner une loi à envoyer
+function selectOneLaw(e) {
+
+    var currentSelectedLaws = document.getElementsByClassName("selectedLaw").length;
+
+    var thisLaw = document.getElementById(e.target.id);
+
+    if (thisLaw.classList.contains("selectedLaw")) {
+        thisLaw.classList.remove("selectedLaw");
+        removeWarning();
+    } else {
+        if (currentSelectedLaws<1) {
+            thisLaw.classList.add("selectedLaw");
+            removeWarning();
+        } else {
+            displayWarning(warnings.maxOneLaw);
+        }
+
+    }
+
+    currentSelectedLaws = document.getElementsByClassName("selectedLaw").length;
+    console.log(currentSelectedLaws);
+
+    if (currentSelectedLaws === 1) {
+        showValidationButton();
+    } else {
+        hideValidationButton();
+    }
+
+}
+
+
+
+/***************
+ *
+ *   Fonctions relatives à la première phase de vote (joueur 1 choisi 2 lois parmi 3)
+ *
+ ***************/
+
 
 // choisit une loi au hasard quand on clique sur un carré
 function generateLaw(e) {
@@ -83,18 +161,14 @@ function generateLaw(e) {
 
     // quand trois lois sont affichées, on a la possibilité de les choisir
     if (displayedLaws === 3) {
-        displayMessage(messages.b);
+        displayMessage(messages.choisiDeuxLois);
         var laws = document.getElementsByClassName("law");
         for (var i=0; i<laws.length; i++) {
             laws[i].addEventListener('click', selectTwoLaws);
         }
-
     }
 
 }
-
-var maxLawsToSelect = 2;
-
 
 // permet au J1 de sélectionner les deux lois à envoyer
 function selectTwoLaws(e) {
@@ -125,12 +199,41 @@ function selectTwoLaws(e) {
         hideValidationButton();
     }
 
+}
 
+// Quand on clique sur "Valider" ça envoie les choix au J2
+function sendChoicesToPlayerTwo() {
+
+    var lawsArray = {   '0':'',
+        '1':''};
+    var selectedLaws = document.getElementsByClassName("selectedLaw");
+
+    for(var i=0; i<selectedLaws.length; i++) {
+        console.log(selectedLaws[i].classList);
+        if (selectedLaws[i].classList[1] === "humaniste" || selectedLaws[i].classList[1] === "progressiste") {
+            lawsArray[i] = selectedLaws[i].classList[1]; // la class 1 correspond au type de loi
+        } else {
+            console.log("classList[1] ne correspond pas au type de loi");
+        }
+
+    }
+
+    console.log(lawsArray);
+
+    document.getElementById('valider').removeEventListener('click', sendChoicesToPlayerTwo);
 
 }
 
 
 
+
+
+
+/***************
+ *
+ *   Fonctions relatives à l'affichage des éléments textuels : boutons, messages, warnings
+ *
+ ***************/
 
 // Affiche les différents éléments d'interface -
 
