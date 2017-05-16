@@ -1,0 +1,141 @@
+
+
+html {
+    background-color: blue;
+}
+
+body {
+    width: 85vw;
+    margin: 5vh auto;
+}
+
+#laws {
+    height: 55vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 5vh auto 4vh;
+    /*border: 1px solid red;*/
+
+}
+
+#laws .law {
+    width: 30%;
+    height: 100%;
+    background-color: blue;
+    padding:20px;
+    text-align: center;
+    font-family: monospace;
+    font-weight: bold;
+    font-size:120%;
+    border: 5px solid blue;
+    box-sizing: border-box;
+}
+
+
+
+.law:nth-child(1):not(.humaniste):not(.progressiste) {
+    animation: randomLaws 0.2s infinite;
+}
+
+
+.law:nth-child(2):not(.humaniste):not(.progressiste) {
+    animation: randomLaws 0.2s infinite 0.07s;
+}
+
+.law:nth-child(3):not(.humaniste):not(.progressiste) {
+    animation: randomLaws 0.2s infinite 0.14s;
+}
+
+
+@keyframes randomLaws { /* Tous les autres navigateurs */
+    0% {
+        background-color: cyan;
+    }
+
+    50% {
+        background-color: yellow;
+    }
+}
+
+.humaniste {
+    color: cyan;
+    border-color: cyan !important;
+}
+
+.progressiste {
+    color: yellow;
+    border-color: yellow !important;
+}
+
+
+.selectedLaw {
+    background-color: white !important;
+    border-color: black !important;
+    color: black;
+}
+
+
+
+/* Message */
+
+#message {
+    /*border: 1px solid yellow;*/
+    box-sizing: border-box;
+    height:50px;
+    width: 70%;
+    justify-content: end;
+}
+
+#message p {
+    font-size: 120%;
+    font-family: monospace;
+    color: white;
+    /*border: 1px solid white;*/
+}
+
+#message p::before {
+    content: "> ";
+}
+
+
+#warning {
+    opacity: 0;
+    font-size: 90%;
+    font-family: monospace;
+    background-color: white;
+    display: inline-block;
+    padding: 12px;
+    margin-left: -20px;
+    transition: margin-left 0.5s ease, opacity 0.5s ease;
+}
+#warning::before {
+    content: " ❌ ";
+}
+
+#warning.active {
+    opacity: 1;
+    margin-left: 0px;
+    transition: margin-left 0.5s ease, opacity 0.5s ease;
+}
+
+
+#controls button {
+    background-color: blue;
+    padding: 10px;
+    font-size: 80%;
+    text-transform: uppercase;
+    font-weight: bold;
+    border: 3px solid white;
+    color: white;
+    float: right;
+    margin-right: -15px;
+    opacity: 0;
+    transition: margin-right 0.5s ease, opacity 0.5s ease;
+}
+
+#controls button.active {
+    opacity: 1;
+    margin-right: 0;
+    transition: margin-right 0.5s ease, opacity 0.5s ease;
+}

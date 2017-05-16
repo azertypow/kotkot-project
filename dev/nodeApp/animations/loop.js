@@ -22,4 +22,8 @@ function loop() {
 }
 
 selectTwoPlayers(selectedPlayers);
-//voteTimer(voteDuration);
+//voteTimer(1000); //param = voteDuration (initial:1000) // doit être proportionnel à la variable numberOfLeds
+//gradient([Blue, Red]);
+//initAllLedsSameColor([Yellow, Cyan, Red]);
+//voteIsComing(20); //param = voteDuration (initial:80) // doit être proportionnel à la variable numberOfLeds
+//allLedsDifferentColor();
