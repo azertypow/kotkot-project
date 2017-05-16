@@ -4,7 +4,7 @@ html {
 
 body {
     width: 70vw;
-    margin: 20vh auto;
+    margin: 10vh auto;
 }
 
 #laws {
@@ -12,13 +12,13 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 10vh auto 20vh;
+    margin: 10vh auto 5vh;
 
 }
 
 #laws .law {
     width: 25%;
-    height: 100%;
+    height: 85%;
     background-color: blue;
     padding:20px;
     text-align: center;
@@ -84,4 +84,24 @@ body {
 
 #message::before {
     content: "> ";
+}
+
+
+#warning {
+    opacity: 0;
+    font-family: monospace;
+    background-color: white;
+    display: inline-block;
+    padding: 20px;
+    margin-left: -20px;
+    transition: margin-left 0.5s ease, opacity 0.5s ease;
+}
+#warning::before {
+    content: " ❌ ";
+}
+
+#warning.active {
+    opacity: 1;
+    margin-left: 15px;
+    transition: margin-left 0.5s ease, opacity 0.5s ease;
 }

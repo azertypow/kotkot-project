@@ -8,6 +8,12 @@ var messages = {
     "b":"Choisis-en deux à envoyer à l'autre joueur"
 };
 
+var warnings = {
+    "maxTwoLaws":"Tu ne peux pas sélectionner plus de deux lois",
+    "notEnoughLaws":"Tu dois sélectionner deux lois",
+    "tooSlow":"Dépêche-toi, tu n'as bientôt plus de temps"
+}
+
 var displayedLaws = 0;
 
 displayMessage(messages.a);
@@ -63,10 +69,28 @@ function generateLaw(e) {
 
 }
 
+var maxLawsToSelect = 2;
+
 function selectTwoLaws(e) {
 
+    var currentSelectedLaws = document.getElementsByClassName("selectedLaw").length;
+    console.log(currentSelectedLaws);
+
     var thisLaw = document.getElementById(e.target.id);
-    thisLaw.className += " selectedLaw";
+
+    if (thisLaw.classList.contains("selectedLaw")) {
+        thisLaw.classList.remove("selectedLaw");
+        removeWarning();
+    } else {
+        if (currentSelectedLaws<2) {
+            thisLaw.classList.add("selectedLaw");
+            removeWarning();
+        } else {
+            displayWarning(warnings.maxTwoLaws);
+        }
+
+    }
+
 
 }
 
@@ -77,4 +101,17 @@ function displayMessage(message) {
 
 }
 
+function displayWarning(warning) {
+
+    var blocWarning = document.getElementById('warning');
+    blocWarning.textContent = warning;
+    blocWarning.classList.add('active');
+
+}
+
+function removeWarning() {
+    var blocWarning = document.getElementById('warning');
+    // blocWarning.textContent = "";
+    blocWarning.classList.remove('active');
+}
 
