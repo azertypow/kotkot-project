@@ -7,6 +7,7 @@
 import SerialPort = require("serialport");
 import Events = require("events");
 import ReadLine = require("readline");
+import WritableStream = NodeJS.WritableStream;
 
 const threshold: number = 100;
 const maxPotentiometer: number = 1024;
@@ -29,11 +30,6 @@ export default class PortSerial {
 
         this.myUsb.on("data", (value: string)=>{
 
-            //afficher dans le terminal les info en cours sur les potentiomettres
-            // ReadLine.clearLine(process.stdout, 0);
-            // ReadLine.cursorTo(process.stdout, 0, null);
-            // process.stdout.write(value);
-
             // envois a arduino
             let dataToSend: string = "bonjours";
 
@@ -49,15 +45,32 @@ export default class PortSerial {
             }
 
             // convertir les données recu en object :
-            console.log(value);
-            let valueParsed: string = "null";
+            interface ValueParsed {
+                data: JSON,
+                isJson: boolean,
+            }
+
+            let valueParsed: ValueParsed = {
+                data: JSON.parse("{}"),
+                isJson: false,
+            };
+
             try{
-                valueParsed = JSON.parse(value);
+                valueParsed.data = JSON.parse(value);
+                valueParsed.isJson = true;
             }
             catch(e){
-                valueParsed = e;
+                // console.log("data from arduino isn't JSON format");
+                // console.log(e);
             }
-            console.log( valueParsed );
+
+            //afficher dans le terminal les info en cours sur les potentiomettres
+            if(valueParsed.isJson){
+                ReadLine.cursorTo(process.stdout, 0, 0);
+                ReadLine.clearScreenDown(process.stdout);
+                console.log( valueParsed.data );
+            }
+
 
             // let value_toInt = parseInt(value);
             //

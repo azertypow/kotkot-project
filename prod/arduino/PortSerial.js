@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var SerialPort = require("serialport");
 var Events = require("events");
+var ReadLine = require("readline");
 var threshold = 100;
 var maxPotentiometer = 1024;
 var minPotentiometer = 0;
@@ -22,15 +23,21 @@ var PortSerial = (function () {
                 _this.isReceivedFromArduino = false;
                 _this.sendData(dataToSend + "\n");
             }
-            console.log(value);
-            var valueParsed = "null";
+            var valueParsed = {
+                data: JSON.parse("{}"),
+                isJson: false,
+            };
             try {
-                valueParsed = JSON.parse(value);
+                valueParsed.data = JSON.parse(value);
+                valueParsed.isJson = true;
             }
             catch (e) {
-                valueParsed = e;
             }
-            console.log(valueParsed);
+            if (valueParsed.isJson) {
+                ReadLine.cursorTo(process.stdout, 0, 0);
+                ReadLine.clearScreenDown(process.stdout);
+                console.log(valueParsed.data);
+            }
         });
     }
     PortSerial.prototype.sendData = function (dataToSend) {
