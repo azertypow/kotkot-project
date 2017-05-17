@@ -23,8 +23,10 @@ var lawsArray = {
     '1':'progressiste'
 };
 
-playerOneLawSelection();
+//playerOneLawSelection();
 //playerTwoLawSelection();
+
+eliminateSomeone();
 
 
 // fonction à lancer pour que le joueur 2 puisse choisir sa loi parmi les 2 choix
@@ -49,6 +51,34 @@ function playerOneLawSelection() {
     document.getElementById('valider').addEventListener('click', sendChoicesToPlayerTwo);
 
 }
+
+
+/***************
+ *
+ *   Fonctions pour le système d'élimination
+ *
+ ***************/
+
+
+function eliminateSomeone() {
+
+
+    document.getElementById('molette').style.backgroundColor = "red";
+
+    //return playerToEliminate;
+
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -264,4 +294,10 @@ function removeWarning() {
     var blocWarning = document.getElementById('warning');
     blocWarning.classList.remove('active');
 }
+
+
+
+
+
+
 

@@ -7,6 +7,17 @@ html {
 body {
     width: 85vw;
     margin: 5vh auto;
+    overflow: hidden;
+}
+
+#test-molette {
+    width: 10px;
+    height: 50px;
+    background-color: white;
+    transform: rotate(0deg);
+    float: right;
+    margin-top: -50px;
+    border-top:5px solid deeppink;
 }
 
 #laws {
@@ -138,4 +149,12 @@ body {
     opacity: 1;
     margin-right: 0;
     transition: margin-right 0.5s ease, opacity 0.5s ease;
+}
+
+
+#molette {
+    width: 220px;
+    height: 220px;
+    background-color: deeppink;
+    border-top: 10px solid white;
 }
