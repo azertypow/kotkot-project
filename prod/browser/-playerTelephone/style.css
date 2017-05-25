@@ -10,15 +10,16 @@ body {
     overflow: hidden;
 }
 
-#test-molette {
-    width: 10px;
-    height: 50px;
-    background-color: white;
-    transform: rotate(0deg);
-    float: right;
-    margin-top: -50px;
-    border-top:5px solid deeppink;
+h1 {
+    font-family: monospace;
+    color: white;
+    font-size: 250%;
+    position: absolute;
+    left:50%;
+    top:40%;
+    transform:translate(-50%,-50%);
 }
+
 
 #laws {
     height: 55vh;
@@ -132,7 +133,7 @@ body {
 
 
 #controls button {
-    background-color: blue;
+    background-color: transparent;
     padding: 10px;
     font-size: 80%;
     text-transform: uppercase;
@@ -153,8 +154,20 @@ body {
 
 
 #molette {
+    display: none;
     width: 220px;
     height: 220px;
     background-color: deeppink;
     border-top: 10px solid white;
+}
+
+#test-molette {
+    display: none;
+    width: 10px;
+    height: 50px;
+    background-color: white;
+    transform: rotate(0deg);
+    float: right;
+    margin-top: -50px;
+    border-top:5px solid deeppink;
 }

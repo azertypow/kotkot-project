@@ -20,7 +20,6 @@ hammertime.on('rotate', function(ev) {
 
     document.getElementById("molette").style.transform = "rotate(" + myAngle + "deg)";
 
-
 });
 
 
