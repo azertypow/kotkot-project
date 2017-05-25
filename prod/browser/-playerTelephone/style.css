@@ -153,21 +153,92 @@ h1 {
 }
 
 
-#molette {
+/*#molette {*/
+    /*display: none;*/
+    /*width: 220px;*/
+    /*height: 220px;*/
+    /*background-color: deeppink;*/
+    /*border-top: 10px solid white;*/
+/*}*/
+
+/*#test-molette {*/
+    /*display: none;*/
+    /*width: 10px;*/
+    /*height: 50px;*/
+    /*background-color: white;*/
+    /*transform: rotate(0deg);*/
+    /*float: right;*/
+    /*margin-top: -50px;*/
+    /*border-top:5px solid deeppink;*/
+/*}*/
+
+
+
+/* Molette temporaire (potentiometre) (wheel) */
+
+#potentiometer {
     display: none;
-    width: 220px;
-    height: 220px;
-    background-color: deeppink;
-    border-top: 10px solid white;
 }
 
-#test-molette {
-    display: none;
-    width: 10px;
-    height: 50px;
+#wheel {
+    width: 350px;
+    height: 350px;
+    /*background-color: red;*/
+    border-radius: 125px;
+    /*border: 50px solid blue;*/
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+#subwheel {
+    border: 2px solid rgba(255,255,255,1);
+    /*width: 100px;
+    height: 100px;*/
+    background-color: red;
+    /*border-radius: 50px;*/
+    /*z-index: 2;*/
+    margin: auto;
+
+}
+#subwheel p {
+    text-align: center;
+    display: block;
+    font-size: 20px;
+    font-family: monospace;
+    color: white;
+    width: 150px;
+    margin: 60px auto;
+}
+
+#cursor {
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
     background-color: white;
-    transform: rotate(0deg);
-    float: right;
-    margin-top: -50px;
-    border-top:5px solid deeppink;
+    position: relative;
+}
+
+#wheelMark {
+    width: 20px;
+    border: 4px solid white;
+    position: absolute;
+    right: 25px;
+    display: flex;
+    margin-top: 50px;
+    margin-right: 11px;
+    height: 200px;
+}
+
+#cursorSlider {
+    width: 25px;
+    height: 30px;
+    justify-content: center;
+    background-color: white;
+    position: relative;
+
 }
