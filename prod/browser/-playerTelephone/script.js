@@ -64,9 +64,10 @@ function playerOneLawSelection() {
 
     // Ajoute les listeners
     var aLaw = document.getElementsByClassName('law');
-    for (var i=0; i<aLaw.length; i++) {
-        aLaw[i].addEventListener('click', generateLaw);
-    }
+    setTimeout(function() {generateLaw(0);}, 1000);
+    setTimeout(function() {generateLaw(1);}, 1200);
+    setTimeout(function() {generateLaw(2);}, 1400);
+
     document.getElementById('valider').addEventListener('click', sendChoicesToPlayerTwo);
 
 }
@@ -162,7 +163,7 @@ function placeCursorBeginning() {
 
 function moveCursor(e) {
 
-    console.log(e);
+    // console.log(e);
 
     var posY = e.targetTouches[0].clientY;
 
@@ -210,8 +211,6 @@ function moveCursor(e) {
 
     var playerName = subwheel.getElementsByTagName('p')[0];
     playerName.textContent = "Joueur " + selectedPlayer;
-
-
 
 
 }
@@ -319,10 +318,12 @@ function selectOneLaw(e) {
  ***************/
 
 
-// choisit une loi au hasard quand on clique sur un carré
-function generateLaw(e) {
+// choisit une loi au hasard après le setTimeout
+function generateLaw(i) {
 
-    var thisLaw = document.getElementById(e.target.id);
+    //var thisLaw = document.getElementById(e.target.id);
+
+    var thisLaw = document.getElementsByClassName('law')[i];
 
     var lawType = ["Humaniste", "Progressiste"];
     var index = Math.floor(Math.random()*lawType.length);
