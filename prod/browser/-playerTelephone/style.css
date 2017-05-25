@@ -203,16 +203,19 @@ h1 {
     /*border-radius: 50px;*/
     /*z-index: 2;*/
     margin: auto;
+    transform: scale(1.8) translate(0%, 25%);
 
 }
 #subwheel p {
     text-align: center;
     display: block;
-    font-size: 20px;
+    font-size: 10px;
     font-family: monospace;
     color: white;
     width: 150px;
     margin: 60px auto;
+    position: relative;
+    z-index: 2;
 }
 
 #cursor {
@@ -241,4 +244,14 @@ h1 {
     background-color: white;
     position: relative;
 
+}
+
+/* en fait on dessine un cercle en entier et on en cache la moitié avec un bloc*/
+#cache {
+    width: 190px;
+    height: 85px;
+    background-color: red;
+    position: absolute;
+    bottom: 1px;
+    margin-left: -5px;
 }

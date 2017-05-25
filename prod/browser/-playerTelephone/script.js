@@ -138,12 +138,17 @@ function giveYourVoteToSomeone() {
 
 function placeCursorBeginning() {
 
-    var i = 0;
+    var i = 180;
+
+    var rayon = 175;
 
     //donne une taille au rond intérieur en fonction de la taille de wheel
     subwheel.style.width = Math.floor((wheel.clientWidth)/2) + "px";
     subwheel.style.height = Math.floor((wheel.clientHeight)/2) + "px";
     subwheel.style.borderRadius = Math.floor((wheel.clientWidth)/4) + "px";
+    // subwheel.style.width = rayon + "px";
+    // subwheel.style.height = rayon + "px";
+    // subwheel.style.borderRadius = rayon/2 + "px";
     radius = parseInt(subwheel.style.borderRadius);
 
     var x = Math.cos(i*Math.PI/180) * radius;
@@ -163,12 +168,25 @@ function placeCursorBeginning() {
 
 function moveCursor(e) {
 
-    // console.log(e);
 
-    var posY = e.targetTouches[0].clientY;
 
-    var topMarginWheelMark = 50;
-    var bottomMarginWheelMark = wheelMark.clientHeight-cursorSlider.clientHeight;
+    var posX = (e.targetTouches[0].clientX);
+
+    var widthWheel = (subwheel.clientWidth)*1.8;
+    var offsetLeftWheel = ((windowWidth-widthWheel)/2);
+
+    console.log(widthWheel);
+    console.log(offsetLeftWheel);
+
+    if (posX < offsetLeftWheel) {
+        posX = offsetLeftWheel;
+    } else if (posX>widthWheel + offsetLeftWheel) {
+        posX = widthWheel + offsetLeftWheel;
+    }
+
+    posX = map(posX, offsetLeftWheel, offsetLeftWheel+widthWheel, 0, 360);
+    // var topMarginWheelMark = 50;
+    // var bottomMarginWheelMark = wheelMark.clientHeight-cursorSlider.clientHeight;
 
     // if (posY < topMarginWheelMark) {
     //     posY = topMarginWheelMark;
@@ -176,38 +194,41 @@ function moveCursor(e) {
     //     posY = windowHeight-bottomMarginWheelMark;
     // }
 
-    var i = posY*360/(windowHeight);
+    var i = 180 + (posX*180/(windowHeight));
 
-    if (i<0) {
-        i=0;
+    if (i<180) {
+        i=180;
     } else if (i>360) {
         i=360;
     }
 
+    console.log("i " + i);
+
+    // x et y sont inversés
     var x = Math.cos(i*Math.PI/180) * radius;
     var y = Math.sin(i*Math.PI/180) * radius;
 
     cursor.style.left = x + "px";
     cursor.style.top = y + "px";
 
-    console.log("posY " + posY);
+    //console.log("posY " + posY);
 
-    if (posY<0) {
-        posY = 0;
-    } else if (posY>windowHeight) {
-        posY = windowHeight;
-    }
+    // if (posY<0) {
+    //     posY = 0;
+    // } else if (posY>windowHeight) {
+    //     posY = windowHeight;
+    // }
 
-    var sliderTopPosition = map(posY, 0, windowHeight, 0, bottomMarginWheelMark);
+    //var sliderTopPosition = map(posY, 0, windowHeight, 0, bottomMarginWheelMark);
 
-    cursorSlider.style.top = sliderTopPosition + "px";
+    // cursorSlider.style.top = sliderTopPosition + "px";
     // console.log("windowHeight " + windowHeight);
     // console.log("posY " + posY);
     // console.log("top slider cursor " + cursorSlider.style.top);
 
     //console.log(cursor.style.left);
 
-    var selectedPlayer = map(i, 0, 360, 0, numberOfPlayers-1);
+    var selectedPlayer = map(i, 180, 360, 0, numberOfPlayers-1);
 
     var playerName = subwheel.getElementsByTagName('p')[0];
     playerName.textContent = "Joueur " + selectedPlayer;
