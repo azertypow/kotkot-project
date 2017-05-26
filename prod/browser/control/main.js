@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 8);
+/******/ 	return __webpack_require__(__webpack_require__.s = 9);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -73,17 +73,19 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var removeSleepMode = (function () {
-    function removeSleepMode() {
+var LoadJs = (function () {
+    function LoadJs() {
     }
-    removeSleepMode.run = function () {
-        var noSleep = new NoSleep();
-        noSleep.enable();
-        console.log("sleep cut");
+    LoadJs.load = function (file) {
+        var jsElement = document.createElement("script");
+        jsElement.type = "text/javascript";
+        jsElement.src = file;
+        document.body.appendChild(jsElement);
+        return jsElement;
     };
-    return removeSleepMode;
+    return LoadJs;
 }());
-exports.default = removeSleepMode;
+exports.default = LoadJs;
 
 
 /***/ }),
@@ -105,6 +107,26 @@ exports.default = LocationInfo;
 
 /***/ }),
 /* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var removeSleepMode = (function () {
+    function removeSleepMode() {
+    }
+    removeSleepMode.run = function () {
+        var noSleep = new NoSleep();
+        noSleep.enable();
+        console.log("sleep cut");
+    };
+    return removeSleepMode;
+}());
+exports.default = removeSleepMode;
+
+
+/***/ }),
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -167,14 +189,14 @@ exports.default = ManagePlayers;
 
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var socketRulesButtonEmit_1 = __webpack_require__(9);
-var controlTemplate_1 = __webpack_require__(7);
+var socketRulesButtonEmit_1 = __webpack_require__(10);
+var controlTemplate_1 = __webpack_require__(8);
 var socketControlApp = (function () {
     function socketControlApp() {
     }
@@ -216,10 +238,10 @@ exports.default = socketControlApp;
 
 
 /***/ }),
-/* 4 */,
 /* 5 */,
 /* 6 */,
-/* 7 */
+/* 7 */,
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -241,16 +263,16 @@ exports.default = ControlTemplate;
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var socketControlApp_1 = __webpack_require__(3);
-var removeSleepMode_1 = __webpack_require__(0);
-var managePlayers_1 = __webpack_require__(2);
-var LoadJs_1 = __webpack_require__(12);
+var socketControlApp_1 = __webpack_require__(4);
+var removeSleepMode_1 = __webpack_require__(2);
+var managePlayers_1 = __webpack_require__(3);
+var LoadJs_1 = __webpack_require__(0);
 var locationInfo_1 = __webpack_require__(1);
 var selectedPlayers = [];
 removeSleepMode_1.default.run();
@@ -263,13 +285,13 @@ LoadJs_1.default.load("http://" + currentHostname + ":1337/socket.io/socket.io.j
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var jsonData_1 = __webpack_require__(11);
+var jsonData_1 = __webpack_require__(12);
 var SocketRulesButtonEmit = (function () {
     function SocketRulesButtonEmit() {
     }
@@ -308,8 +330,8 @@ exports.default = SocketRulesButtonEmit;
 
 
 /***/ }),
-/* 10 */,
-/* 11 */
+/* 11 */,
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -410,28 +432,6 @@ JsonData.rulesAndButtons = {
     ],
 };
 exports.default = JsonData;
-
-
-/***/ }),
-/* 12 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var LoadJs = (function () {
-    function LoadJs() {
-    }
-    LoadJs.load = function (file) {
-        var jsElement = document.createElement("script");
-        jsElement.type = "text/javascript";
-        jsElement.src = file;
-        document.body.appendChild(jsElement);
-        return jsElement;
-    };
-    return LoadJs;
-}());
-exports.default = LoadJs;
 
 
 /***/ })
