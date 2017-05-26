@@ -1,15 +1,12 @@
 String info = "";
-void serialEvent(){
-  int incomingByte = 0;   // for incoming serial data
-  incomingByte = Serial.read();
-  char incomingChar = incomingByte; // convert to char
-  if (String(incomingChar) == "\n"){
-    Serial.println("recu");
+void parseSerialReceived(String data){
+  info = info + data;
+  
+  // regarder si c'est la fin du message
+  if(info.endsWith(SERIAL_CHARACTER_INTI) || info.endsWith(SERIAL_CHARACTER_RESET) || info.endsWith(SERIAL_CHARACTER_END)){
+    allDataReceivedPrevious = true; // noté le fais que toutes les data on été recu lors de ce passage
+    Serial.println(info);
     Serial.println(info);
     info = "";
-  }
-  else {
-    String genere = String(incomingChar);
-    info = info + genere;
   }
 }

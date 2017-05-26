@@ -6,8 +6,12 @@
 
 import SerialPort = require("serialport");
 import Events = require("events");
-import ReadLine = require("readline");
 import WritableStream = NodeJS.WritableStream;
+
+const SERIAL_CHARACTER_INTI: string = "I";
+const SERIAL_CHARACTER_RESET: string = "R";
+const SERIAL_CHARACTER_BREAK: string = "B";
+const SERIAL_CHARACTER_END: string = "E";
 
 const threshold: number = 100;
 const maxPotentiometer: number = 1024;
@@ -17,31 +21,42 @@ export default class PortSerial {
 
     myUsb: SerialPort;
     data: Events;
-    private valueStocked: number = 0;
-    private isReceivedFromArduino: boolean;
+    private wasReceivedByArduino: boolean;
+    private wasTreatedByArduino: boolean;
 
     constructor (serialPort: string, options: SerialPort.options){
         this.myUsb = new SerialPort(serialPort, options);
         this.data = new Events();
-        this.isReceivedFromArduino = true;
+        this.wasReceivedByArduino = true;
+        this.wasTreatedByArduino = true;
 
         // initialiser la connection avec l'arduino
-        this.sendData("\n");
+        this.sendData(SERIAL_CHARACTER_INTI);
 
         this.myUsb.on("data", (value: string)=>{
 
             // envois a arduino
-            let dataToSend: string = "bonjours";
+            let dataToSend: string = "bonjours, je suis un arduino qui communique avec nodejs";
 
             // verifier si l'arduino a bien recu les données
-            if(value === "recu"){
-                this.isReceivedFromArduino = true;
+            if(value === "received"){
+                this.wasReceivedByArduino = true;
+            }
+
+            if(value === "treated"){
+                this.wasTreatedByArduino = true;
             }
 
             // si données deja recu, on peut envoyer les suivantes
-            if(this.isReceivedFromArduino){
-                this.isReceivedFromArduino = false;
-                this.sendData(dataToSend+"\n");
+            if(this.wasReceivedByArduino && this.wasTreatedByArduino){
+                this.wasReceivedByArduino = false;
+                this.wasTreatedByArduino = false;
+                // for(let i: number = 0; i < dataToSend.length; i++){
+                //     this.sendData(dataToSend[i]);
+                // }
+
+                this.sendData(dataToSend);
+                this.sendData(SERIAL_CHARACTER_END);
             }
 
             // convertir les données recu en object :
@@ -50,35 +65,13 @@ export default class PortSerial {
                 isJson: boolean,
             }
 
-            let valueParsed: ValueParsed = {
-                data: JSON.parse("{}"),
-                isJson: false,
-            };
-
             try{
-                valueParsed.data = JSON.parse(value);
-                valueParsed.isJson = true;
+                // emit JSON received data event and send json
+                this.data.emit("JSONReceived", JSON.parse(value));
             }
             catch(e){
-                // console.log("data from arduino isn't JSON format");
-                // console.log(e);
+                this.data.emit("otherReceived", value);
             }
-
-            //afficher dans le terminal les info en cours sur les potentiomettres
-            if(valueParsed.isJson){
-                ReadLine.cursorTo(process.stdout, 0, 0);
-                ReadLine.clearScreenDown(process.stdout);
-                console.log( valueParsed.data );
-            }
-
-
-            // let value_toInt = parseInt(value);
-            //
-            // if( value_toInt < (this.valueStocked - threshold) || value_toInt > ( this.valueStocked + threshold) ){
-            //     this.data.emit("received", value);
-            //     this.valueStocked = value_toInt;
-            //     console.log("OK");
-            // }
         });
     }
 
@@ -87,13 +80,13 @@ export default class PortSerial {
             if(err){
                 console.log("r'envois d'initialisation");
                 setTimeout(()=>{
-                    this.sendData("\n");
+                    this.sendData(SERIAL_CHARACTER_RESET);
                 }, 3000);
 
                 return console.log('Error on write: ', err.message);
             }
             // process.stdout.write("message write");
-            console.log('message envoyé');
+            console.log('message envoyé :'+dataToSend);
         });
     }
 }

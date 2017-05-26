@@ -2,41 +2,40 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var SerialPort = require("serialport");
 var Events = require("events");
-var ReadLine = require("readline");
+var SERIAL_CHARACTER_INTI = "I";
+var SERIAL_CHARACTER_RESET = "R";
+var SERIAL_CHARACTER_BREAK = "B";
+var SERIAL_CHARACTER_END = "E";
 var threshold = 100;
 var maxPotentiometer = 1024;
 var minPotentiometer = 0;
 var PortSerial = (function () {
     function PortSerial(serialPort, options) {
         var _this = this;
-        this.valueStocked = 0;
         this.myUsb = new SerialPort(serialPort, options);
         this.data = new Events();
-        this.isReceivedFromArduino = true;
-        this.sendData("\n");
+        this.wasReceivedByArduino = true;
+        this.wasTreatedByArduino = true;
+        this.sendData(SERIAL_CHARACTER_INTI);
         this.myUsb.on("data", function (value) {
-            var dataToSend = "bonjours";
-            if (value === "recu") {
-                _this.isReceivedFromArduino = true;
+            var dataToSend = "bonjours, je suis un arduino qui communique avec nodejs";
+            if (value === "received") {
+                _this.wasReceivedByArduino = true;
             }
-            if (_this.isReceivedFromArduino) {
-                _this.isReceivedFromArduino = false;
-                _this.sendData(dataToSend + "\n");
+            if (value === "treated") {
+                _this.wasTreatedByArduino = true;
             }
-            var valueParsed = {
-                data: JSON.parse("{}"),
-                isJson: false,
-            };
+            if (_this.wasReceivedByArduino && _this.wasTreatedByArduino) {
+                _this.wasReceivedByArduino = false;
+                _this.wasTreatedByArduino = false;
+                _this.sendData(dataToSend);
+                _this.sendData(SERIAL_CHARACTER_END);
+            }
             try {
-                valueParsed.data = JSON.parse(value);
-                valueParsed.isJson = true;
+                _this.data.emit("JSONReceived", JSON.parse(value));
             }
             catch (e) {
-            }
-            if (valueParsed.isJson) {
-                ReadLine.cursorTo(process.stdout, 0, 0);
-                ReadLine.clearScreenDown(process.stdout);
-                console.log(valueParsed.data);
+                _this.data.emit("otherReceived", value);
             }
         });
     }
@@ -46,11 +45,11 @@ var PortSerial = (function () {
             if (err) {
                 console.log("r'envois d'initialisation");
                 setTimeout(function () {
-                    _this.sendData("\n");
+                    _this.sendData(SERIAL_CHARACTER_RESET);
                 }, 3000);
                 return console.log('Error on write: ', err.message);
             }
-            console.log('message envoyé');
+            console.log('message envoyé :' + dataToSend);
         });
     };
     return PortSerial;
