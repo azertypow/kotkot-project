@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "module": "commonjs",
+    "target": "es5",
+    "noImplicitAny": true,
+    "removeComments": true,
+    "outDir": "prod/"
+  },
+  "exclude": [
+    "node_modules",
+    "dev/arduino/"
+  ]
+}

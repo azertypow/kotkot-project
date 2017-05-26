@@ -2,7 +2,7 @@
   "compilerOptions": {
     "allowJs": true,
     "module": "commonjs",
-    "target": "es5",
+    "target": "es6",
     "noImplicitAny": true,
     "removeComments": true,
     "sourceMap": false,
@@ -11,8 +11,7 @@
   },
   "files": [
     "dev/nodeApp/main.ts",
-    "dev/arduino/main.ts",
-    "dev/teste/main.ts"
+    "dev/arduino/main.ts"
   ],
   "exclude": [
     "node_modules"

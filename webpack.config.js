@@ -22,16 +22,17 @@ module.exports = {
             {
                 enforce: 'pre',
                 test: /\.js$/,
-                loader: "source-map-loader"
+                loader: "source-map-loader",
             },
             {
                 enforce: 'pre',
                 test: /\.tsx?$/,
-                use: "source-map-loader"
+                use: "source-map-loader",
             },
             {
                 test: /\.tsx?$/,
-                loader: 'ts-loader'
+                loader: 'ts-loader',
+                options: { configFileName: "tsconfig.browser.json" },
             }
         ]
     },
