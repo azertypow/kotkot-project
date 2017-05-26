@@ -6,6 +6,9 @@
 var messages = {
     "tireTroisLois":"Tire trois lois au hasard",
     "choisiDeuxLois":"Choisis-en deux à envoyer à l'autre joueur",
+    "elimination":"Choisis un joueur à éliminer",
+    "donneTonVote":"Choisis un joueur à qui donner tes votes. Attention, tu démultiplie la puissance de joueur.",
+    "joueurElimine":"Vous avez choisi d'éliminer"
 
 };
 
@@ -23,8 +26,11 @@ var lawsArray = {
     '1':'progressiste'
 };
 
-playerOneLawSelection();
+var phaseTitle = document.getElementById('phaseTitle');
+
+//playerOneLawSelection();
 //playerTwoLawSelection();
+elimination();
 
 
 // fonction à lancer pour que le joueur 2 puisse choisir sa loi parmi les 2 choix
@@ -50,6 +56,67 @@ function playerOneLawSelection() {
 
 }
 
+// fonction à lancer pour la phase d'élimination
+
+function elimination() {
+
+    displayElimination();
+    setTimeout(eliminateSomeone, 5000);
+
+}
+
+
+/***************
+ *
+ *   Fonctions pour le système d'élimination
+ *
+ ***************/
+
+
+
+function displayElimination() {
+
+    // allume toutes les LED en rouge pour 5 secondes
+
+    document.getElementsByTagName('html')[0].style.backgroundColor = "red";
+    phaseTitle.innerHTML = "Élimination";
+
+}
+
+function eliminateSomeone() {
+
+    phaseTitle.innerHTML = "";
+    displayMessage(messages.elimination);
+    showValidationButton();
+
+    //return playerToEliminate;
+
+}
+
+function determinePlayerToEliminate() {
+
+    // fonction qui reçoit les 8 valeurs de playerToEliminate et renvoie celui qui a eu le plus de voix contre lui.
+    // que faire en cas d'ex-aequo ?
+
+    // return eliminatedPlayer;
+
+}
+
+function displayEliminatedPlayer() {
+
+    displayMessage(messages.joueurElimine + "Nom du joueur");
+
+}
+
+function giveYourVoteToSomeone() {
+
+    displayMessage(messages.donneTonVote);
+    showValidationButton();
+
+}
+
+
+
 
 
 
@@ -70,6 +137,9 @@ function createLaws(nbCards) {
         lawsBlock.appendChild(oneLaw);
     }
 }
+
+
+
 
 
 /***************
@@ -264,4 +334,10 @@ function removeWarning() {
     var blocWarning = document.getElementById('warning');
     blocWarning.classList.remove('active');
 }
+
+
+
+
+
+
 
