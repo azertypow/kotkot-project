@@ -1,18 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var AssigningRoles = (function () {
-    function AssigningRoles() {
-    }
-    AssigningRoles.generate = function (rules) {
-        var allRolesAssigned = [];
-        var numberOfRules = rules.length;
-        console.log("avant : " + numberOfRules);
-        for (var i = 1; i < numberOfRules + 1; i++) {
-            var maxRandom = rules.length;
+class AssigningRoles {
+    static generate(rules) {
+        let allRolesAssigned = [];
+        const numberOfRules = rules.length;
+        console.log(`avant : ${numberOfRules}`);
+        for (let i = 1; i < numberOfRules + 1; i++) {
+            const maxRandom = rules.length;
             console.log(maxRandom);
-            var randomArrayIndex = this.getRandomInt(0, maxRandom);
+            const randomArrayIndex = this.getRandomInt(0, maxRandom);
             console.log(randomArrayIndex);
-            var roleInCreation = {
+            let roleInCreation = {
                 playerIndex: i,
                 playerRole: rules[randomArrayIndex],
             };
@@ -21,14 +19,13 @@ var AssigningRoles = (function () {
             console.log(rules);
             allRolesAssigned.push(roleInCreation);
         }
-        console.log("apr\u00E8s : " + numberOfRules);
+        console.log(`après : ${numberOfRules}`);
         return allRolesAssigned;
-    };
-    AssigningRoles.getRandomInt = function (min, max) {
+    }
+    static getRandomInt(min, max) {
         min = Math.ceil(min);
         max = Math.floor(max);
         return Math.floor(Math.random() * (max - min)) + min;
-    };
-    return AssigningRoles;
-}());
+    }
+}
 exports.default = AssigningRoles;

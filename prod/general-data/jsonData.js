@@ -1,10 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var JsonData = (function () {
-    function JsonData() {
-    }
-    return JsonData;
-}());
+class JsonData {
+}
 JsonData.rulesAndButtons = {
     loisJ1: [
         { text: "Je te propose trois lois de Gauche",

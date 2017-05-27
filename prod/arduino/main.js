@@ -1,36 +1,33 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var SerialPort = require("serialport");
-var PortSerial_1 = require("./PortSerial");
-var ReadLine = require("readline");
-var portSerial = new PortSerial_1.default("/dev/cu.usbmodem1411", {
+const SerialPort = require("serialport");
+const PortSerial_1 = require("./PortSerial");
+const ReadLine = require("readline");
+const portSerial = new PortSerial_1.default("/dev/cu.usbmodem1411", {
     baudRate: 115200,
     parser: SerialPort.parsers.readline("\r\n"),
 });
-var arduinoData = {
+let arduinoData = {
     other: "",
     potentiometer: JSON.parse("{}"),
 };
-portSerial.data.on("JSONReceived", function (json) {
+portSerial.data.on("JSONReceived", (json) => {
     arduinoData.potentiometer = json;
 });
-portSerial.data.on("otherReceived", function (data) {
+portSerial.data.on("otherReceived", (data) => {
     arduinoData.other = data;
     console.log(arduinoData.other);
 });
-var Screen = (function () {
-    function Screen() {
-    }
-    Screen.print = function () {
+class Screen {
+    static print() {
         ReadLine.cursorTo(process.stdout, 0, 0);
         ReadLine.clearScreenDown(process.stdout);
         console.log("other:");
         console.log(this.data.arduinoOther);
         console.log("potentiometer");
         console.log(this.data.arduinoPotentiometer);
-    };
-    return Screen;
-}());
+    }
+}
 Screen.data = {
     arduinoOther: "",
     arduinoPotentiometer: JSON.parse("{}"),

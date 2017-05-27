@@ -6,16 +6,19 @@
 
 // pixels led
 #define LEDPIN 8
-#define NUMPIXELS 20
+#define NUMPIXELS 40
+
+// serial connection status
+boolean serialConnected = false;
+boolean incomingData = false;
+boolean allDataReceivedPrevious = false;
+boolean processedData = true;
 
 // serial param
 #define SERIAL_CHARACTER_INTI "I"
 #define SERIAL_CHARACTER_RESET "R"
 #define SERIAL_CHARACTER_BREAK "B"
 #define SERIAL_CHARACTER_END "E"
-boolean incomingData = false;
-boolean allDataReceivedPrevious = false;
-boolean processedData = true;
 
 // setup the NeoPixel library
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, LEDPIN, NEO_GRB + NEO_KHZ800);
@@ -34,30 +37,33 @@ void setup() {
 }
 
 void loop() {
-  static unsigned long lastRead = 0;
+  // temps de traitement
+  //static unsigned long lastRead = 0;
+  //unsigned long pause = millis() - lastRead;
+  //lastRead = millis();
 
-  unsigned long pause = millis() - lastRead;
-  lastRead = millis();
-
-  // send potentiometre value for all players
-  sendPententiometreUsersValue();
-  ///  fin info
-  Serial.print("\r\n");
-
-  //––––– debut -> priorité au data potentiellement recu –––––//
-  // regarder si toutes les data ont bien été recu dans la boucle précédent
-  if(allDataReceivedPrevious){
+  //––––– priorité au data potentiellement recu –––––//
+  // regarder si toutes les data ont bien été recu dans la boucle précédent et en informer nodejs, SEULEMENT SI LA CONNECTION A ÉTÉ VALIDÉE
+  if(allDataReceivedPrevious && serialConnected){
     Serial.println("received"); // All data was received in the previous loop
+    allDataReceivedPrevious = false;
   }
   // lire recu par serialport
   if(Serial.available()){
+    // signaler la venu de donné en cour
     incomingData = true;
+
+    // signaler que les donné en cour de reception n'ont pas étées traité
     processedData = false;
-    Serial.print("Serial.available :");
-    Serial.println(Serial.available());
+
+    // montrer la taille de ce qui est recu, SEULEMENT SI LA CONNECTION A ÉTÉ VALIDÉE
+    if(serialConnected){
+      Serial.print("Serial.available :");
+      Serial.println(Serial.available());
+    }
     
     //tant que des données sont en attente
-    if(Serial.available() > 55){
+    //if(Serial.available() > 55){
       while (Serial.available()) {
         char c = Serial.read();
         reception += c;
@@ -65,30 +71,41 @@ void loop() {
         //Serial.println(reception);
         //delay(1);
       }
-      
+
+      // traité ce qui a été recu jusqu'a présent
       parseSerialReceived(reception);
-      //Serial.println("recu");
-      Serial.println("fin boucle");
+      
+      // vidée ce qui a été recu jusqu'a présent
       reception="";
-    }
+
+      // signaler le fait que l'arduino a bien recu des données (mais pas forcément complete), SEULEMENT SI LA CONNECTION A ÉTÉ VALIDÉE
+      if(serialConnected){
+        Serial.println("recu");
+        Serial.println("fin boucle");
+      }
+    //}
   }
   else{
+    // signaler qu'ocune données n'a été recu
     incomingData = false;
   }
-  
-  Serial.print("pause: ");
-  Serial.println(pause);
 
-  // ne pas traiter si reception de donnée en cour
+  //––––– traitement des datas recu et non traitées pour les leds –––––//
+  // ne pas traiter si reception de donnée en cour !!! (interference avec les datas recues)
   if(! incomingData && ! processedData ){
     // NeoPixel
     lightUpLeds();
+    
     // datas traités
     processedData = true;
     Serial.println("treated");
   }
 
   //delay(3000);
+  
+  // temps de traitement
+  //Serial.print("pause: ");
+  //Serial.println(pause);
 }
 
 

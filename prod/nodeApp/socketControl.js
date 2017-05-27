@@ -1,55 +1,52 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var io = require("socket.io");
-var assigningRoles_1 = require("./assigningRoles");
-var player_1 = require("./player");
-var setPlayerData_1 = require("./setPlayerData");
-var Control_1 = require("./Control");
-var jsonData_1 = require("../general-data/jsonData");
-var SocketControl = (function () {
-    function SocketControl() {
-    }
-    SocketControl.connection = function (httpServer) {
-        var _this = this;
-        var ioServer = io.listen(httpServer);
-        ioServer.sockets.on("connection", function (socket) {
-            var socketId = socket.id;
-            var socketIp = socket.request.connection.remoteAddress;
-            socket.on("disconnect", function () {
+const io = require("socket.io");
+const assigningRoles_1 = require("./assigningRoles");
+const player_1 = require("./player");
+const setPlayerData_1 = require("./setPlayerData");
+const Control_1 = require("./Control");
+const jsonData_1 = require("../general-data/jsonData");
+class SocketControl {
+    static connection(httpServer) {
+        let ioServer = io.listen(httpServer);
+        ioServer.sockets.on("connection", (socket) => {
+            let socketId = socket.id;
+            let socketIp = socket.request.connection.remoteAddress;
+            socket.on("disconnect", () => {
                 console.log("un utilisateur s'est deconnecté");
                 console.log("\n");
             });
-            socket.on("control-connected", function (info) {
-                console.log("control " + socketId + " connect\u00E9 \n[ IP: " + socketIp + " ]");
+            socket.on("control-connected", (info) => {
+                console.log(`control ${socketId} connecté \n[ IP: ${socketIp} ]`);
                 console.log(info);
                 console.log("\n");
-                _this.controller = new Control_1.default(socketIp, socketId);
+                this.controller = new Control_1.default(socketIp, socketId);
             });
-            socket.on("player-connected", function (info) {
-                console.log("player " + socketId + " connect\u00E9 \n[ IP: " + socketIp + " ]");
+            socket.on("player-connected", (info) => {
+                console.log(`player ${socketId} connecté \n[ IP: ${socketIp} ]`);
                 console.log(info);
                 console.log("\n");
                 function checkIp(element) {
                     return element === socketIp;
                 }
-                if (!_this.players.allIp.some(checkIp)) {
-                    if (_this.ilManqueDesJoueurs) {
-                        var player = new player_1.default(_this.players.count, socketIp, socketId, { index: 1, rules: "empty", status: "empty", buttons: [] });
-                        _this.players.allIp.push(socketIp);
-                        _this.players.count++;
-                        _this.players.player.push(player);
-                        var data = {
-                            index: _this.players.count,
+                if (!this.players.allIp.some(checkIp)) {
+                    if (this.ilManqueDesJoueurs) {
+                        let player = new player_1.default(this.players.count, socketIp, socketId, { index: 1, rules: "empty", status: "empty", buttons: [] });
+                        this.players.allIp.push(socketIp);
+                        this.players.count++;
+                        this.players.player.push(player);
+                        const data = {
+                            index: this.players.count,
                             status: "en attente de la connection de tous les joueurs",
                             rules: "les règles s'afficherons ici",
                             buttons: [],
                         };
-                        setPlayerData_1.default.send(socket, player, data, _this.players, _this.controller, true);
-                        console.log(_this.players);
+                        setPlayerData_1.default.send(socket, player, data, this.players, this.controller, true);
+                        console.log(this.players);
                         console.log("\n");
-                        if (_this.players.count === _this.numberOfPlayers) {
+                        if (this.players.count === this.numberOfPlayers) {
                             console.log("total des joeurs connecté!\n");
-                            var roles = [
+                            const roles = [
                                 "membre du parti de gauche",
                                 "membre du parti de gauche",
                                 "cyborg, membre du parti de gauche",
@@ -57,15 +54,15 @@ var SocketControl = (function () {
                                 "membre du parti de droite",
                                 "cyborg, membre du parti de droite",
                             ];
-                            if (_this.numberOfPlayers !== roles.length) {
+                            if (this.numberOfPlayers !== roles.length) {
                                 console.error("le nombre de role n'est pas égale au nombre de joueur !!");
                                 process.exit(1);
                             }
-                            var rolesAssigned = assigningRoles_1.default.generate(roles);
+                            const rolesAssigned = assigningRoles_1.default.generate(roles);
                             console.log(roles);
-                            for (var j = 0; j < rolesAssigned.length; j++) {
-                                var currentPlayerSettings = setPlayerData_1.default.getPlayer(_this.players, rolesAssigned[j].playerIndex);
-                                var dataToSend = {
+                            for (let j = 0; j < rolesAssigned.length; j++) {
+                                const currentPlayerSettings = setPlayerData_1.default.getPlayer(this.players, rolesAssigned[j].playerIndex);
+                                const dataToSend = {
                                     index: rolesAssigned[j].playerIndex,
                                     rules: currentPlayerSettings.data.rules,
                                     status: rolesAssigned[j].playerRole,
@@ -75,53 +72,52 @@ var SocketControl = (function () {
                                     console.log("meme socket");
                                     console.log(currentPlayerSettings);
                                     console.log(socketIp);
-                                    var currentPlayer = _this.players.player[j];
-                                    setPlayerData_1.default.send(socket, currentPlayer, dataToSend, _this.players, _this.controller, true);
+                                    const currentPlayer = this.players.player[j];
+                                    setPlayerData_1.default.send(socket, currentPlayer, dataToSend, this.players, this.controller, true);
                                 }
                                 else {
                                     console.log("diff");
                                     console.log(currentPlayerSettings);
                                     console.log(socketIp);
-                                    setPlayerData_1.default.sendTo(socket, _this.players, rolesAssigned[j].playerIndex, dataToSend, _this.controller, true);
+                                    setPlayerData_1.default.sendTo(socket, this.players, rolesAssigned[j].playerIndex, dataToSend, this.controller, true);
                                 }
                             }
-                            _this.ilManqueDesJoueurs = false;
+                            this.ilManqueDesJoueurs = false;
                         }
                     }
                 }
                 else {
-                    for (var key in _this.players.player) {
-                        var currentPlayer = _this.players.player[key];
+                    for (let key in this.players.player) {
+                        const currentPlayer = this.players.player[key];
                         if (currentPlayer.ipValue === socketIp) {
-                            console.log("le joueur " + (currentPlayer.id + 1) + " s'est reconnect\u00E9");
+                            console.log(`le joueur ${currentPlayer.id + 1} s'est reconnecté`);
                             currentPlayer.socketId = socketId;
-                            setPlayerData_1.default.send(socket, currentPlayer, currentPlayer.data, _this.players, _this.controller, true);
+                            setPlayerData_1.default.send(socket, currentPlayer, currentPlayer.data, this.players, this.controller, true);
                             break;
                         }
                     }
                 }
             });
-            socket.on("control-directive", function (data) {
-                var listOfPlayersToSend = data.selectedPlayers;
-                for (var i = 0; i < listOfPlayersToSend.length; i++) {
-                    var playerToSend = listOfPlayersToSend[i];
-                    var player = setPlayerData_1.default.getPlayer(_this.players, playerToSend);
-                    var dataToSend = {
+            socket.on("control-directive", (data) => {
+                const listOfPlayersToSend = data.selectedPlayers;
+                for (let i = 0; i < listOfPlayersToSend.length; i++) {
+                    const playerToSend = listOfPlayersToSend[i];
+                    const player = setPlayerData_1.default.getPlayer(this.players, playerToSend);
+                    let dataToSend = {
                         status: player.data.status,
                         rules: data.rules,
                         index: player.data.index,
                         buttons: jsonData_1.default.rulesAndButtons[data.category][data.indexCategory].buttons,
                     };
-                    setPlayerData_1.default.sendTo(socket, _this.players, playerToSend, dataToSend, _this.controller, false);
+                    setPlayerData_1.default.sendTo(socket, this.players, playerToSend, dataToSend, this.controller, false);
                 }
             });
-            socket.on("player-responses", function (data) {
-                socket.to(_this.controller.socketId).emit("player-responses", data);
+            socket.on("player-responses", (data) => {
+                socket.to(this.controller.socketId).emit("player-responses", data);
             });
         });
-    };
-    return SocketControl;
-}());
+    }
+}
 SocketControl.numberOfPlayers = 6;
 SocketControl.ilManqueDesJoueurs = true;
 SocketControl.players = {
