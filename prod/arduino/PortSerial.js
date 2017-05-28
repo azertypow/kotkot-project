@@ -13,6 +13,7 @@ const minPotentiometer = 0;
 class PortSerial {
     constructor(serialPort, options) {
         this.myUsb = new SerialPort(serialPort, options);
+        this.arduino = new Events();
         this.data = new Events();
         this.wasReceivedByArduino = true;
         this.wasTreatedByArduino = true;
@@ -39,10 +40,11 @@ class PortSerial {
                         console.log(this.myUsb.listeners("data"));
                         console.log("––––––––––");
                         console.log("ARDUINO CONNECTED");
+                        this.arduino.emit("connected");
                         this.startCommunication();
                         setTimeout(() => {
-                            this.sendDirectiveToArduino("hello kotkot");
-                            console.log("hello kotkot envoyé");
+                            this.sendDirectiveToArduino("check");
+                            console.log("check envoyé");
                         }, reconnectionDelay);
                     }
                     else {

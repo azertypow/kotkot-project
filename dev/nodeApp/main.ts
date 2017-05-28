@@ -2,11 +2,21 @@
  * Created by azertypow on 09/04/2017.
  */
 
-import VoiceGenerator from "./voiceGenerator.js"
+import VoiceGenerator from "./voiceGenerator"
 import AppServer from "./appServer"
+import ArduinoConnection from "../arduino/ArduinoConnection"
 
-// voie
-VoiceGenerator.run();
+// voie attente connection arduino
+VoiceGenerator.say_waitDeArduino();
 
-// socket
-AppServer.run(1337);
+// lancer la connection a arduino
+const arduinoConnection: ArduinoConnection = new ArduinoConnection();
+arduinoConnection.portSerial.arduino.once("connected", ()=>{
+    console.log("EVENT CONNECTION ARDUINO OK");
+
+    // voie attente connection de tous les joueurs
+    VoiceGenerator.say_waitConnectionPlayers();
+
+    // lancer le serveur et la connection des joueur socket
+    AppServer.run(1337);
+});

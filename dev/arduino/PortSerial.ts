@@ -30,12 +30,14 @@ interface SerialPortEvent extends SerialPort{
 export default class PortSerial {
 
     myUsb: SerialPort;
+    public arduino: Events;
     data: Events;
     private wasReceivedByArduino: boolean;
     private wasTreatedByArduino: boolean;
 
     constructor (serialPort: string, options: SerialPort.options){
         this.myUsb = new SerialPort(serialPort, options);
+        this.arduino = new Events();
         this.data = new Events();
         this.wasReceivedByArduino = true;
         this.wasTreatedByArduino = true;
@@ -73,13 +75,15 @@ export default class PortSerial {
 
                         console.log("ARDUINO CONNECTED");
 
+                        this.arduino.emit("connected");
+
                         // commencer la communication
                         this.startCommunication();
 
                         // message de teste
                         setTimeout(()=>{
-                            this.sendDirectiveToArduino("hello kotkot");
-                            console.log("hello kotkot envoyé");
+                            this.sendDirectiveToArduino("check");
+                            console.log("check envoyé");
                         }, reconnectionDelay)
                     }
                     else{

@@ -6,7 +6,8 @@
 
 // pixels led
 #define LEDPIN 8
-#define NUMPIXELS 40
+#define NUMPIXELS 150
+#define IL 100
 
 // serial connection status
 boolean serialConnected = false;
@@ -19,6 +20,7 @@ boolean processedData = true;
 #define SERIAL_CHARACTER_RESET "R"
 #define SERIAL_CHARACTER_BREAK "B"
 #define SERIAL_CHARACTER_END "E"
+String directive = "";
 
 // setup the NeoPixel library
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, LEDPIN, NEO_GRB + NEO_KHZ800);
@@ -93,8 +95,13 @@ void loop() {
   //––––– traitement des datas recu et non traitées pour les leds –––––//
   // ne pas traiter si reception de donnée en cour !!! (interference avec les datas recues)
   if(! incomingData && ! processedData ){
-    // NeoPixel
-    lightUpLeds();
+    Serial.print("directive: ");
+    Serial.println(directive);
+    if(directive == "check"){
+      // NeoPixel
+      lightUpLeds();
+      Serial.println("led checked");
+    }
     
     // datas traités
     processedData = true;
@@ -111,16 +118,17 @@ void loop() {
 
 int count = 0;
 void lightUpLeds(){
-  for(int i = 0; i < NUMPIXELS; i++){
-    if((count + i) % 3 == 0){
-      pixels.setPixelColor(i, pixels.Color(150,0,150));
-    }
-    else if((count + i) % 2 == 0){
-      pixels.setPixelColor(i, pixels.Color(150,150,0));
-    }
-    else{
-      pixels.setPixelColor(i, pixels.Color(0,150,150));
-    }
+  for(int i = 0; i < NUMPIXELS - 149; i++){
+//    if((count + i) % 3 == 0){
+//      pixels.setPixelColor(i, pixels.Color(35,0,35));
+//    }
+//    else if((count + i) % 2 == 0){
+//      pixels.setPixelColor(i, pixels.Color(150,150,0));
+//    }
+//    else{
+//      pixels.setPixelColor(i, pixels.Color(0,150,150));
+//    }
+    pixels.setPixelColor(i, pixels.Color(0,0,0));
   }
   pixels.show();
   //delay(125);
