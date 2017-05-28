@@ -2,7 +2,6 @@
  * Created by mathi on 15/05/2017.
  */
 
-
 var messages = {
     "tireTroisLois":"Tire trois lois au hasard",
     "choisiDeuxLois":"Choisis-en deux à envoyer à l'autre joueur",
@@ -28,6 +27,22 @@ var lawsArray = {
 
 var phaseTitle = document.getElementById('phaseTitle');
 
+var wheel = document.getElementById('wheel');
+var cursor = document.getElementById('cursor');
+var subwheel = document.getElementById('subwheel');
+var cursorSlider = document.getElementById('cursorSlider');
+var wheelMark = document.getElementById('wheelMark');
+
+var windowWidth = window.innerWidth;
+var windowHeight = window.innerHeight;
+
+var radius;
+var marge = 50; // marge en haut et en bas du slider
+var numberOfPlayers = 8;
+
+
+
+
 //playerOneLawSelection();
 //playerTwoLawSelection();
 elimination();
@@ -49,9 +64,10 @@ function playerOneLawSelection() {
 
     // Ajoute les listeners
     var aLaw = document.getElementsByClassName('law');
-    for (var i=0; i<aLaw.length; i++) {
-        aLaw[i].addEventListener('click', generateLaw);
-    }
+    setTimeout(function() {generateLaw(0);}, 1000);
+    setTimeout(function() {generateLaw(1);}, 1200);
+    setTimeout(function() {generateLaw(2);}, 1400);
+
     document.getElementById('valider').addEventListener('click', sendChoicesToPlayerTwo);
 
 }
@@ -61,7 +77,7 @@ function playerOneLawSelection() {
 function elimination() {
 
     displayElimination();
-    setTimeout(eliminateSomeone, 5000);
+    setTimeout(eliminateSomeone, 500);
 
 }
 
@@ -77,17 +93,22 @@ function elimination() {
 function displayElimination() {
 
     // allume toutes les LED en rouge pour 5 secondes
-
     document.getElementsByTagName('html')[0].style.backgroundColor = "red";
+
+    // affiche sur l'écran qu'on rentre en phase d'élimination
     phaseTitle.innerHTML = "Élimination";
 
 }
 
 function eliminateSomeone() {
 
+    document.getElementById('potentiometer').style.display = "block";
+    placeCursorBeginning();
+    document.body.addEventListener('touchmove', moveCursor);
     phaseTitle.innerHTML = "";
     displayMessage(messages.elimination);
     showValidationButton();
+
 
     //return playerToEliminate;
 
@@ -112,6 +133,113 @@ function giveYourVoteToSomeone() {
 
     displayMessage(messages.donneTonVote);
     showValidationButton();
+
+}
+
+function placeCursorBeginning() {
+
+    var i = 180;
+
+    var rayon = 175;
+
+    //donne une taille au rond intérieur en fonction de la taille de wheel
+    subwheel.style.width = Math.floor((wheel.clientWidth)/2) + "px";
+    subwheel.style.height = Math.floor((wheel.clientHeight)/2) + "px";
+    subwheel.style.borderRadius = Math.floor((wheel.clientWidth)/4) + "px";
+    // subwheel.style.width = rayon + "px";
+    // subwheel.style.height = rayon + "px";
+    // subwheel.style.borderRadius = rayon/2 + "px";
+    radius = parseInt(subwheel.style.borderRadius);
+
+    var x = Math.cos(i*Math.PI/180) * radius;
+    var y = Math.sin(i*Math.PI/180) * radius;
+
+    // positionne le cursor
+    cursor.style.left = x + "px";
+    cursor.style.top = y + "px";
+
+    // lui donne le bon translate
+    var borderParent = parseInt(subwheel.style.borderRadius);
+    var valueTranslate = borderParent - Math.floor((cursor.clientWidth)/2);
+    cursor.style.transform = "translate(" + valueTranslate + "px," + valueTranslate + "px)";
+
+
+}
+
+function moveCursor(e) {
+
+
+
+    var posX = (e.targetTouches[0].clientX);
+
+    var widthWheel = (subwheel.clientWidth)*1.8;
+    var offsetLeftWheel = ((windowWidth-widthWheel)/2);
+
+    console.log(widthWheel);
+    console.log(offsetLeftWheel);
+
+    if (posX < offsetLeftWheel) {
+        posX = offsetLeftWheel;
+    } else if (posX>widthWheel + offsetLeftWheel) {
+        posX = widthWheel + offsetLeftWheel;
+    }
+
+    posX = map(posX, offsetLeftWheel, offsetLeftWheel+widthWheel, 0, 360);
+    // var topMarginWheelMark = 50;
+    // var bottomMarginWheelMark = wheelMark.clientHeight-cursorSlider.clientHeight;
+
+    // if (posY < topMarginWheelMark) {
+    //     posY = topMarginWheelMark;
+    // } else if (posY > bottomMarginWheelMark) {
+    //     posY = windowHeight-bottomMarginWheelMark;
+    // }
+
+    var i = 180 + (posX*180/(windowHeight));
+
+    if (i<180) {
+        i=180;
+    } else if (i>360) {
+        i=360;
+    }
+
+    console.log("i " + i);
+
+    // x et y sont inversés
+    var x = Math.cos(i*Math.PI/180) * radius;
+    var y = Math.sin(i*Math.PI/180) * radius;
+
+    cursor.style.left = x + "px";
+    cursor.style.top = y + "px";
+
+    //console.log("posY " + posY);
+
+    // if (posY<0) {
+    //     posY = 0;
+    // } else if (posY>windowHeight) {
+    //     posY = windowHeight;
+    // }
+
+    //var sliderTopPosition = map(posY, 0, windowHeight, 0, bottomMarginWheelMark);
+
+    // cursorSlider.style.top = sliderTopPosition + "px";
+    // console.log("windowHeight " + windowHeight);
+    // console.log("posY " + posY);
+    // console.log("top slider cursor " + cursorSlider.style.top);
+
+    //console.log(cursor.style.left);
+
+    var selectedPlayer = map(i, 180, 360, 0, numberOfPlayers-1);
+
+    var playerName = subwheel.getElementsByTagName('p')[0];
+    playerName.textContent = "Joueur " + selectedPlayer;
+
+
+}
+
+
+function map(valueToMap, minInput, maxInput, minOutput, maxOutput) {
+
+    return Math.floor((valueToMap - minInput) * (maxOutput - minOutput) / (maxInput - minInput) + minOutput);
 
 }
 
@@ -211,10 +339,12 @@ function selectOneLaw(e) {
  ***************/
 
 
-// choisit une loi au hasard quand on clique sur un carré
-function generateLaw(e) {
+// choisit une loi au hasard après le setTimeout
+function generateLaw(i) {
 
-    var thisLaw = document.getElementById(e.target.id);
+    //var thisLaw = document.getElementById(e.target.id);
+
+    var thisLaw = document.getElementsByClassName('law')[i];
 
     var lawType = ["Humaniste", "Progressiste"];
     var index = Math.floor(Math.random()*lawType.length);
