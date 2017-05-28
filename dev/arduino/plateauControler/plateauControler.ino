@@ -7,7 +7,7 @@
 // pixels led
 #define LEDPIN 8
 #define NUMPIXELS 150
-#define IL 100
+#define IntLed 50
 
 // serial connection status
 boolean serialConnected = false;
@@ -95,13 +95,9 @@ void loop() {
   //––––– traitement des datas recu et non traitées pour les leds –––––//
   // ne pas traiter si reception de donnée en cour !!! (interference avec les datas recues)
   if(! incomingData && ! processedData ){
-    Serial.print("directive: ");
-    Serial.println(directive);
-    if(directive == "check"){
-      // NeoPixel
-      lightUpLeds();
-      Serial.println("led checked");
-    }
+    
+    // traiter la directive correspondant à la data envoyé
+    dataToInstructions();
     
     // datas traités
     processedData = true;
@@ -115,22 +111,16 @@ void loop() {
   //Serial.println(pause);
 }
 
-
-int count = 0;
-void lightUpLeds(){
-  for(int i = 0; i < NUMPIXELS - 149; i++){
-//    if((count + i) % 3 == 0){
-//      pixels.setPixelColor(i, pixels.Color(35,0,35));
-//    }
-//    else if((count + i) % 2 == 0){
-//      pixels.setPixelColor(i, pixels.Color(150,150,0));
-//    }
-//    else{
-//      pixels.setPixelColor(i, pixels.Color(0,150,150));
-//    }
-    pixels.setPixelColor(i, pixels.Color(0,0,0));
+void lightUpAllLeds(int r, int g, int b){
+  for(int i = 0; i < NUMPIXELS; i++){
+    pixels.setPixelColor(i, pixels.Color(r,g,b));
   }
   pixels.show();
-  //delay(125);
-  count ++;
+}
+
+void lightUpLedsFromTo(int r, int g, int b, int ledIndexFrom, int ledIndexTo){
+  for(int i = ledIndexFrom; i < ledIndexTo; i++){
+    pixels.setPixelColor(i, pixels.Color(r,g,b));
+  }
+  pixels.show();
 }

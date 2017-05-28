@@ -8,13 +8,13 @@
 
 import io = require("socket.io")
 import {Server} from "http"
-import AssigningRoles from "./assigningRoles"
 import Player from "./player"
 import Players from "./players"
 import SetPlayerData from "./setPlayerData"
 import Control from "./Control"
 import JsonData from "../general-data/jsonData"
 import _GLOBAL from "./_GLOBAL";
+import PlayersStatus from "./PlayersStatus";
 
 export default class SocketControl{
 
@@ -162,55 +162,7 @@ export default class SocketControl{
                 console.log("total des joeurs connecté!\n");
 
                 // générer les roles de chaques joueurs
-                /// lister les roles
-                const roles: Array<string> = [
-                    "membre du parti de gauche",
-                    "membre du parti de gauche",
-                    "cyborg, membre du parti de gauche",
-                    "membre du parti de droite",
-                    "membre du parti de droite",
-                    "cyborg, membre du parti de droite",
-                ];
-
-                /// vérifier que le nombre de role soit identique au nombre de joueur
-                if(_GLOBAL.numberOfPlayers !== roles.length){
-                    console.error("le nombre de role n'est pas égale au nombre de joueur !!");
-                    process.exit(1);
-                }
-
-                /// assignation des roles
-                const rolesAssigned: Array<RoleAssigned> = AssigningRoles.generate(roles);
-                console.log(roles);
-
-                /// envoyer les roles aux joeurs
-                for(let j: number = 0; j < rolesAssigned.length; j++){
-
-                    const currentPlayerSettings: Player = SetPlayerData.getPlayer(this.players, rolesAssigned[j].playerIndex);
-
-                    const dataToSend: PlayerData = {
-                        index: rolesAssigned[j].playerIndex,
-                        rules: currentPlayerSettings.data.rules,
-                        status: rolesAssigned[j].playerRole,
-                        buttons: currentPlayerSettings.data.buttons,
-                    };
-
-                    // regarder si les data en cour son a envoyer au socket du client actuel ou a un autre
-                    if( currentPlayerSettings.socketId === socketId ){
-                        console.log("meme socket");
-                        console.log(currentPlayerSettings);
-                        console.log(socketIp);
-                        // socket du joueur a metre a jour est celui sur lequel on est connecté
-                        const currentPlayer = this.players.player[j];
-                        SetPlayerData.send(socket, currentPlayer, dataToSend, this.players, this.controller, true);
-                    }
-                    else {
-                        console.log("diff");
-                        console.log(currentPlayerSettings);
-                        console.log(socketIp);
-                        // socket autre, on doit donner un identifiant pour envoyer les data
-                        SetPlayerData.sendTo(socket, this.players, rolesAssigned[j].playerIndex, dataToSend, this.controller, true);
-                    }
-                }
+                PlayersStatus.generate(this.players, this.controller, socket, socketId, socketIp);
 
                 //enregistrer le fait que l'on ai tous les joueurs
                 this.ilManqueDesJoueurs = false;
