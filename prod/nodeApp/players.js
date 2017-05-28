@@ -1,8 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Players = (function () {
-    function Players() {
-    }
-    return Players;
-}());
+class Players {
+}
 exports.default = Players;

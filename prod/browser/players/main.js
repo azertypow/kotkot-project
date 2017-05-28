@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 10);
+/******/ 	return __webpack_require__(__webpack_require__.s = 11);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -73,17 +73,19 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var removeSleepMode = (function () {
-    function removeSleepMode() {
+var LoadJs = (function () {
+    function LoadJs() {
     }
-    removeSleepMode.run = function () {
-        var noSleep = new NoSleep();
-        noSleep.enable();
-        console.log("sleep cut");
+    LoadJs.load = function (file) {
+        var jsElement = document.createElement("script");
+        jsElement.type = "text/javascript";
+        jsElement.src = file;
+        document.body.appendChild(jsElement);
+        return jsElement;
     };
-    return removeSleepMode;
+    return LoadJs;
 }());
-exports.default = removeSleepMode;
+exports.default = LoadJs;
 
 
 /***/ }),
@@ -104,9 +106,29 @@ exports.default = LocationInfo;
 
 
 /***/ }),
-/* 2 */,
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var removeSleepMode = (function () {
+    function removeSleepMode() {
+    }
+    removeSleepMode.run = function () {
+        var noSleep = new NoSleep();
+        noSleep.enable();
+        console.log("sleep cut");
+    };
+    return removeSleepMode;
+}());
+exports.default = removeSleepMode;
+
+
+/***/ }),
 /* 3 */,
-/* 4 */
+/* 4 */,
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -157,7 +179,7 @@ exports.default = PlayerTemplate;
 
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -193,20 +215,20 @@ exports.default = SocketClientApp;
 
 
 /***/ }),
-/* 6 */,
 /* 7 */,
 /* 8 */,
 /* 9 */,
-/* 10 */
+/* 10 */,
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var socketClientApp_1 = __webpack_require__(5);
-var playerTemplate_1 = __webpack_require__(4);
-var removeSleepMode_1 = __webpack_require__(0);
-var LoadJs_1 = __webpack_require__(12);
+var socketClientApp_1 = __webpack_require__(6);
+var playerTemplate_1 = __webpack_require__(5);
+var removeSleepMode_1 = __webpack_require__(2);
+var LoadJs_1 = __webpack_require__(0);
 var locationInfo_1 = __webpack_require__(1);
 removeSleepMode_1.default.run();
 var initParam = {
@@ -225,29 +247,6 @@ var currentHostname = locationInfo.parse.hostname;
 LoadJs_1.default.load("http://" + currentHostname + ":1337/socket.io/socket.io.js").addEventListener("load", function () {
     socketClientApp_1.default.run(playerTemplate, currentHostname);
 });
-
-
-/***/ }),
-/* 11 */,
-/* 12 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var LoadJs = (function () {
-    function LoadJs() {
-    }
-    LoadJs.load = function (file) {
-        var jsElement = document.createElement("script");
-        jsElement.type = "text/javascript";
-        jsElement.src = file;
-        document.body.appendChild(jsElement);
-        return jsElement;
-    };
-    return LoadJs;
-}());
-exports.default = LoadJs;
 
 
 /***/ })

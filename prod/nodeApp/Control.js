@@ -1,10 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Control = (function () {
-    function Control(ipValue, socketId) {
+class Control {
+    constructor(ipValue, socketId) {
         this.ipValue = ipValue;
         this.socketId = socketId;
     }
-    return Control;
-}());
+}
 exports.default = Control;
