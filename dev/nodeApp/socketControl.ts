@@ -15,10 +15,12 @@ import Control from "./Control"
 import JsonData from "../general-data/jsonData"
 import _GLOBAL from "./_GLOBAL";
 import PlayersStatus from "./PlayersStatus";
+import Events = require("events");
 
 export default class SocketControl{
 
     private static ilManqueDesJoueurs: boolean = true;
+    public static allPlayers: Events = new Events();
 
     static players: Players = {
         allIp: [],
@@ -160,6 +162,8 @@ export default class SocketControl{
 
             if(this.players.count === _GLOBAL.numberOfPlayers){
                 console.log("total des joeurs connecté!\n");
+
+                this.allPlayers.emit("connected");
 
                 // générer les roles de chaques joueurs
                 PlayersStatus.generate(this.players, this.controller, socket, socketId, socketIp);

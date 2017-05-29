@@ -25,6 +25,10 @@ String directive = "";
 // setup the NeoPixel library
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, LEDPIN, NEO_GRB + NEO_KHZ800);
 
+// directive sur les leds
+boolean run_Intro = false;
+boolean run_RandomPlacement = false;
+
 // init string for serialPort
 String reception = "";
 
@@ -102,6 +106,14 @@ void loop() {
     // datas traités
     processedData = true;
     Serial.println("treated");
+  }
+
+  //––––– annimation des led ––––––––––//
+  if(run_Intro == true){
+    play_Intro();
+  }
+  else if (run_RandomPlacement){
+    play_random_placement();
   }
 
   //delay(3000);

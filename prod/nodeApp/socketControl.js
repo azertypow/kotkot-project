@@ -7,6 +7,7 @@ const Control_1 = require("./Control");
 const jsonData_1 = require("../general-data/jsonData");
 const _GLOBAL_1 = require("./_GLOBAL");
 const PlayersStatus_1 = require("./PlayersStatus");
+const Events = require("events");
 class SocketControl {
     static connection(httpServer) {
         let ioServer = io.listen(httpServer);
@@ -86,6 +87,7 @@ class SocketControl {
             console.log("\n");
             if (this.players.count === _GLOBAL_1.default.numberOfPlayers) {
                 console.log("total des joeurs connecté!\n");
+                this.allPlayers.emit("connected");
                 PlayersStatus_1.default.generate(this.players, this.controller, socket, socketId, socketIp);
                 this.ilManqueDesJoueurs = false;
             }
@@ -99,6 +101,7 @@ class SocketControl {
     }
 }
 SocketControl.ilManqueDesJoueurs = true;
+SocketControl.allPlayers = new Events();
 SocketControl.players = {
     allIp: [],
     count: 0,
