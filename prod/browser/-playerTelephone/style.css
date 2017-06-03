@@ -1,7 +1,19 @@
+/*si tu déplaces les polices oublie pas de la ajouter dans le gitignore*/
+@font-face {
+    font-family: 'gt_america_monoregular';
+    src: url('fonts/gt-america-mono-regular-webfont.woff2') format('woff2'),
+    url('fonts/gt-america-mono-regular-webfont.woff') format('woff'),
+    url('fonts/gt-america-mono-regular-webfont.ttf') format('truetype'),
+    url('fonts/gt-america-mono-regular-webfont.svg#gt_america_monoregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
 
+}
 
 html {
     background-color: blue;
+    transition: 0.2s ease;
+    font-family: 'gt_america_monoregular', monospace;
 }
 
 body {
@@ -11,9 +23,8 @@ body {
 }
 
 h1 {
-    font-family: monospace;
     color: white;
-    font-size: 250%;
+    font-size: 200%;
     position: absolute;
     left:50%;
     top:40%;
@@ -37,9 +48,8 @@ h1 {
     background-color: blue;
     padding:20px;
     text-align: center;
-    font-family: monospace;
     font-weight: bold;
-    font-size:120%;
+    font-size:100%;
     border: 5px solid blue;
     box-sizing: border-box;
 }
@@ -100,8 +110,7 @@ h1 {
 }
 
 #message p {
-    font-size: 120%;
-    font-family: monospace;
+    font-size: 100%;
     color: white;
     /*border: 1px solid white;*/
 }
@@ -113,8 +122,7 @@ h1 {
 
 #warning {
     opacity: 0;
-    font-size: 90%;
-    font-family: monospace;
+    font-size: 80%;
     background-color: white;
     display: inline-block;
     padding: 12px;
@@ -135,7 +143,7 @@ h1 {
 #controls button {
     background-color: transparent;
     padding: 10px;
-    font-size: 80%;
+    font-size: 70%;
     text-transform: uppercase;
     font-weight: bold;
     border: 3px solid white;
@@ -143,13 +151,30 @@ h1 {
     float: right;
     margin-right: -15px;
     opacity: 0;
-    transition: margin-right 0.5s ease, opacity 0.5s ease;
+    position: absolute;
+    top:-500px;
+    right: 999px;
+    transition: margin-right 0.5s ease, opacity 0.5s ease, top 0.01s ease, right 0.01s ease;
 }
 
 #controls button.active {
     opacity: 1;
+    position: relative;
+    top:0;
+    right:0;
     margin-right: 0;
-    transition: margin-right 0.5s ease, opacity 0.5s ease;
+    transition: margin-right 0.5s ease, opacity 0.5s ease, top 0.01s ease, right 0.01s ease;
+}
+
+#controls #doublechoix {
+    position: absolute;
+    display: flex;
+    justify-content: space-around;
+    width: 200px;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 50%;
+
 }
 
 
@@ -210,7 +235,6 @@ h1 {
     text-align: center;
     display: block;
     font-size: 10px;
-    font-family: monospace;
     color: white;
     width: 150px;
     margin: 60px auto;

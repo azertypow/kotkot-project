@@ -43,15 +43,16 @@ var numberOfPlayers = 8;
 
 
 
-//playerOneLawSelection();
-//playerTwoLawSelection();
-//elimination();
-attenteDeConnexionDesJoueurs();
-
+// playerOneLawSelection();
+// playerTwoLawSelection();
+// elimination();
+installation();
+// brancheCasque();
 
 // fonction à lancer pour que le joueur 2 puisse choisir sa loi parmi les 2 choix
 function playerTwoLawSelection() {
 
+    background([0,0,255]);
     createLaws(2);
     setLaws(lawsArray);
 
@@ -59,6 +60,8 @@ function playerTwoLawSelection() {
 
 // fonction à lancer pour que le joueur 1 puisse choisir ses 2 lois parmi les 3 choix
 function playerOneLawSelection() {
+
+    background([0,0,255]);
 
     displayMessage(messages.tireTroisLois);
     createLaws(3);
@@ -76,6 +79,7 @@ function playerOneLawSelection() {
 // fonction à lancer pour la phase d'élimination
 function elimination() {
 
+    background([255,0,0]);
     displayElimination();
     setTimeout(eliminateSomeone, 500);
 
@@ -88,13 +92,26 @@ function elimination() {
  *
  ***************/
 
-function attenteDeConnexionDesJoueurs() {
-    displayMessage("replace", "Attente de connexion des autres joueurs. ");
+function brancheCasque() {
+
+    background([0,0,0]);
+    displayMessage("replace", "Est-ce que ton casque est bien branché ?");
+    displayButton("oui");
+
+
+}
+
+function installation() {
+
+    background([0,0,0]);
+
+    displayMessage("replace", "Tu es Ministre de l'Education. Tu peux aller t'installer à ta place");
+    displayButton(["autre", "Je suis assis à ma place"]);
 
     // si les joueurs mettent trop de temps à se connecter.
     setTimeout(function () {
         displayMessage("add", "Dis-leur de se dépêcher, on a pas toute la nuit");
-    }, 2000);
+    }, 10000);
 }
 
 
@@ -108,8 +125,9 @@ function attenteDeConnexionDesJoueurs() {
 
 function displayElimination() {
 
+
+
     // allume toutes les LED en rouge pour 5 secondes
-    document.getElementsByTagName('html')[0].style.backgroundColor = "red";
 
     // affiche sur l'écran qu'on rentre en phase d'élimination
     phaseTitle.innerHTML = "Élimination";
@@ -123,7 +141,7 @@ function eliminateSomeone() {
     document.body.addEventListener('touchmove', moveCursor);
     phaseTitle.innerHTML = "";
     displayMessage("replace", messages.elimination);
-    showValidationButton();
+    displayButton("valider");
 
 
     //return playerToEliminate;
@@ -148,7 +166,8 @@ function displayEliminatedPlayer() {
 function giveYourVoteToSomeone() {
 
     displayMessage("replace", messages.donneTonVote);
-    showValidationButton();
+    displayButton("valider");
+
 
 }
 
@@ -253,13 +272,21 @@ function moveCursor(e) {
 }
 
 
+/***************
+ *
+ *   Fonctions-outils
+ *
+ ***************/
+
 function map(valueToMap, minInput, maxInput, minOutput, maxOutput) {
 
     return Math.floor((valueToMap - minInput) * (maxOutput - minOutput) / (maxInput - minInput) + minOutput);
 
 }
 
-
+function background(color) {
+    document.getElementsByTagName('html')[0].style.backgroundColor = "rgb(" + color[0] + "," +  color[1] + "," + color[2] + ")";
+}
 
 
 
@@ -339,9 +366,9 @@ function selectOneLaw(e) {
     console.log(currentSelectedLaws);
 
     if (currentSelectedLaws === 1) {
-        showValidationButton();
+        displayButton("valider");
     } else {
-        hideValidationButton();
+        removeButtons();
     }
 
 }
@@ -410,9 +437,9 @@ function selectTwoLaws(e) {
     console.log(currentSelectedLaws);
 
     if (currentSelectedLaws === 2) {
-        showValidationButton();
+        displayButton("valider");
     } else {
-        hideValidationButton();
+        removeButtons();
     }
 
 }
@@ -453,14 +480,41 @@ function sendChoicesToPlayerTwo() {
 
 // Affiche les différents éléments d'interface -
 
-function showValidationButton() {
-    var button = document.getElementById('valider');
-    button.classList.add('active');
+// on peut soit envoyer un nom de bouton si c'est oui/non/valider, par ex : displayButton("valider")
+// soit envoyer un tableau de boutons : displayButton(["oui", "non"])
+// soit envoyer un bouton personnalisé (autre) : displayButton(["autre", "nom du bouton"]);
+function displayButton(buttonToDisplay) {
+
+    var button;
+
+    console.log(buttonToDisplay);
+
+    if(typeof buttonToDisplay !== "string") { // c'est-à-dire si c'est un tableau, par exemple si on veut ajouter "oui" et "non"
+        if (buttonToDisplay[0] === "autre") { // si c'est un bouton personnalisé
+            button = document.getElementById(buttonToDisplay[0]);
+            button.textContent = buttonToDisplay[1];
+            button.classList.add('active');
+        } else {
+            button = [];
+            for (var i=0; i<buttonToDisplay.length; i++) {
+                button[i] = document.getElementById(buttonToDisplay[i]);
+                button[i].classList.add('active');
+            }
+        }
+    } else {
+        button = document.getElementById(buttonToDisplay);
+        button.classList.add('active');
+    }
+
+
 }
 
-function hideValidationButton() {
-    var button = document.getElementById('valider');
-    button.classList.remove('active');
+function removeButtons() {
+    var buttons = document.getElementsByTagName('button');
+    for (var i=0; i<buttons.length; i++) {
+        buttons[i].classList.remove('active');
+    }
+
 }
 
 function displayMessage(mode, message) {
