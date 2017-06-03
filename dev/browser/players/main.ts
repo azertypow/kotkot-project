@@ -2,14 +2,15 @@
  * Created by azertypow on 06/04/2017.
  */
 
-import SocketClientApp from "./socketClientApp";
-import PlayerTemplate from "./playerTemplate";
+import SocketClientApp from "./socketClientApp"
+import PlayerTemplate from "./playerTemplate"
 import LoadJs from "../LoadJs"
 import LocationInfo from "../locationInfo"
 
-// joueur
+//import * as script from "./scripts.js"
+import * as sequences from "./sequences.js";
 
-/// initialiser l'affichage du joueur :
+// initialiser l'affichage du joueur :
 const initParam:InitParam = {
     setIndex: 'en attente…',
     setStatus: 'en attente…',
@@ -31,3 +32,7 @@ LoadJs.load(`http://${currentHostname}:1337/socket.io/socket.io.js`).addEventLis
     // lancer le socket
     SocketClientApp.run(playerTemplate, currentHostname);
 });
+
+
+//teste
+sequences.elimination();
