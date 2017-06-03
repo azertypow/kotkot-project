@@ -25,7 +25,7 @@ var lawsArray = {
     '1':'progressiste'
 };
 
-var phaseTitle = document.getElementById('phaseTitle');
+var title = document.getElementsByTagName('h1')[0];
 
 var wheel = document.getElementById('wheel');
 var cursor = document.getElementById('cursor');

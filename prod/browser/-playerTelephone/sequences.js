@@ -100,7 +100,7 @@ function displayElimination() {
     // allume toutes les LED en rouge pour 5 secondes
 
     // affiche sur l'écran qu'on rentre en phase d'élimination
-    phaseTitle.innerHTML = "Élimination";
+    title.innerHTML = "Élimination";
 
 }
 
@@ -109,7 +109,7 @@ function eliminateSomeone() {
     document.getElementById('potentiometer').style.display = "block";
     placeCursorBeginning();
     document.body.addEventListener('touchmove', moveCursor);
-    phaseTitle.innerHTML = "";
+    title.innerHTML = "";
     displayMessage("replace", messages.elimination);
     displayButton("valider");
 
