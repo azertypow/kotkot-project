@@ -8,6 +8,8 @@ import SerialPort = require("serialport");
 import Events = require("events");
 import WritableStream = NodeJS.WritableStream;
 import {removeAllListeners} from "cluster";
+import Timer = NodeJS.Timer;
+import SocketControl from "../nodeApp/socketControl"
 
 const SERIAL_CHARACTER_INTI: string = "I";
 const SERIAL_CHARACTER_RESET: string = "R";
@@ -30,15 +32,21 @@ interface SerialPortEvent extends SerialPort{
 export default class PortSerial {
 
     myUsb: SerialPort;
+    public arduino: Events;
     data: Events;
     private wasReceivedByArduino: boolean;
     private wasTreatedByArduino: boolean;
+    private anAnimationIsPlaying: boolean;
+    private dataToSend_standBay: string;
 
     constructor (serialPort: string, options: SerialPort.options){
         this.myUsb = new SerialPort(serialPort, options);
+        this.arduino = new Events();
         this.data = new Events();
         this.wasReceivedByArduino = true;
         this.wasTreatedByArduino = true;
+        this.anAnimationIsPlaying = false;
+        this.dataToSend_standBay = "";
 
         // initialiser la connection avec l'arduino
         this.initCommunication();
@@ -73,13 +81,15 @@ export default class PortSerial {
 
                         console.log("ARDUINO CONNECTED");
 
+                        this.arduino.emit("connected");
+
                         // commencer la communication
                         this.startCommunication();
 
                         // message de teste
                         setTimeout(()=>{
-                            this.sendDirectiveToArduino("hello kotkot");
-                            console.log("hello kotkot envoyé");
+                            this.sendDirectiveToArduino("intro");
+                            console.log("intro envoyé");
                         }, reconnectionDelay)
                     }
                     else{
@@ -102,6 +112,14 @@ export default class PortSerial {
         // à la reception de valeur de la part de l'arduino
         this.myUsb.on("data", (value: string)=>{
 
+            // regarder si des donners sont en attente d'envois
+            if(this.dataToSend_standBay.length > 0){
+                console.log("!!!!! –––––");
+                console.log(this.dataToSend_standBay);
+                this.sendDirectiveToArduino(this.dataToSend_standBay);
+                console.log("––––– !!!!!");
+            }
+
             // notifier que l'arduino a bien recu les données
             if(value === "received"){
                 this.wasReceivedByArduino = true;
@@ -110,6 +128,14 @@ export default class PortSerial {
             // notifier que les données ont bien été traité
             if(value === "treated"){
                 this.wasTreatedByArduino = true;
+            }
+
+            if(value === "animate on"){
+                this.anAnimationIsPlaying = true;
+            }
+
+            if(value === "animate off"){
+                this.anAnimationIsPlaying = false;
             }
 
             //––––––––––
@@ -130,6 +156,14 @@ export default class PortSerial {
             //––––––––––
             //––––––––––
         });
+
+        // attente de connection de tous les joueurs
+        SocketControl.allPlayers.once("connected", ()=>{
+            console.log("PRET POUR COMMENCERRRRRRRRR");
+
+            // envoyer random en attente de positionnment des joueurs
+            this.sendDirectiveToArduino("random attente placement");
+        });
     }
 
     sendData(dataToSend: string){
@@ -147,9 +181,16 @@ export default class PortSerial {
         });
     }
 
+    // loop si info pas réussi a envoyé et que ce n'est pas du a une annimation
+    // sendDataStandBay_interval: Timer;
+    //
+    // sendDataStandBay(){
+    //     this.sendDataStandBay_interval = setInterval(()=>{},);
+    // }
+
     sendDirectiveToArduino(dataToSend: string){
         // si données deja recu, on peut envoyer les suivantes
-        if(this.wasReceivedByArduino && this.wasTreatedByArduino){
+        if(this.wasReceivedByArduino && this.wasTreatedByArduino && !this.anAnimationIsPlaying){
 
             // notifier que des data sont envoyé à l'arduino (attente de reception et attente de traitement)
             this.wasReceivedByArduino = false;
@@ -166,9 +207,17 @@ export default class PortSerial {
             // caractere signalent la fin des donnés
             this.sendData(SERIAL_CHARACTER_END);
         }
-        // sinon, stocker les message en attendant la liberation
+        // data n'ont pas pu etre envoyé car arduino traite des information sur les leds
         else{
-            // !!! a faire tableau -> evenement arduino ready -> si tableau.length > 0, envoyer la [premiere ? derniere ? toute ? juste la dernière] directive
+            // si c'est du a une annimation
+            //if(this.anAnimationIsPlaying){
+                console.log("en attente d'envois");
+                this.dataToSend_standBay = dataToSend;
+            //}
+            // autre ??
+            //else {
+                // !!! a faire tableau -> evenement arduino ready -> si tableau.length > 0, envoyer la [premiere ? derniere ? toute ? juste la dernière] directive
+            //}
         }
     }
 }

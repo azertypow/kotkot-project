@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const SerialPort = require("serialport");
 const Events = require("events");
+const socketControl_1 = require("../nodeApp/socketControl");
 const SERIAL_CHARACTER_INTI = "I";
 const SERIAL_CHARACTER_RESET = "R";
 const SERIAL_CHARACTER_BREAK = "B";
@@ -13,9 +14,12 @@ const minPotentiometer = 0;
 class PortSerial {
     constructor(serialPort, options) {
         this.myUsb = new SerialPort(serialPort, options);
+        this.arduino = new Events();
         this.data = new Events();
         this.wasReceivedByArduino = true;
         this.wasTreatedByArduino = true;
+        this.anAnimationIsPlaying = false;
+        this.dataToSend_standBay = "";
         this.initCommunication();
     }
     initCommunication() {
@@ -39,10 +43,11 @@ class PortSerial {
                         console.log(this.myUsb.listeners("data"));
                         console.log("––––––––––");
                         console.log("ARDUINO CONNECTED");
+                        this.arduino.emit("connected");
                         this.startCommunication();
                         setTimeout(() => {
-                            this.sendDirectiveToArduino("hello kotkot");
-                            console.log("hello kotkot envoyé");
+                            this.sendDirectiveToArduino("intro");
+                            console.log("intro envoyé");
                         }, reconnectionDelay);
                     }
                     else {
@@ -59,11 +64,23 @@ class PortSerial {
     }
     startCommunication() {
         this.myUsb.on("data", (value) => {
+            if (this.dataToSend_standBay.length > 0) {
+                console.log("!!!!! –––––");
+                console.log(this.dataToSend_standBay);
+                this.sendDirectiveToArduino(this.dataToSend_standBay);
+                console.log("––––– !!!!!");
+            }
             if (value === "received") {
                 this.wasReceivedByArduino = true;
             }
             if (value === "treated") {
                 this.wasTreatedByArduino = true;
+            }
+            if (value === "animate on") {
+                this.anAnimationIsPlaying = true;
+            }
+            if (value === "animate off") {
+                this.anAnimationIsPlaying = false;
             }
             try {
                 this.data.emit("JSONReceived", JSON.parse(value));
@@ -71,6 +88,10 @@ class PortSerial {
             catch (e) {
                 this.data.emit("otherReceived", value);
             }
+        });
+        socketControl_1.default.allPlayers.once("connected", () => {
+            console.log("PRET POUR COMMENCERRRRRRRRR");
+            this.sendDirectiveToArduino("random attente placement");
         });
     }
     sendData(dataToSend) {
@@ -86,13 +107,15 @@ class PortSerial {
         });
     }
     sendDirectiveToArduino(dataToSend) {
-        if (this.wasReceivedByArduino && this.wasTreatedByArduino) {
+        if (this.wasReceivedByArduino && this.wasTreatedByArduino && !this.anAnimationIsPlaying) {
             this.wasReceivedByArduino = false;
             this.wasTreatedByArduino = false;
             this.sendData(dataToSend);
             this.sendData(SERIAL_CHARACTER_END);
         }
         else {
+            console.log("en attente d'envois");
+            this.dataToSend_standBay = dataToSend;
         }
     }
 }

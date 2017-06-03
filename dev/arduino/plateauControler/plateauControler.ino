@@ -6,7 +6,8 @@
 
 // pixels led
 #define LEDPIN 8
-#define NUMPIXELS 40
+#define NUMPIXELS 150
+#define IntLed 50
 
 // serial connection status
 boolean serialConnected = false;
@@ -19,9 +20,14 @@ boolean processedData = true;
 #define SERIAL_CHARACTER_RESET "R"
 #define SERIAL_CHARACTER_BREAK "B"
 #define SERIAL_CHARACTER_END "E"
+String directive = "";
 
 // setup the NeoPixel library
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, LEDPIN, NEO_GRB + NEO_KHZ800);
+
+// directive sur les leds
+boolean run_Intro = false;
+boolean run_RandomPlacement = false;
 
 // init string for serialPort
 String reception = "";
@@ -93,12 +99,21 @@ void loop() {
   //––––– traitement des datas recu et non traitées pour les leds –––––//
   // ne pas traiter si reception de donnée en cour !!! (interference avec les datas recues)
   if(! incomingData && ! processedData ){
-    // NeoPixel
-    lightUpLeds();
+    
+    // traiter la directive correspondant à la data envoyé
+    dataToInstructions();
     
     // datas traités
     processedData = true;
     Serial.println("treated");
+  }
+
+  //––––– annimation des led ––––––––––//
+  if(run_Intro == true){
+    play_Intro();
+  }
+  else if (run_RandomPlacement){
+    play_random_placement();
   }
 
   //delay(3000);
@@ -108,21 +123,16 @@ void loop() {
   //Serial.println(pause);
 }
 
-
-int count = 0;
-void lightUpLeds(){
+void lightUpAllLeds(int r, int g, int b){
   for(int i = 0; i < NUMPIXELS; i++){
-    if((count + i) % 3 == 0){
-      pixels.setPixelColor(i, pixels.Color(150,0,150));
-    }
-    else if((count + i) % 2 == 0){
-      pixels.setPixelColor(i, pixels.Color(150,150,0));
-    }
-    else{
-      pixels.setPixelColor(i, pixels.Color(0,150,150));
-    }
+    pixels.setPixelColor(i, pixels.Color(r,g,b));
   }
   pixels.show();
-  //delay(125);
-  count ++;
+}
+
+void lightUpLedsFromTo(int r, int g, int b, int ledIndexFrom, int ledIndexTo){
+  for(int i = ledIndexFrom; i < ledIndexTo; i++){
+    pixels.setPixelColor(i, pixels.Color(r,g,b));
+  }
+  pixels.show();
 }

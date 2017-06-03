@@ -12,6 +12,10 @@ void parseSerialReceived(String data){
     // noté le fais que toutes les data on été recu lors de ce passage
     allDataReceivedPrevious = true;
     Serial.println(info);
+
+    // placer l'info recu en directive pour les leds
+    info.remove(info.length() - 1);
+    directive = info;
     
     // vider le stockage des data recu
     info = "";
