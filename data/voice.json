@@ -43,10 +43,18 @@
             }
           }
         },
-        "choix du ministre":{
+        "choix lois ministre":{
           "ministre actif":"Choisissez deux lois parmi les trois proposées",
           "delegue":"le ministre est en train de voter",
           "autres joueurs":"le ministre est en train de choisir deux lois à vous proposer…"
+        },
+        "choix loi delegue": {
+          "ministre actif et autres":"votre délégué est en train de valider une loi",
+          "delegue":"le ministre vous a proposé ces deux lois, laquelle choisissez-vous ?"
+        },
+        "bien recu":"bien reçu",
+        "annonce loi":{
+          "progressiste": "une loi progressiste vient d'être promulguée"
         }
       }
     },
@@ -69,9 +77,10 @@
         },
         "passation du vote": {
           "joueur elimine": "Tu dois quitter le jeu. Avant ça tu vas pouvoir donner ton droit de vote à un autre ministre. Ce dernier aura plus de pouvoir lors des prochaines éléctions et éliminations",
-          "autres joueurs": "<ministre> est en train de choisir un joueur à qui donner son droit de vote. Ce dernier aura plus de pouvoir lors des prochaines élections et éliminations",
-          "annonce resultat":"Joueur éliminé a choisi de donner son droit de vote à Joueur. Sa voix comptera maintenant X fois."
-        }
+          "autres joueurs": "<ministre éliminé> est en train de choisir un joueur à qui donner son droit de vote. Ce dernier aura plus de pouvoir lors des prochaines élections et éliminations",
+          "annonce resultat":"<ministre éliminé> a choisi de donner son droit de vote à <ministre choisi>. Il obtient une voix supplémentaire pour tous les prochains votes."
+        },
+        "message adieu":"<ministre éliminé>, tu dois enlever ton casque et quitter la partie. Hasta la vista beil-bé"
       }
     },
     "bonus": {

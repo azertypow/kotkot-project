@@ -16,7 +16,7 @@ var warnings = {
     "maxOneLaw":"Tu ne peux pas sélectionner plus d'une loi",
     "notEnoughLaws":"Tu dois sélectionner deux lois",
     "tooSlow":"Dépêche-toi, tu n'as bientôt plus de temps"
-}
+};
 
 var displayedLaws = 0;
 
@@ -37,7 +37,6 @@ var windowWidth = window.innerWidth;
 var windowHeight = window.innerHeight;
 
 var radius;
-var marge = 50; // marge en haut et en bas du slider
 var numberOfPlayers = 8;
 
 var listeDesMinistres = {
