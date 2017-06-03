@@ -9,6 +9,7 @@
   },
   "exclude": [
     "node_modules",
-    "dev/arduino/"
+    "dev/arduino/",
+    "dev/nodeApp/"
   ]
 }

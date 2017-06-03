@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 9);
+/******/ 	return __webpack_require__(__webpack_require__.s = 8);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -107,26 +107,6 @@ exports.default = LocationInfo;
 
 /***/ }),
 /* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var removeSleepMode = (function () {
-    function removeSleepMode() {
-    }
-    removeSleepMode.run = function () {
-        var noSleep = new NoSleep();
-        noSleep.enable();
-        console.log("sleep cut");
-    };
-    return removeSleepMode;
-}());
-exports.default = removeSleepMode;
-
-
-/***/ }),
-/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -189,14 +169,14 @@ exports.default = ManagePlayers;
 
 
 /***/ }),
-/* 4 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var socketRulesButtonEmit_1 = __webpack_require__(10);
-var controlTemplate_1 = __webpack_require__(8);
+var socketRulesButtonEmit_1 = __webpack_require__(9);
+var controlTemplate_1 = __webpack_require__(7);
 var socketControlApp = (function () {
     function socketControlApp() {
     }
@@ -238,10 +218,10 @@ exports.default = socketControlApp;
 
 
 /***/ }),
+/* 4 */,
 /* 5 */,
 /* 6 */,
-/* 7 */,
-/* 8 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -263,19 +243,17 @@ exports.default = ControlTemplate;
 
 
 /***/ }),
-/* 9 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var socketControlApp_1 = __webpack_require__(4);
-var removeSleepMode_1 = __webpack_require__(2);
-var managePlayers_1 = __webpack_require__(3);
+var socketControlApp_1 = __webpack_require__(3);
+var managePlayers_1 = __webpack_require__(2);
 var LoadJs_1 = __webpack_require__(0);
 var locationInfo_1 = __webpack_require__(1);
 var selectedPlayers = [];
-removeSleepMode_1.default.run();
 var locationInfo = new locationInfo_1.default(window.location.href);
 var currentHostname = locationInfo.parse.hostname;
 LoadJs_1.default.load("http://" + currentHostname + ":1337/socket.io/socket.io.js").addEventListener("load", function () {
@@ -285,13 +263,13 @@ LoadJs_1.default.load("http://" + currentHostname + ":1337/socket.io/socket.io.j
 
 
 /***/ }),
-/* 10 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var jsonData_1 = __webpack_require__(12);
+var jsonData_1 = __webpack_require__(11);
 var SocketRulesButtonEmit = (function () {
     function SocketRulesButtonEmit() {
     }
@@ -330,8 +308,8 @@ exports.default = SocketRulesButtonEmit;
 
 
 /***/ }),
-/* 11 */,
-/* 12 */
+/* 10 */,
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
