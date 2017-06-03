@@ -2,54 +2,15 @@
  * Created by mathi on 15/05/2017.
  */
 
-var messages = {
-    "tireTroisLois":"Tire trois lois au hasard",
-    "choisiDeuxLois":"Choisis-en deux à envoyer à l'autre joueur",
-    "elimination":"Choisis un joueur à éliminer",
-    "donneTonVote":"Choisis un joueur à qui donner tes votes. Attention, tu démultiplie la puissance de joueur.",
-    "joueurElimine":"Vous avez choisi d'éliminer"
-
-};
-
-var warnings = {
-    "maxTwoLaws":"Tu ne peux pas sélectionner plus de deux lois",
-    "maxOneLaw":"Tu ne peux pas sélectionner plus d'une loi",
-    "notEnoughLaws":"Tu dois sélectionner deux lois",
-    "tooSlow":"Dépêche-toi, tu n'as bientôt plus de temps"
-}
-
-var displayedLaws = 0;
-
-var lawsArray = {
-    '0':'humaniste',
-    '1':'progressiste'
-};
-
-var phaseTitle = document.getElementById('phaseTitle');
-
-var wheel = document.getElementById('wheel');
-var cursor = document.getElementById('cursor');
-var subwheel = document.getElementById('subwheel');
-var cursorSlider = document.getElementById('cursorSlider');
-var wheelMark = document.getElementById('wheelMark');
-
-var windowWidth = window.innerWidth;
-var windowHeight = window.innerHeight;
-
-var radius;
-var marge = 50; // marge en haut et en bas du slider
-var numberOfPlayers = 8;
-
 
 
 
 // playerOneLawSelection();
 // playerTwoLawSelection();
-// elimination();
+elimination();
 // installation();
 // brancheCasque();
-hasardSelectionJoueur();
-
+// hasardSelectionJoueur();
 // ecouteDesRegles();
 
 // fonction à lancer pour que le joueur 2 puisse choisir sa loi parmi les 2 choix
@@ -221,7 +182,6 @@ function placeCursorBeginning() {
 function moveCursor(e) {
 
 
-
     var posX = (e.targetTouches[0].clientX);
 
     var widthWheel = (subwheel.clientWidth)*1.8;
@@ -283,7 +243,7 @@ function moveCursor(e) {
     var selectedPlayer = map(i, 180, 360, 0, numberOfPlayers-1);
 
     var playerName = subwheel.getElementsByTagName('p')[0];
-    playerName.textContent = "Joueur " + selectedPlayer;
+    playerName.textContent = listeDesMinistres[selectedPlayer];
 
 
 }
@@ -291,15 +251,6 @@ function moveCursor(e) {
 function hasardSelectionJoueur() {
 
     var message;
-    var listeDesMinistres = [   "Ministre de l'Education",
-                                "Ministre de l'Industrie",
-                                "Ministre de la Justice",
-                                "Ministre de l'Information",
-                                "Ministre de la Communication",
-                                "Ministre de la Santé",
-                                "Ministre du Travail",
-                                "Ministre de l'Armée",
-    ];
 
     setInterval(function() {
         var index = Math.floor(Math.random()*listeDesMinistres.length);
