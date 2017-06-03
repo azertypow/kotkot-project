@@ -46,8 +46,11 @@ var numberOfPlayers = 8;
 // playerOneLawSelection();
 // playerTwoLawSelection();
 // elimination();
-installation();
+// installation();
 // brancheCasque();
+hasardSelectionJoueur();
+
+// ecouteDesRegles();
 
 // fonction à lancer pour que le joueur 2 puisse choisir sa loi parmi les 2 choix
 function playerTwoLawSelection() {
@@ -92,6 +95,7 @@ function elimination() {
  *
  ***************/
 
+// indique aux joueurs de brancher leurs casques
 function brancheCasque() {
 
     background([0,0,0]);
@@ -101,6 +105,7 @@ function brancheCasque() {
 
 }
 
+// indique aux joueurs d'aller s'installer à leur place
 function installation() {
 
     background([0,0,0]);
@@ -113,6 +118,18 @@ function installation() {
         displayMessage("add", "Dis-leur de se dépêcher, on a pas toute la nuit");
     }, 10000);
 }
+
+// demande aux joueurs s'ils ont compris ou pas les règles.
+function ecouteDesRegles() {
+
+    background([0,0,0]);
+
+    displayButton(["autre", "J'ai compris les règles", "Je souhaite les réécouter"]);
+    // displayButton(["autre", "Je souhaite les réécouter"]);
+
+}
+
+
 
 
 /***************
@@ -271,6 +288,30 @@ function moveCursor(e) {
 
 }
 
+function hasardSelectionJoueur() {
+
+    var message;
+    var listeDesMinistres = [   "Ministre de l'Education",
+                                "Ministre de l'Industrie",
+                                "Ministre de la Justice",
+                                "Ministre de l'Information",
+                                "Ministre de la Communication",
+                                "Ministre de la Santé",
+                                "Ministre du Travail",
+                                "Ministre de l'Armée",
+    ];
+
+    setInterval(function() {
+        var index = Math.floor(Math.random()*listeDesMinistres.length);
+        message = listeDesMinistres[index];
+        displayMessage("replace", message);
+        // régler le style ? ici le message est un peu haut
+        // document.getElementById("message").style.marginTop = "150px";
+    }, 70);
+
+
+}
+
 
 /***************
  *
@@ -285,6 +326,7 @@ function map(valueToMap, minInput, maxInput, minOutput, maxOutput) {
 }
 
 function background(color) {
+
     document.getElementsByTagName('html')[0].style.backgroundColor = "rgb(" + color[0] + "," +  color[1] + "," + color[2] + ")";
 }
 
@@ -482,18 +524,21 @@ function sendChoicesToPlayerTwo() {
 
 // on peut soit envoyer un nom de bouton si c'est oui/non/valider, par ex : displayButton("valider")
 // soit envoyer un tableau de boutons : displayButton(["oui", "non"])
-// soit envoyer un bouton personnalisé (autre) : displayButton(["autre", "nom du bouton"]);
+// soit envoyer un ou plusieurs bouton(s) personnalisé(s) (autre) : displayButton(["autre", "nom du bouton", "nom de l'autre bouton"]);
 function displayButton(buttonToDisplay) {
 
     var button;
 
     console.log(buttonToDisplay);
 
-    if(typeof buttonToDisplay !== "string") { // c'est-à-dire si c'est un tableau, par exemple si on veut ajouter "oui" et "non"
+    if(typeof buttonToDisplay !== "string") { // c'est-à-dire si c'est un tableau, par exemple si on veut ajouter plusieurs boutons ("oui" et "non" par ex)
         if (buttonToDisplay[0] === "autre") { // si c'est un bouton personnalisé
-            button = document.getElementById(buttonToDisplay[0]);
-            button.textContent = buttonToDisplay[1];
-            button.classList.add('active');
+            button = document.getElementsByClassName(buttonToDisplay[0]);
+            for (var i=1; i<buttonToDisplay.length; i++) {
+                button[i-1].textContent = buttonToDisplay[i];
+                button[i-1].classList.add('active');
+            }
+
         } else {
             button = [];
             for (var i=0; i<buttonToDisplay.length; i++) {
