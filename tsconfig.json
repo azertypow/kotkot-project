@@ -11,7 +11,8 @@
   },
   "files": [
     "dev/nodeApp/main.ts",
-    "dev/arduino/main.ts"
+    "dev/arduino/main.ts",
+    "dev/nodeApp/_debugServer/main.ts"
   ],
   "exclude": [
     "node_modules"
