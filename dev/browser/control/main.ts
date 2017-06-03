@@ -5,7 +5,6 @@
 /// <reference types="mustache" />
 
 import socketControlApp from "./socketControlApp"
-import removeSleepMode from "../removeSleepMode"
 import ManagePlayers from "./managePlayers"
 import LoadJs from "../LoadJs"
 import LocationInfo from "../locationInfo"
@@ -13,9 +12,6 @@ import LocationInfo from "../locationInfo"
 import child_process = require("child_process");
 
 let selectedPlayers: Array<number> = [];
-
-// remove sleep mode
-removeSleepMode.run();
 
 // ajouter js dinamiqument le file pour la connection socket (à cause de l'adresse ip)
 const locationInfo: LocationInfo = new LocationInfo(window.location.href);

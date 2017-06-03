@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 11);
+/******/ 	return __webpack_require__(__webpack_require__.s = 10);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -106,29 +106,9 @@ exports.default = LocationInfo;
 
 
 /***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var removeSleepMode = (function () {
-    function removeSleepMode() {
-    }
-    removeSleepMode.run = function () {
-        var noSleep = new NoSleep();
-        noSleep.enable();
-        console.log("sleep cut");
-    };
-    return removeSleepMode;
-}());
-exports.default = removeSleepMode;
-
-
-/***/ }),
+/* 2 */,
 /* 3 */,
-/* 4 */,
-/* 5 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -179,7 +159,7 @@ exports.default = PlayerTemplate;
 
 
 /***/ }),
-/* 6 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -215,22 +195,20 @@ exports.default = SocketClientApp;
 
 
 /***/ }),
+/* 6 */,
 /* 7 */,
 /* 8 */,
 /* 9 */,
-/* 10 */,
-/* 11 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var socketClientApp_1 = __webpack_require__(6);
-var playerTemplate_1 = __webpack_require__(5);
-var removeSleepMode_1 = __webpack_require__(2);
+var socketClientApp_1 = __webpack_require__(5);
+var playerTemplate_1 = __webpack_require__(4);
 var LoadJs_1 = __webpack_require__(0);
 var locationInfo_1 = __webpack_require__(1);
-removeSleepMode_1.default.run();
 var initParam = {
     setIndex: 'en attente…',
     setStatus: 'en attente…',
