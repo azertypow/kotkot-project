@@ -2,7 +2,7 @@
   "pres intro":{
     "narration" : {
       "connection ok": "Connexion réussie. Regarde à quel ministère tu es assigné, et va t’asseoir à ta place",
-      "histoire": "Bienvenue dans l’équipe ministérielle. Dans cette Nation, deux partis forment l’équilibre politique. Le parti du Progrès, partisan de l’asservissement des machines pour assister les Hommes, et le parti de l’Homme, qui souhaite mettre l’Humain au centre des décisions politiques. Depuis des années ces deux partis se disputent le pouvoir, c’est pourquoi l’on m’a chargée d’assister les Ministres dans leurs prises de décisions, de manière à maintenir l’équilibre cher à notre belle Nation."
+      "histoire": "Bienvenue dans l’équipe ministérielle. Dans cette Nation, deux partis      forment l’équilibre politique. Le parti du Progrès, partisan de l’asservissement des machines pour assister les Hommes, et le parti de l’Homme, qui souhaite mettre l’Humain au centre des décisions politiques. Depuis des années ces deux partis se disputent le pouvoir, c’est pourquoi l’on m’a chargée d’assister les Ministres dans leurs prises de décisions, de manière à maintenir l’équilibre cher à notre belle Nation."
 
     },
     "bonus": {
@@ -33,13 +33,18 @@
         "vote de confiance": {
           "ministre actif": "Les autres joueurs décident de s’ils font confiance au délégué désigné",
           "delegue": "Les autres joueurs décident s’ils vous font confiance en tant que leur représentant",
-          "autres joueurs": "Faites-vous confiance au joueur sélectionné par votre précédent délégué ?",
+          "autres joueurs": "Faites-vous confiance au Ministre sélectionné par votre précédent délégué ?",
           "tous": {
-            "rejet":{
-              "0":"Vous avez rejeté le <ministre>. Un nouveau délégué va être désigné"
-            },
+            "rejet":"Vous avez rejeté ce délégué. Un nouveau délégué va être désigné",
             "nouveau": {
-              "0":"Le <ministre> est le nouveau délégué qui s’exprimera"
+              "0":"Le Ministre de l'Education est le nouveau délégué qui s’exprimera",
+              "1":"Le Ministre de l'Industrie est le nouveau délégué qui s’exprimera",
+              "2":"Le Ministre de la Justice est le nouveau délégué qui s’exprimera",
+              "3":"Le Ministre de l'Information est le nouveau délégué qui s’exprimera",
+              "4":"Le Ministre de la Communication est le nouveau délégué qui s’exprimera",
+              "5":"Le Ministre de la Santé est le nouveau délégué qui s’exprimera",
+              "6":"Le Ministre du Travail est le nouveau délégué qui s’exprimera",
+              "7":"Le Ministre de l'Armée est le nouveau délégué qui s’exprimera"
             }
           }
         },
@@ -54,7 +59,22 @@
         },
         "bien recu":"bien reçu",
         "annonce loi":{
-          "progressiste": "une loi progressiste vient d'être promulguée"
+          "progressiste": "une loi progressiste vient d'être promulguée",
+          "humaniste":"une loi humaniste vient d'être promulguée"
+        },
+        "choix du prochain":{
+          "delegue":"Tu peux choisir le prochain ministre qui s’exprimera, qui choisis-tu?",
+          "autres joueurs":"Votre délégué est en train de choisir le prochain ministre qui s’exprimera",
+          "conclusion":{
+            "0":"Votre délégué a choisi le Ministre de l'Education comme nouveau ministre qui s’exprimera",
+            "1":"Votre délégué a choisi le Ministre de l'Industrie comme nouveau ministre qui s’exprimera",
+            "2":"Votre délégué a choisi le Ministre de la Justice comme nouveau ministre qui s’exprimera",
+            "3":"Votre délégué a choisi le Ministre de l'Information comme nouveau ministre qui s’exprimera",
+            "4":"Votre délégué a choisi le Ministre de la Communication comme nouveau ministre qui s’exprimera",
+            "5":"Votre délégué a choisi le Ministre de la Santé comme nouveau ministre qui s’exprimera",
+            "6":"Votre délégué a choisi le Ministre du Travail comme nouveau ministre qui s’exprimera",
+            "7":"Votre délégué a choisi le Ministre de l'Armée comme nouveau ministre qui s’exprimera"
+          }
         }
       }
     },
@@ -67,20 +87,67 @@
     "narration": {
       "premier tour": "Vous allez devoir éliminer un ministre qui sera désigné à la majorité. Attention, le ministre éliminé donnera son droit de vote au Ministre de son choix, ce dernier aura donc un poids plus conséquent lors des prochains votes. Etes-vous prêt ?",
       "tour standard": {
-        "intro": "Vous allez de nouveau devoir éliminer un joueur. Etes-vous prêt ?",
+        "intro": "Vous allez de nouveau devoir éliminer un ministre. Etes-vous prêt ?",
         "qui eliminer": "Qui souhaitez-vous éliminer ? Choisissez bien.",
-        "elimination normale": "Vous avez choisi d’éliminer le <ministre>",
+        "elimination normale":{
+           "0":"Vous avez choisi d’éliminer le Ministre de l'Education",
+           "1":"Vous avez choisi d’éliminer le Ministre de l'Industrie",
+           "2":"Vous avez choisi d’éliminer le Ministre de la Justice",
+           "3":"Vous avez choisi d’éliminer le Ministre de l'Information",
+           "4":"Vous avez choisi d’éliminer le Ministre de la Communication",
+           "5":"Vous avez choisi d’éliminer le Ministre de la Santé",
+           "6":"Vous avez choisi d’éliminer le Ministre du Travail",
+           "7":"Vous avez choisi d’éliminer le Ministre de l'Armée",
+        },
         "egalite": {
           "premiere": "Attention, si vous n’arrivez pas à vous mettre d’accord c’est moi qui trancherai",
           "deuxieme": "Je vous ai déjà prévenu, attention, je vais finir par décider à votre place",
-          "elimination": "Vous n’avez pas réussi à vous entendre, j’ai dû trancher à votre place. Le <ministre> est éliminé"
+          "elimination":{
+            "0":"Vous n’avez pas réussi à vous entendre, j’ai dû trancher à votre place. Le Ministre de l'Education est éliminé",
+            "1":"Vous n’avez pas réussi à vous entendre, j’ai dû trancher à votre place. Le Ministre de l'Industrie est éliminé",
+            "2":"Vous n’avez pas réussi à vous entendre, j’ai dû trancher à votre place. Le Ministre de la Justice est éliminé",
+            "3":"Vous n’avez pas réussi à vous entendre, j’ai dû trancher à votre place. Le Ministre de l'Information est éliminé",
+            "4":"Vous n’avez pas réussi à vous entendre, j’ai dû trancher à votre place. Le Ministre de la Communication est éliminé",
+            "5":"Vous n’avez pas réussi à vous entendre, j’ai dû trancher à votre place. Le Ministre de la Santé est éliminé",
+            "6":"Vous n’avez pas réussi à vous entendre, j’ai dû trancher à votre place. Le Ministre du Travail est éliminé",
+            "7":"Vous n’avez pas réussi à vous entendre, j’ai dû trancher à votre place. Le Ministre de l'Armée est éliminé"
+          }
         },
         "passation du vote": {
           "joueur elimine": "Tu dois quitter le jeu. Avant ça tu vas pouvoir donner ton droit de vote à un autre ministre. Ce dernier aura plus de pouvoir lors des prochaines éléctions et éliminations",
-          "autres joueurs": "<ministre éliminé> est en train de choisir un joueur à qui donner son droit de vote. Ce dernier aura plus de pouvoir lors des prochaines élections et éliminations",
-          "annonce resultat":"<ministre éliminé> a choisi de donner son droit de vote à <ministre choisi>. Il obtient une voix supplémentaire pour tous les prochains votes."
+          "autres joueurs":{
+            "0":"Le Ministre de l'Education est en train de choisir un joueur à qui donner son droit de vote. Ce dernier aura plus de pouvoir lors des prochaines élections et éliminations",
+            "1":"Le Ministre de l'Industrie est en train de choisir un joueur à qui donner son droit de vote. Ce dernier aura plus de pouvoir lors des prochaines élections et éliminations",
+            "2":"Le Ministre de la Justice est en train de choisir un joueur à qui donner son droit de vote. Ce dernier aura plus de pouvoir lors des prochaines élections et éliminations",
+            "3":"Le Ministre de l'Information est en train de choisir un joueur à qui donner son droit de vote. Ce dernier aura plus de pouvoir lors des prochaines élections et éliminations",
+            "4":"Le Ministre de la Communication est en train de choisir un joueur à qui donner son droit de vote. Ce dernier aura plus de pouvoir lors des prochaines élections et éliminations",
+            "5":"Le Ministre de la Santé est en train de choisir un joueur à qui donner son droit de vote. Ce dernier aura plus de pouvoir lors des prochaines élections et éliminations",
+            "6":"Le Ministre du Travail est en train de choisir un joueur à qui donner son droit de vote. Ce dernier aura plus de pouvoir lors des prochaines élections et éliminations",
+            "7":"Le Ministre de l'Armée est en train de choisir un joueur à qui donner son droit de vote. Ce dernier aura plus de pouvoir lors des prochaines élections et éliminations"
+          } ,
+          "annonce resultat":{
+            "0":"Le ministre éliminé a choisi de donner son droit de vote au Ministre de l'Education. Il obtient une voix supplémentaire pour tous les prochains votes.",
+            "1":"Le ministre éliminé a choisi de donner son droit de vote au Ministre de l'Industrie. Il obtient une voix supplémentaire pour tous les prochains votes.",
+            "2":"Le ministre éliminé a choisi de donner son droit de vote au Ministre de la Justice. Il obtient une voix supplémentaire pour tous les prochains votes.",
+            "3":"Le ministre éliminé a choisi de donner son droit de vote au Ministre de l'Information. Il obtient une voix supplémentaire pour tous les prochains votes.",
+            "4":"Le ministre éliminé a choisi de donner son droit de vote au Ministre de la Communication. Il obtient une voix supplémentaire pour tous les prochains votes.",
+            "5":"Le ministre éliminé a choisi de donner son droit de vote au Ministre de la Santé. Il obtient une voix supplémentaire pour tous les prochains votes.",
+            "6":"Le ministre éliminé a choisi de donner son droit de vote au Ministre du Travail. Il obtient une voix supplémentaire pour tous les prochains votes.",
+            "7":"Le ministre éliminé a choisi de donner son droit de vote au Ministre de l'Armée. Il obtient une voix supplémentaire pour tous les prochains votes."
+          }
         },
-        "message adieu":"<ministre éliminé>, tu dois enlever ton casque et quitter la partie. Hasta la vista beil-bé"
+        "message adieu":{
+          "0":"Ministre de l'Education, tu dois enlever ton casque et quitter la partie. Hasta la vista beil-bé",
+          "1":"Ministre de l'Industrie, tu dois enlever ton casque et quitter la partie. Hasta la vista beil-bé",
+          "2":"Ministre de la Justice, tu dois enlever ton casque et quitter la partie. Hasta la vista beil-bé",
+          "3":"Ministre de l'Information, tu dois enlever ton casque et quitter la partie. Hasta la vista beil-bé",
+          "4":"Ministre de la Communication, tu dois enlever ton casque et quitter la partie. Hasta la vista beil-bé",
+          "5":"Ministre de la Santé, tu dois enlever ton casque et quitter la partie. Hasta la vista beil-bé",
+          "6":"Ministre du Travail, tu dois enlever ton casque et quitter la partie. Hasta la vista beil-bé",
+          "7":"Ministre de l'Armée, tu dois enlever ton casque et quitter la partie. Hasta la vista beil-bé"
+
+
+        }
       }
     },
     "bonus": {

@@ -28,7 +28,7 @@ function playerOneLawSelection() {
     setTimeout(function() {generateLaw(1);}, 1200);
     setTimeout(function() {generateLaw(2);}, 1400);
 
-    document.getElementById('valider').addEventListener('click', sendChoicesToPlayerTwo);
+    document.querySelector('valider').addEventListener('click', sendChoicesToPlayerTwo);
 
 }
 
@@ -106,7 +106,7 @@ function displayElimination() {
 
 function eliminateSomeone() {
 
-    document.getElementById('potentiometer').style.display = "block";
+    document.querySelector('potentiometer').style.display = "block";
     placeCursorBeginning();
     document.body.addEventListener('touchmove', moveCursor);
     title.innerHTML = "";
@@ -265,7 +265,7 @@ function background(color) {
 // crée les x emplacements pour les lois
 function createLaws(nbCards) {
 
-    var lawsBlock = document.getElementById('laws');
+    var lawsBlock = document.querySelector('laws');
     for (var i=0; i<nbCards; i++) {
         var oneLaw = document.createElement("div");
         oneLaw.setAttribute("class", "law");
@@ -312,7 +312,7 @@ function selectOneLaw(e) {
 
     var currentSelectedLaws = document.getElementsByClassName("selectedLaw").length;
 
-    var thisLaw = document.getElementById(e.target.id);
+    var thisLaw = document.getElementById(e.target.className);
 
     if (thisLaw.classList.contains("selectedLaw")) {
         thisLaw.classList.remove("selectedLaw");
@@ -383,7 +383,7 @@ function selectTwoLaws(e) {
 
     var currentSelectedLaws = document.getElementsByClassName("selectedLaw").length;
 
-    var thisLaw = document.getElementById(e.target.id);
+    var thisLaw = document.querySelector(e.target.id);
 
     if (thisLaw.classList.contains("selectedLaw")) {
         thisLaw.classList.remove("selectedLaw");
@@ -428,7 +428,7 @@ function sendChoicesToPlayerTwo() {
 
     console.log(lawsArray);
 
-    document.getElementById('valider').removeEventListener('click', sendChoicesToPlayerTwo);
+    document.querySelector('valider').removeEventListener('click', sendChoicesToPlayerTwo);
 
 }
 
@@ -465,12 +465,12 @@ function displayButton(buttonToDisplay) {
         } else {
             button = [];
             for (var i=0; i<buttonToDisplay.length; i++) {
-                button[i] = document.getElementById(buttonToDisplay[i]);
+                button[i] = document.querySelector(buttonToDisplay[i]);
                 button[i].classList.add('active');
             }
         }
     } else {
-        button = document.getElementById(buttonToDisplay);
+        button = document.querySelector(buttonToDisplay);
         button.classList.add('active');
     }
 
@@ -488,12 +488,12 @@ function removeButtons() {
 function displayMessage(mode, message) {
 
     if (mode === "add") {
-        var blocMessage = document.getElementById('message').getElementsByTagName('p')[0];
+        var blocMessage = document.querySelector('message').getElementsByTagName('p')[0];
         blocMessage.textContent += message;
     }
 
     if (mode === "replace") {
-        var blocMessage = document.getElementById('message').getElementsByTagName('p')[0];
+        var blocMessage = document.querySelector('message').getElementsByTagName('p')[0];
         blocMessage.textContent = message;
     }
 
@@ -501,14 +501,14 @@ function displayMessage(mode, message) {
 }
 
 function displayWarning(warning) {
-    var blocWarning = document.getElementById('warning');
+    var blocWarning = document.querySelector('warning');
     blocWarning.textContent = warning;
     blocWarning.classList.add('active');
 
 }
 
 function removeWarning() {
-    var blocWarning = document.getElementById('warning');
+    var blocWarning = document.querySelector('warning');
     blocWarning.classList.remove('active');
 }
 

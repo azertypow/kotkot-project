@@ -25,13 +25,13 @@ var lawsArray = {
     '1':'progressiste'
 };
 
-var title = document.getElementsByTagName('h1')[0];
+var title = document.querySelector('#title h1');;
 
-var wheel = document.getElementById('wheel');
-var cursor = document.getElementById('cursor');
-var subwheel = document.getElementById('subwheel');
-var cursorSlider = document.getElementById('cursorSlider');
-var wheelMark = document.getElementById('wheelMark');
+var wheel = document.querySelector('wheel');
+var cursor = document.querySelector('cursor');
+var subwheel = document.querySelector('subwheel');
+var cursorSlider = document.querySelector('cursorSlider');
+var wheelMark = document.querySelector('wheelMark');
 
 var windowWidth = window.innerWidth;
 var windowHeight = window.innerHeight;
