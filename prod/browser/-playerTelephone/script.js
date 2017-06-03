@@ -10,7 +10,7 @@ var pathToText = '../../../data/text.json';
 // elimination();
 // installation();
 // brancheCasque();
-// hasardSelectionJoueur();
+hasardSelectionJoueur();
 // ecouteDesRegles();
 
 

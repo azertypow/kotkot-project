@@ -28,7 +28,7 @@ function playerOneLawSelection() {
     setTimeout(function() {generateLaw(1);}, 1200);
     setTimeout(function() {generateLaw(2);}, 1400);
 
-    document.querySelector('valider').addEventListener('click', sendChoicesToPlayerTwo);
+    document.querySelector('.valider').addEventListener('click', sendChoicesToPlayerTwo);
 
 }
 
@@ -106,7 +106,7 @@ function displayElimination() {
 
 function eliminateSomeone() {
 
-    document.querySelector('potentiometer').style.display = "block";
+    document.querySelector('.potentiometer').style.display = "block";
     placeCursorBeginning();
     document.body.addEventListener('touchmove', moveCursor);
     title.innerHTML = "";
@@ -151,9 +151,6 @@ function placeCursorBeginning() {
     subwheel.style.width = Math.floor((wheel.clientWidth)/2) + "px";
     subwheel.style.height = Math.floor((wheel.clientHeight)/2) + "px";
     subwheel.style.borderRadius = Math.floor((wheel.clientWidth)/4) + "px";
-    // subwheel.style.width = rayon + "px";
-    // subwheel.style.height = rayon + "px";
-    // subwheel.style.borderRadius = rayon/2 + "px";
     radius = parseInt(subwheel.style.borderRadius);
 
     var x = Math.cos(i*Math.PI/180) * radius;
@@ -167,7 +164,6 @@ function placeCursorBeginning() {
     var borderParent = parseInt(subwheel.style.borderRadius);
     var valueTranslate = borderParent - Math.floor((cursor.clientWidth)/2);
     cursor.style.transform = "translate(" + valueTranslate + "px," + valueTranslate + "px)";
-
 
 }
 
@@ -265,11 +261,12 @@ function background(color) {
 // crée les x emplacements pour les lois
 function createLaws(nbCards) {
 
-    var lawsBlock = document.querySelector('laws');
+    var lawsBlock = document.querySelector('.laws');
     for (var i=0; i<nbCards; i++) {
         var oneLaw = document.createElement("div");
-        oneLaw.setAttribute("class", "law");
-        oneLaw.setAttribute("id", "law-" + i);
+        oneLaw.className += "law";
+        oneLaw.className += " law-" + i;
+        oneLaw.setAttribute('data-id', i);
         lawsBlock.appendChild(oneLaw);
     }
 }
@@ -312,7 +309,7 @@ function selectOneLaw(e) {
 
     var currentSelectedLaws = document.getElementsByClassName("selectedLaw").length;
 
-    var thisLaw = document.getElementById(e.target.className);
+    var thisLaw = e.target;
 
     if (thisLaw.classList.contains("selectedLaw")) {
         thisLaw.classList.remove("selectedLaw");
@@ -383,7 +380,8 @@ function selectTwoLaws(e) {
 
     var currentSelectedLaws = document.getElementsByClassName("selectedLaw").length;
 
-    var thisLaw = document.querySelector(e.target.id);
+    console.log(e);
+    var thisLaw = e.target;
 
     if (thisLaw.classList.contains("selectedLaw")) {
         thisLaw.classList.remove("selectedLaw");
@@ -428,7 +426,7 @@ function sendChoicesToPlayerTwo() {
 
     console.log(lawsArray);
 
-    document.querySelector('valider').removeEventListener('click', sendChoicesToPlayerTwo);
+    document.querySelector('.valider').removeEventListener('click', sendChoicesToPlayerTwo);
 
 }
 
@@ -465,12 +463,12 @@ function displayButton(buttonToDisplay) {
         } else {
             button = [];
             for (var i=0; i<buttonToDisplay.length; i++) {
-                button[i] = document.querySelector(buttonToDisplay[i]);
+                button[i] = document.querySelector("." + buttonToDisplay[i]);
                 button[i].classList.add('active');
             }
         }
     } else {
-        button = document.querySelector(buttonToDisplay);
+        button = document.querySelector("." + buttonToDisplay);
         button.classList.add('active');
     }
 
@@ -488,12 +486,12 @@ function removeButtons() {
 function displayMessage(mode, message) {
 
     if (mode === "add") {
-        var blocMessage = document.querySelector('message').getElementsByTagName('p')[0];
+        var blocMessage = document.querySelector('.message').getElementsByTagName('p')[0];
         blocMessage.textContent += message;
     }
 
     if (mode === "replace") {
-        var blocMessage = document.querySelector('message').getElementsByTagName('p')[0];
+        var blocMessage = document.querySelector('.message').getElementsByTagName('p')[0];
         blocMessage.textContent = message;
     }
 
@@ -501,14 +499,14 @@ function displayMessage(mode, message) {
 }
 
 function displayWarning(warning) {
-    var blocWarning = document.querySelector('warning');
+    var blocWarning = document.querySelector('.warning');
     blocWarning.textContent = warning;
     blocWarning.classList.add('active');
 
 }
 
 function removeWarning() {
-    var blocWarning = document.querySelector('warning');
+    var blocWarning = document.querySelector('.warning');
     blocWarning.classList.remove('active');
 }
 

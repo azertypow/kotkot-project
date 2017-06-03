@@ -43,7 +43,7 @@ h1 {
 }
 
 
-#laws {
+.laws {
     height: 55vh;
     display: flex;
     justify-content: space-between;
@@ -53,7 +53,7 @@ h1 {
 
 }
 
-#laws .law {
+.laws .law {
     width: 30%;
     height: 100%;
     background-color: blue;
@@ -112,7 +112,7 @@ h1 {
 
 /* Message */
 
-#message {
+.message {
     /*border: 1px solid yellow;*/
     box-sizing: border-box;
     height:50px;
@@ -120,18 +120,18 @@ h1 {
     justify-content: end;
 }
 
-#message p {
+.message p {
     font-size: 100%;
     color: white;
     /*border: 1px solid white;*/
 }
 
-#message p::before {
+.message p::before {
     content: "> ";
 }
 
 
-#warning {
+.warning {
     opacity: 0;
     font-size: 80%;
     background-color: white;
@@ -140,18 +140,18 @@ h1 {
     margin-left: -20px;
     transition: margin-left 0.5s ease, opacity 0.5s ease;
 }
-#warning::before {
+.warning::before {
     content: " ❌ ";
 }
 
-#warning.active {
+.warning.active {
     opacity: 1;
     margin-left: 0px;
     transition: margin-left 0.5s ease, opacity 0.5s ease;
 }
 
 
-#controls button {
+.controls button {
     background-color: transparent;
     padding: 10px;
     font-size: 90%;
@@ -169,7 +169,7 @@ h1 {
     transition: margin-right 0.5s ease, opacity 0.5s ease, top 0.01s ease, right 0.01s ease;
 }
 
-#controls button.active {
+.controls button.active {
     opacity: 1;
     position: relative;
     top:0;
@@ -178,7 +178,7 @@ h1 {
     transition: margin-right 0.5s ease, opacity 0.5s ease, top 0.01s ease, right 0.01s ease;
 }
 
-#controls #doublechoix {
+.controls .doublechoix {
     position: absolute;
     display: flex;
     justify-content: space-around;
@@ -188,39 +188,15 @@ h1 {
     top: 50%;
 }
 
-#controls #doublechoix button {
+.controls .doublechoix button {
     max-width: 140px;
 }
 
-
-/*#molette {*/
-    /*display: none;*/
-    /*width: 220px;*/
-    /*height: 220px;*/
-    /*background-color: deeppink;*/
-    /*border-top: 10px solid white;*/
-/*}*/
-
-/*#test-molette {*/
-    /*display: none;*/
-    /*width: 10px;*/
-    /*height: 50px;*/
-    /*background-color: white;*/
-    /*transform: rotate(0deg);*/
-    /*float: right;*/
-    /*margin-top: -50px;*/
-    /*border-top:5px solid deeppink;*/
-/*}*/
-
-
-
-/* Molette temporaire (potentiometre) (wheel) */
-
-#potentiometer {
+.potentiometer {
     display: none;
 }
 
-#wheel {
+.wheel {
     width: 350px;
     height: 350px;
     /*background-color: red;*/
@@ -235,7 +211,7 @@ h1 {
     flex-direction: column;
 }
 
-#subwheel {
+.subwheel {
     border: 2px solid rgba(255,255,255,1);
     /*width: 100px;
     height: 100px;*/
@@ -246,7 +222,7 @@ h1 {
     transform: scale(1.8) translate(0%, 25%);
 
 }
-#subwheel p {
+.subwheel p {
     text-align: center;
     display: block;
     font-size: 10px;
@@ -257,7 +233,7 @@ h1 {
     z-index: 2;
 }
 
-#cursor {
+.cursor {
     width: 20px;
     height: 20px;
     border-radius: 10px;
@@ -265,7 +241,7 @@ h1 {
     position: relative;
 }
 
-#wheelMark {
+.wheelMark {
     width: 20px;
     border: 4px solid white;
     position: absolute;
@@ -276,7 +252,7 @@ h1 {
     height: 200px;
 }
 
-#cursorSlider {
+.cursorSlider {
     width: 25px;
     height: 30px;
     justify-content: center;
@@ -286,7 +262,7 @@ h1 {
 }
 
 /* en fait on dessine un cercle en entier et on en cache la moitié avec un bloc*/
-#cache {
+.cache {
     width: 190px;
     height: 85px;
     background-color: red;

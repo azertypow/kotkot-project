@@ -25,13 +25,13 @@ var lawsArray = {
     '1':'progressiste'
 };
 
-var title = document.querySelector('#title h1');;
+var title = document.querySelector('.title h1');
 
-var wheel = document.querySelector('wheel');
-var cursor = document.querySelector('cursor');
-var subwheel = document.querySelector('subwheel');
-var cursorSlider = document.querySelector('cursorSlider');
-var wheelMark = document.querySelector('wheelMark');
+var wheel = document.querySelector('.wheel');
+var cursor = document.querySelector('.cursor');
+var subwheel = document.querySelector('.subwheel');
+var cursorSlider = document.querySelector('.cursorSlider');
+var wheelMark = document.querySelector('.wheelMark');
 
 var windowWidth = window.innerWidth;
 var windowHeight = window.innerHeight;
@@ -47,5 +47,5 @@ var listeDesMinistres = {
     "4":"Ministre de la Communication",
     "5":"Ministre de la Santé",
     "6":"Ministre du Travail",
-    "7":"Ministre de l'Armée",
+    "7":"Ministre de l'Armée"
 };

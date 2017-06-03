@@ -2,7 +2,7 @@
   "pres intro":{
     "narration" : {
       "connection ok": "Connexion réussie. Regarde à quel ministère tu es assigné, et va t’asseoir à ta place",
-      "histoire": "Bienvenue dans l’équipe ministérielle. Dans cette Nation, deux partis      forment l’équilibre politique. Le parti du Progrès, partisan de l’asservissement des machines pour assister les Hommes, et le parti de l’Homme, qui souhaite mettre l’Humain au centre des décisions politiques. Depuis des années ces deux partis se disputent le pouvoir, c’est pourquoi l’on m’a chargée d’assister les Ministres dans leurs prises de décisions, de manière à maintenir l’équilibre cher à notre belle Nation."
+      "histoire": "Bienvenue dans l’équipe ministérielle. Dans cette Nation, deux partis forment l’équilibre politique. Le parti du Progrès, partisan de l’asservissement des machines pour assister les Hommes, et le parti de l’Homme, qui souhaite mettre l’Humain au centre des décisions politiques. Depuis des années ces deux partis se disputent le pouvoir, c’est pourquoi l’on m’a chargée d’assister les Ministres dans leurs prises de décisions, de manière à maintenir l’équilibre cher à notre belle Nation."
 
     },
     "bonus": {
@@ -27,7 +27,7 @@
   },
   "votation":{
     "narration" : {
-      "intro": "Nous allons commencer un tour de vote.",
+      "intro": "Nous allons commencer un tour de vote",
       "premier tour": "La votation d’une loi est faite par deux personnes sélectionnées. La première envoie des suggestions à la seconde, qui doit faire le choix final. Le résultat est l’application d’une loi progressiste ou humaniste",
       "tour standard": {
         "vote de confiance": {
