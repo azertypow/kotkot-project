@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="./main.css" >
 </head>
 <body>
+<!--avant-->
     <h1 id="index" >salut joueur {{index}}</h1>
     <h2 id="status" >tu es: {{status}}</h2>
     <h3>régle:</h3>
@@ -16,11 +17,30 @@
             <button>{{.}}</button>
         {{/buttons}}
     </div>
+<!--avant-->
 
-
-    <section id="phaseTitle">
+    <!--pour seulement afficher quelque chose en gros, pendant les transitions par exemple-->
+    <section class="title">
         <h1></h1>
     </section>
+
+    <!--pour afficher les lois à proposer-->
+    <section class="laws">
+    </section>
+
+    <!--interface de validation-->
+    <section class="controls">
+        <button class="valider">Valider</button>
+        <div class="doublechoix">
+            <button class="oui">Oui</button>
+            <button class="non">Non</button>
+            <button class="autre"></button>
+            <button class="autre"></button>
+        </div>
+    </section>
+
+    <!--pour placer les message alert-->
+    <div class="warning"></div>
 
     <script type="text/javascript" src="../../node_modules/mustache/mustache.min.js"></script>
     <script type="text/javascript" src="./players/main.js" ></script>

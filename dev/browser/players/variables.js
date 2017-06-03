@@ -2,7 +2,7 @@
  * Created by mathi on 03/06/2017.
  */
 
-var messages = {
+export var messages = {
     "tireTroisLois":"Tire trois lois au hasard",
     "choisiDeuxLois":"Choisis-en deux à envoyer à l'autre joueur",
     "elimination":"Choisis un joueur à éliminer",
@@ -11,36 +11,36 @@ var messages = {
 
 };
 
-var warnings = {
+export var warnings = {
     "maxTwoLaws":"Tu ne peux pas sélectionner plus de deux lois",
     "maxOneLaw":"Tu ne peux pas sélectionner plus d'une loi",
     "notEnoughLaws":"Tu dois sélectionner deux lois",
     "tooSlow":"Dépêche-toi, tu n'as bientôt plus de temps"
-}
+};
 
-var displayedLaws = 0;
+export var displayedLaws = 0;
 
-var lawsArray = {
+export var lawsArray = {
     '0':'humaniste',
     '1':'progressiste'
 };
 
-var phaseTitle = document.getElementById('phaseTitle');
+export var title = document.querySelector('#title h1');
 
-var wheel = document.getElementById('wheel');
-var cursor = document.getElementById('cursor');
-var subwheel = document.getElementById('subwheel');
-var cursorSlider = document.getElementById('cursorSlider');
-var wheelMark = document.getElementById('wheelMark');
+export var wheel = document.getElementById('wheel');
+export var cursor = document.getElementById('cursor');
+export var subwheel = document.getElementById('subwheel');
+export var cursorSlider = document.getElementById('cursorSlider');
+export var wheelMark = document.getElementById('wheelMark');
 
-var windowWidth = window.innerWidth;
-var windowHeight = window.innerHeight;
+export var windowWidth = window.innerWidth;
+export var windowHeight = window.innerHeight;
 
-var radius;
-var marge = 50; // marge en haut et en bas du slider
-var numberOfPlayers = 8;
+export var radius;
+export var marge = 50; // marge en haut et en bas du slider
+export var numberOfPlayers = 8;
 
-var listeDesMinistres = {
+export var listeDesMinistres = {
     "0":"Ministre de l'Education",
     "1":"Ministre de l'Industrie",
     "2":"Ministre de la Justice",

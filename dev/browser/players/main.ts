@@ -7,8 +7,8 @@ import PlayerTemplate from "./playerTemplate"
 import LoadJs from "../LoadJs"
 import LocationInfo from "../locationInfo"
 
-//import * as script from "./scripts.js"
-import * as sequences from "./sequences.js";
+import * as variables from "./variables.js"
+import * as sequences from "./sequences.js"
 
 // initialiser l'affichage du joueur :
 const initParam:InitParam = {
@@ -35,4 +35,4 @@ LoadJs.load(`http://${currentHostname}:1337/socket.io/socket.io.js`).addEventLis
 
 
 //teste
-sequences.elimination();
+//sequences.elimination();
