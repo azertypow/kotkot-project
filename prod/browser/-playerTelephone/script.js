@@ -2,55 +2,21 @@
  * Created by mathi on 15/05/2017.
  */
 
-var messages = {
-    "tireTroisLois":"Tire trois lois au hasard",
-    "choisiDeuxLois":"Choisis-en deux à envoyer à l'autre joueur",
-    "elimination":"Choisis un joueur à éliminer",
-    "donneTonVote":"Choisis un joueur à qui donner tes votes. Attention, tu démultiplie la puissance de joueur.",
-    "joueurElimine":"Vous avez choisi d'éliminer"
-
-};
-
-var warnings = {
-    "maxTwoLaws":"Tu ne peux pas sélectionner plus de deux lois",
-    "maxOneLaw":"Tu ne peux pas sélectionner plus d'une loi",
-    "notEnoughLaws":"Tu dois sélectionner deux lois",
-    "tooSlow":"Dépêche-toi, tu n'as bientôt plus de temps"
-}
-
-var displayedLaws = 0;
-
-var lawsArray = {
-    '0':'humaniste',
-    '1':'progressiste'
-};
-
-var phaseTitle = document.getElementById('phaseTitle');
-
-var wheel = document.getElementById('wheel');
-var cursor = document.getElementById('cursor');
-var subwheel = document.getElementById('subwheel');
-var cursorSlider = document.getElementById('cursorSlider');
-var wheelMark = document.getElementById('wheelMark');
-
-var windowWidth = window.innerWidth;
-var windowHeight = window.innerHeight;
-
-var radius;
-var marge = 50; // marge en haut et en bas du slider
-var numberOfPlayers = 8;
 
 
 
-
-//playerOneLawSelection();
-//playerTwoLawSelection();
+// playerOneLawSelection();
+// playerTwoLawSelection();
 elimination();
-
+// installation();
+// brancheCasque();
+// hasardSelectionJoueur();
+// ecouteDesRegles();
 
 // fonction à lancer pour que le joueur 2 puisse choisir sa loi parmi les 2 choix
 function playerTwoLawSelection() {
 
+    background([0,0,255]);
     createLaws(2);
     setLaws(lawsArray);
 
@@ -58,6 +24,8 @@ function playerTwoLawSelection() {
 
 // fonction à lancer pour que le joueur 1 puisse choisir ses 2 lois parmi les 3 choix
 function playerOneLawSelection() {
+
+    background([0,0,255]);
 
     displayMessage(messages.tireTroisLois);
     createLaws(3);
@@ -73,13 +41,56 @@ function playerOneLawSelection() {
 }
 
 // fonction à lancer pour la phase d'élimination
-
 function elimination() {
 
+    background([255,0,0]);
     displayElimination();
     setTimeout(eliminateSomeone, 500);
 
 }
+
+
+/***************
+ *
+ *   Introduction
+ *
+ ***************/
+
+// indique aux joueurs de brancher leurs casques
+function brancheCasque() {
+
+    background([0,0,0]);
+    displayMessage("replace", "Est-ce que ton casque est bien branché ?");
+    displayButton("oui");
+
+
+}
+
+// indique aux joueurs d'aller s'installer à leur place
+function installation() {
+
+    background([0,0,0]);
+
+    displayMessage("replace", "Tu es Ministre de l'Education. Tu peux aller t'installer à ta place");
+    displayButton(["autre", "Je suis assis à ma place"]);
+
+    // si les joueurs mettent trop de temps à se connecter.
+    setTimeout(function () {
+        displayMessage("add", "Dis-leur de se dépêcher, on a pas toute la nuit");
+    }, 10000);
+}
+
+// demande aux joueurs s'ils ont compris ou pas les règles.
+function ecouteDesRegles() {
+
+    background([0,0,0]);
+
+    displayButton(["autre", "J'ai compris les règles", "Je souhaite les réécouter"]);
+    // displayButton(["autre", "Je souhaite les réécouter"]);
+
+}
+
+
 
 
 /***************
@@ -92,8 +103,9 @@ function elimination() {
 
 function displayElimination() {
 
+
+
     // allume toutes les LED en rouge pour 5 secondes
-    document.getElementsByTagName('html')[0].style.backgroundColor = "red";
 
     // affiche sur l'écran qu'on rentre en phase d'élimination
     phaseTitle.innerHTML = "Élimination";
@@ -106,8 +118,8 @@ function eliminateSomeone() {
     placeCursorBeginning();
     document.body.addEventListener('touchmove', moveCursor);
     phaseTitle.innerHTML = "";
-    displayMessage(messages.elimination);
-    showValidationButton();
+    displayMessage("replace", messages.elimination);
+    displayButton("valider");
 
 
     //return playerToEliminate;
@@ -125,14 +137,15 @@ function determinePlayerToEliminate() {
 
 function displayEliminatedPlayer() {
 
-    displayMessage(messages.joueurElimine + "Nom du joueur");
+    displayMessage("replace", messages.joueurElimine + "Nom du joueur");
 
 }
 
 function giveYourVoteToSomeone() {
 
-    displayMessage(messages.donneTonVote);
-    showValidationButton();
+    displayMessage("replace", messages.donneTonVote);
+    displayButton("valider");
+
 
 }
 
@@ -167,7 +180,6 @@ function placeCursorBeginning() {
 }
 
 function moveCursor(e) {
-
 
 
     var posX = (e.targetTouches[0].clientX);
@@ -231,11 +243,32 @@ function moveCursor(e) {
     var selectedPlayer = map(i, 180, 360, 0, numberOfPlayers-1);
 
     var playerName = subwheel.getElementsByTagName('p')[0];
-    playerName.textContent = "Joueur " + selectedPlayer;
+    playerName.textContent = listeDesMinistres[selectedPlayer];
 
 
 }
 
+function hasardSelectionJoueur() {
+
+    var message;
+
+    setInterval(function() {
+        var index = Math.floor(Math.random()*listeDesMinistres.length);
+        message = listeDesMinistres[index];
+        displayMessage("replace", message);
+        // régler le style ? ici le message est un peu haut
+        // document.getElementById("message").style.marginTop = "150px";
+    }, 70);
+
+
+}
+
+
+/***************
+ *
+ *   Fonctions-outils
+ *
+ ***************/
 
 function map(valueToMap, minInput, maxInput, minOutput, maxOutput) {
 
@@ -243,7 +276,10 @@ function map(valueToMap, minInput, maxInput, minOutput, maxOutput) {
 
 }
 
+function background(color) {
 
+    document.getElementsByTagName('html')[0].style.backgroundColor = "rgb(" + color[0] + "," +  color[1] + "," + color[2] + ")";
+}
 
 
 
@@ -323,9 +359,9 @@ function selectOneLaw(e) {
     console.log(currentSelectedLaws);
 
     if (currentSelectedLaws === 1) {
-        showValidationButton();
+        displayButton("valider");
     } else {
-        hideValidationButton();
+        removeButtons();
     }
 
 }
@@ -361,7 +397,7 @@ function generateLaw(i) {
 
     // quand trois lois sont affichées, on a la possibilité de les choisir
     if (displayedLaws === 3) {
-        displayMessage(messages.choisiDeuxLois);
+        displayMessage("replace", messages.choisiDeuxLois);
         var laws = document.getElementsByClassName("law");
         for (var i=0; i<laws.length; i++) {
             laws[i].addEventListener('click', selectTwoLaws);
@@ -394,9 +430,9 @@ function selectTwoLaws(e) {
     console.log(currentSelectedLaws);
 
     if (currentSelectedLaws === 2) {
-        showValidationButton();
+        displayButton("valider");
     } else {
-        hideValidationButton();
+        removeButtons();
     }
 
 }
@@ -437,19 +473,58 @@ function sendChoicesToPlayerTwo() {
 
 // Affiche les différents éléments d'interface -
 
-function showValidationButton() {
-    var button = document.getElementById('valider');
-    button.classList.add('active');
+// on peut soit envoyer un nom de bouton si c'est oui/non/valider, par ex : displayButton("valider")
+// soit envoyer un tableau de boutons : displayButton(["oui", "non"])
+// soit envoyer un ou plusieurs bouton(s) personnalisé(s) (autre) : displayButton(["autre", "nom du bouton", "nom de l'autre bouton"]);
+function displayButton(buttonToDisplay) {
+
+    var button;
+
+    console.log(buttonToDisplay);
+
+    if(typeof buttonToDisplay !== "string") { // c'est-à-dire si c'est un tableau, par exemple si on veut ajouter plusieurs boutons ("oui" et "non" par ex)
+        if (buttonToDisplay[0] === "autre") { // si c'est un bouton personnalisé
+            button = document.getElementsByClassName(buttonToDisplay[0]);
+            for (var i=1; i<buttonToDisplay.length; i++) {
+                button[i-1].textContent = buttonToDisplay[i];
+                button[i-1].classList.add('active');
+            }
+
+        } else {
+            button = [];
+            for (var i=0; i<buttonToDisplay.length; i++) {
+                button[i] = document.getElementById(buttonToDisplay[i]);
+                button[i].classList.add('active');
+            }
+        }
+    } else {
+        button = document.getElementById(buttonToDisplay);
+        button.classList.add('active');
+    }
+
+
 }
 
-function hideValidationButton() {
-    var button = document.getElementById('valider');
-    button.classList.remove('active');
+function removeButtons() {
+    var buttons = document.getElementsByTagName('button');
+    for (var i=0; i<buttons.length; i++) {
+        buttons[i].classList.remove('active');
+    }
+
 }
 
-function displayMessage(message) {
-    var blocMessage = document.getElementById('message').getElementsByTagName('p')[0];
-    blocMessage.textContent = message;
+function displayMessage(mode, message) {
+
+    if (mode === "add") {
+        var blocMessage = document.getElementById('message').getElementsByTagName('p')[0];
+        blocMessage.textContent += message;
+    }
+
+    if (mode === "replace") {
+        var blocMessage = document.getElementById('message').getElementsByTagName('p')[0];
+        blocMessage.textContent = message;
+    }
+
 
 }
 
