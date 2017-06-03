@@ -185,7 +185,7 @@ function moveCursor(e) {
     var posX = (e.targetTouches[0].clientX);
 
     // on récupère la largeur de la div qui va contenir l'arc de cercle et on calcule sa position par rapport à la taille de l'écran
-    var widthWheel = (subwheel.clientWidth)*1.8;
+    var widthWheel = (subwheel.clientWidth)*1.8; // on a appliqué un scale sur le
     var offsetLeftWheel = ((windowWidth-widthWheel)/2);
 
     // si le doigt n'est pas sur l'arc de cercle (qu'il est trop à gauche ou trop à droite) on normalise les valeurs
@@ -195,8 +195,9 @@ function moveCursor(e) {
         posX = widthWheel + offsetLeftWheel;
     }
 
-    // on map cette position x pour obtenir un angle entre 0 et 360
-    posX = map(posX, offsetLeftWheel, offsetLeftWheel+widthWheel, 0, 360);
+    // on est sensé mapper cette position x pour obtenir un angle entre 0 et 360
+    // ici on map entre -20 et 300 parce que ça rend plus facile la manipulation avec le doigt
+    posX = map(posX, offsetLeftWheel, offsetLeftWheel+widthWheel, -20, 300);
 
     var i = 180 + (posX*180/(windowHeight));
 
