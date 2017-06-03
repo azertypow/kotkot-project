@@ -19,14 +19,6 @@
     </div>
 <!--avant-->
 
-    <!--pour seulement afficher quelque chose en gros, pendant les transitions par exemple-->
-    <section class="title">
-        <h1></h1>
-    </section>
-
-    <!--pour afficher les lois à proposer-->
-    <section class="laws">
-    </section>
 
     <!--interface de validation-->
     <section class="controls">
@@ -39,8 +31,32 @@
         </div>
     </section>
 
+    <!--pour seulement afficher quelque chose en gros, pendant les transitions par exemple-->
+    <section class="title">
+        <h1></h1>
+    </section>
+
+    <!-- wheels sont pour le système de potentiometre -->
+    <div id="potentiometer">
+        <div id="wheel">
+            <div id="subwheel">
+                <div id="cache"></div>
+                <div id="cursor"></div>
+                <p></p>
+            </div>
+        </div>
+    </div>
+
+    <!--pour afficher les message-->
+    <section class="message">
+        <p></p>
+    </section>
+
+    <!--pour afficher les lois à proposer-->
+    <section class="laws"></section>
+
     <!--pour placer les message alert-->
-    <div class="warning"></div>
+    <section class="warning"></section>
 
     <script type="text/javascript" src="../../node_modules/mustache/mustache.min.js"></script>
     <script type="text/javascript" src="./players/main.js" ></script>

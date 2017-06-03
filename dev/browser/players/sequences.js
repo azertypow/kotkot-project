@@ -2,6 +2,8 @@
  * Created by mathi on 03/06/2017.
  */
 
+const variables = require("./variables.js");
+
 // Ce sont les morceaux de code qui sont appelés pendant le déroulement du jeu qui se passe dans script.js
 
 
@@ -19,11 +21,11 @@ export function playerOneLawSelection() {
 
     background([0,0,255]);
 
-    displayMessage(messages.tireTroisLois);
+    displayMessage(variables.messages.tireTroisLois);
     createLaws(3);
 
     // Ajoute les listeners
-    var aLaw = document.getElementsByClassName('law');
+    let aLaw = document.getElementsByClassName('law');
     setTimeout(function() {generateLaw(0);}, 1000);
     setTimeout(function() {generateLaw(1);}, 1200);
     setTimeout(function() {generateLaw(2);}, 1400);
@@ -100,7 +102,7 @@ export function displayElimination() {
     // allume toutes les LED en rouge pour 5 secondes
 
     // affiche sur l'écran qu'on rentre en phase d'élimination
-    title.innerHTML = "Élimination";
+    variables.title.innerHTML = "Élimination";
 
 }
 
@@ -109,8 +111,8 @@ export function eliminateSomeone() {
     document.getElementById('potentiometer').style.display = "block";
     placeCursorBeginning();
     document.body.addEventListener('touchmove', moveCursor);
-    title.innerHTML = "";
-    displayMessage("replace", messages.elimination);
+    variables.title.innerHTML = "";
+    displayMessage("replace", variables.messages.elimination);
     displayButton("valider");
 
 
@@ -129,13 +131,13 @@ export function determinePlayerToEliminate() {
 
 export function displayEliminatedPlayer() {
 
-    displayMessage("replace", messages.joueurElimine + "Nom du joueur");
+    displayMessage("replace", variables.messages.joueurElimine + "Nom du joueur");
 
 }
 
 export function giveYourVoteToSomeone() {
 
-    displayMessage("replace", messages.donneTonVote);
+    displayMessage("replace", variables.messages.donneTonVote);
     displayButton("valider");
 
 
@@ -143,29 +145,29 @@ export function giveYourVoteToSomeone() {
 
 export function placeCursorBeginning() {
 
-    var i = 180;
+    let i = 180;
 
-    var rayon = 175;
+    let rayon = 175;
 
     //donne une taille au rond intérieur en fonction de la taille de wheel
-    subwheel.style.width = Math.floor((wheel.clientWidth)/2) + "px";
-    subwheel.style.height = Math.floor((wheel.clientHeight)/2) + "px";
-    subwheel.style.borderRadius = Math.floor((wheel.clientWidth)/4) + "px";
+    variables.subwheel.style.width = Math.floor((wheel.clientWidth)/2) + "px";
+    variables.subwheel.style.height = Math.floor((wheel.clientHeight)/2) + "px";
+    variables.subwheel.style.borderRadius = Math.floor((wheel.clientWidth)/4) + "px";
     // subwheel.style.width = rayon + "px";
     // subwheel.style.height = rayon + "px";
     // subwheel.style.borderRadius = rayon/2 + "px";
     radius = parseInt(subwheel.style.borderRadius);
 
-    var x = Math.cos(i*Math.PI/180) * radius;
-    var y = Math.sin(i*Math.PI/180) * radius;
+    let x = Math.cos(i*Math.PI/180) * radius;
+    let y = Math.sin(i*Math.PI/180) * radius;
 
     // positionne le cursor
     cursor.style.left = x + "px";
     cursor.style.top = y + "px";
 
     // lui donne le bon translate
-    var borderParent = parseInt(subwheel.style.borderRadius);
-    var valueTranslate = borderParent - Math.floor((cursor.clientWidth)/2);
+    let borderParent = parseInt(subwheel.style.borderRadius);
+    let valueTranslate = borderParent - Math.floor((cursor.clientWidth)/2);
     cursor.style.transform = "translate(" + valueTranslate + "px," + valueTranslate + "px)";
 
 
@@ -174,11 +176,11 @@ export function placeCursorBeginning() {
 export function moveCursor(e) {
 
     // on récupère la position x du doigt
-    var posX = (e.targetTouches[0].clientX);
+    let posX = (e.targetTouches[0].clientX);
 
     // on récupère la largeur de la div qui va contenir l'arc de cercle et on calcule sa position par rapport à la taille de l'écran
-    var widthWheel = (subwheel.clientWidth)*1.8; // on a appliqué un scale sur le
-    var offsetLeftWheel = ((windowWidth-widthWheel)/2);
+    let widthWheel = (subwheel.clientWidth)*1.8; // on a appliqué un scale sur le
+    let offsetLeftWheel = ((windowWidth-widthWheel)/2);
 
     // si le doigt n'est pas sur l'arc de cercle (qu'il est trop à gauche ou trop à droite) on normalise les valeurs
     if (posX < offsetLeftWheel) {
@@ -191,7 +193,7 @@ export function moveCursor(e) {
     // ici on map entre -20 et 300 parce que ça rend plus facile la manipulation avec le doigt
     posX = map(posX, offsetLeftWheel, offsetLeftWheel+widthWheel, -20, 300);
 
-    var i = 180 + (posX*180/(windowHeight));
+    let i = 180 + (posX*180/(windowHeight));
 
     if (i<180) {
         i=180;
@@ -203,18 +205,18 @@ export function moveCursor(e) {
 
     // calcule la position du disque sur l'arc de cercle
     // x et y sont inversés
-    var x = Math.cos(i*Math.PI/180) * radius;
-    var y = Math.sin(i*Math.PI/180) * radius;
+    let x = Math.cos(i*Math.PI/180) * radius;
+    let y = Math.sin(i*Math.PI/180) * radius;
 
     cursor.style.left = x + "px";
     cursor.style.top = y + "px";
 
 
     // on map la valeur de l'angle sur le nombre de joueurs (entre 0 et 30° = Joueur 0, entre 30 et 60 = Joueur 1 etc...)
-    var selectedPlayer = map(i, 180, 360, 0, numberOfPlayers-1);
+    let selectedPlayer = map(i, 180, 360, 0, numberOfPlayers-1);
 
     // on affiche le nom du joueur sélectionné
-    var playerName = subwheel.getElementsByTagName('p')[0];
+    let playerName = subwheel.getElementsByTagName('p')[0];
     playerName.textContent = listeDesMinistres[selectedPlayer];
 
 
@@ -222,10 +224,10 @@ export function moveCursor(e) {
 
 export function hasardSelectionJoueur() {
 
-    var message;
+    let message;
 
     setInterval(function() {
-        var index = Math.floor(Math.random()*listeDesMinistres.length);
+        let index = Math.floor(Math.random()*listeDesMinistres.length);
         message = listeDesMinistres[index];
         displayMessage("replace", message);
         // régler le style ? ici le message est un peu haut
@@ -265,9 +267,9 @@ export function background(color) {
 // crée les x emplacements pour les lois
 export function createLaws(nbCards) {
 
-    var lawsBlock = document.getElementById('laws');
-    for (var i=0; i<nbCards; i++) {
-        var oneLaw = document.createElement("div");
+    let lawsBlock = document.getElementById('laws');
+    for (let i=0; i<nbCards; i++) {
+        let oneLaw = document.createElement("div");
         oneLaw.setAttribute("class", "law");
         oneLaw.setAttribute("id", "law-" + i);
         lawsBlock.appendChild(oneLaw);
@@ -287,13 +289,13 @@ export function createLaws(nbCards) {
 // affiche les deux lois choisies par le J1
 export function setLaws(lawsArray) {
 
-    var laws = document.getElementsByClassName('law');
+    let laws = document.getElementsByClassName('law');
 
-    for (var i=0; i<laws.length; i++) {
+    for (let i=0; i<laws.length; i++) {
         laws[i].classList.add(lawsArray[i]);
         laws[i].addEventListener('click', selectOneLaw);
-        var lawContent = document.createElement("p");
-        var cardType = lawsArray[i];
+        let lawContent = document.createElement("p");
+        let cardType = lawsArray[i];
         if (cardType === "humaniste") {
             cardType = "Humaniste"
         } else if (cardType === "progressiste") {
@@ -310,9 +312,9 @@ export function setLaws(lawsArray) {
 // permet au J2 de sélectionner une loi à envoyer
 export function selectOneLaw(e) {
 
-    var currentSelectedLaws = document.getElementsByClassName("selectedLaw").length;
+    let currentSelectedLaws = document.getElementsByClassName("selectedLaw").length;
 
-    var thisLaw = document.getElementById(e.target.id);
+    let thisLaw = document.getElementById(e.target.id);
 
     if (thisLaw.classList.contains("selectedLaw")) {
         thisLaw.classList.remove("selectedLaw");
@@ -350,16 +352,16 @@ export function selectOneLaw(e) {
 // choisit une loi au hasard après le setTimeout
 export function generateLaw(i) {
 
-    //var thisLaw = document.getElementById(e.target.id);
+    //let thisLaw = document.getElementById(e.target.id);
 
-    var thisLaw = document.getElementsByClassName('law')[i];
+    let thisLaw = document.getElementsByClassName('law')[i];
 
-    var lawType = ["Humaniste", "Progressiste"];
-    var index = Math.floor(Math.random()*lawType.length);
-    var cardType = lawType[index];
-    var oneLaw = thisLaw;
+    let lawType = ["Humaniste", "Progressiste"];
+    let index = Math.floor(Math.random()*lawType.length);
+    let cardType = lawType[index];
+    let oneLaw = thisLaw;
     oneLaw.className += " " + cardType.toLowerCase();
-    var lawContent = document.createElement("p");
+    let lawContent = document.createElement("p");
     lawContent.textContent = "Loi " + cardType;
     oneLaw.appendChild(lawContent);
 
@@ -370,8 +372,8 @@ export function generateLaw(i) {
     // quand trois lois sont affichées, on a la possibilité de les choisir
     if (displayedLaws === 3) {
         displayMessage("replace", messages.choisiDeuxLois);
-        var laws = document.getElementsByClassName("law");
-        for (var i=0; i<laws.length; i++) {
+        let laws = document.getElementsByClassName("law");
+        for (let i=0; i<laws.length; i++) {
             laws[i].addEventListener('click', selectTwoLaws);
         }
     }
@@ -381,9 +383,9 @@ export function generateLaw(i) {
 // permet au J1 de sélectionner les deux lois à envoyer
 export function selectTwoLaws(e) {
 
-    var currentSelectedLaws = document.getElementsByClassName("selectedLaw").length;
+    let currentSelectedLaws = document.getElementsByClassName("selectedLaw").length;
 
-    var thisLaw = document.getElementById(e.target.id);
+    let thisLaw = document.getElementById(e.target.id);
 
     if (thisLaw.classList.contains("selectedLaw")) {
         thisLaw.classList.remove("selectedLaw");
@@ -412,11 +414,11 @@ export function selectTwoLaws(e) {
 // Quand on clique sur "Valider" ça envoie les choix au J2
 export function sendChoicesToPlayerTwo() {
 
-    var lawsArray = {   '0':'',
+    let lawsArray = {   '0':'',
         '1':''};
-    var selectedLaws = document.getElementsByClassName("selectedLaw");
+    let selectedLaws = document.getElementsByClassName("selectedLaw");
 
-    for(var i=0; i<selectedLaws.length; i++) {
+    for(let i=0; i<selectedLaws.length; i++) {
         console.log(selectedLaws[i].classList);
         if (selectedLaws[i].classList[1] === "humaniste" || selectedLaws[i].classList[1] === "progressiste") {
             lawsArray[i] = selectedLaws[i].classList[1]; // la class 1 correspond au type de loi
@@ -450,21 +452,21 @@ export function sendChoicesToPlayerTwo() {
 // soit envoyer un ou plusieurs bouton(s) personnalisé(s) (autre) : displayButton(["autre", "nom du bouton", "nom de l'autre bouton"]);
 export function displayButton(buttonToDisplay) {
 
-    var button;
+    let button;
 
     console.log(buttonToDisplay);
 
     if(typeof buttonToDisplay !== "string") { // c'est-à-dire si c'est un tableau, par exemple si on veut ajouter plusieurs boutons ("oui" et "non" par ex)
         if (buttonToDisplay[0] === "autre") { // si c'est un bouton personnalisé
             button = document.getElementsByClassName(buttonToDisplay[0]);
-            for (var i=1; i<buttonToDisplay.length; i++) {
+            for (let i=1; i<buttonToDisplay.length; i++) {
                 button[i-1].textContent = buttonToDisplay[i];
                 button[i-1].classList.add('active');
             }
 
         } else {
             button = [];
-            for (var i=0; i<buttonToDisplay.length; i++) {
+            for (let i=0; i<buttonToDisplay.length; i++) {
                 button[i] = document.getElementById(buttonToDisplay[i]);
                 button[i].classList.add('active');
             }
@@ -478,8 +480,8 @@ export function displayButton(buttonToDisplay) {
 }
 
 export function removeButtons() {
-    var buttons = document.getElementsByTagName('button');
-    for (var i=0; i<buttons.length; i++) {
+    let buttons = document.getElementsByTagName('button');
+    for (let i=0; i<buttons.length; i++) {
         buttons[i].classList.remove('active');
     }
 
@@ -488,12 +490,12 @@ export function removeButtons() {
 export function displayMessage(mode, message) {
 
     if (mode === "add") {
-        var blocMessage = document.getElementById('message').getElementsByTagName('p')[0];
+        let blocMessage = document.getElementById('message').getElementsByTagName('p')[0];
         blocMessage.textContent += message;
     }
 
     if (mode === "replace") {
-        var blocMessage = document.getElementById('message').getElementsByTagName('p')[0];
+        let blocMessage = document.getElementById('message').getElementsByTagName('p')[0];
         blocMessage.textContent = message;
     }
 
@@ -501,14 +503,14 @@ export function displayMessage(mode, message) {
 }
 
 export function displayWarning(warning) {
-    var blocWarning = document.getElementById('warning');
+    let blocWarning = document.getElementById('warning');
     blocWarning.textContent = warning;
     blocWarning.classList.add('active');
 
 }
 
 export function removeWarning() {
-    var blocWarning = document.getElementById('warning');
+    let blocWarning = document.getElementById('warning');
     blocWarning.classList.remove('active');
 }
 

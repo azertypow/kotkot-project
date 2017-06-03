@@ -25,7 +25,7 @@ export var lawsArray = {
     '1':'progressiste'
 };
 
-export var title = document.querySelector('#title h1');
+export var title = document.querySelector('.title h1');
 
 export var wheel = document.getElementById('wheel');
 export var cursor = document.getElementById('cursor');

@@ -35,4 +35,4 @@ LoadJs.load(`http://${currentHostname}:1337/socket.io/socket.io.js`).addEventLis
 
 
 //teste
-//sequences.elimination();
+sequences.elimination();
