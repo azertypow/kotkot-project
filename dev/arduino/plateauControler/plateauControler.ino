@@ -2,12 +2,15 @@
 #include <Adafruit_NeoPixel.h>
 
 // players
-#define PLAYERSNUMBER 2
+#define PLAYERSNUMBER 8       // nombre de joueurs
+#define STRIPLEDSNUMBER 10     // nombre de leds par bandes devant les joueurs
+#define LAWNUMBER 10          // nombre de leds pour les lois de chaques parties
+#define COEFFICIENTSLEDNUMNER 5  // nombre de led pour les cohéficient de vote de qhasue jouers
 
 // pixels led
 #define LEDPIN 8
-#define NUMPIXELS 150
-#define IntLed 50
+#define NUMPIXELS 149
+#define MAXLEDINTENSITY 50
 
 // serial connection status
 boolean serialConnected = false;
@@ -121,18 +124,4 @@ void loop() {
   // temps de traitement
   //Serial.print("pause: ");
   //Serial.println(pause);
-}
-
-void lightUpAllLeds(int r, int g, int b){
-  for(int i = 0; i < NUMPIXELS; i++){
-    pixels.setPixelColor(i, pixels.Color(r,g,b));
-  }
-  pixels.show();
-}
-
-void lightUpLedsFromTo(int r, int g, int b, int ledIndexFrom, int ledIndexTo){
-  for(int i = ledIndexFrom; i < ledIndexTo; i++){
-    pixels.setPixelColor(i, pixels.Color(r,g,b));
-  }
-  pixels.show();
 }

@@ -1,0 +1,57 @@
+{
+  "pres intro":{
+    "narration" : {
+      "connection ok": "Connexion réussie. Regarde à quel ministère tu es assigné, et va t’asseoir à ta place",
+      "histoire": "Bienvenue dans l’équipe ministérielle. Dans cette Nation, deux partis forment l’équilibre politique. Le parti du Progrès, partisan de l’asservissement des machines pour assister les Hommes, et le parti de l’Homme, qui souhaite mettre l’Humain au centre des décisions politiques. Depuis des années ces deux partis se disputent le pouvoir, c’est pourquoi l’on m’a chargée d’assister les Ministres dans leurs prises de décisions, de manière à maintenir l’équilibre cher à notre belle Nation."
+
+    },
+    "bonus": {
+      "trop long": {
+        "0": "Dis aux autres de se dépêcher, on a pas toute la nuit",
+        "1": "J’ai hâte de commencer dis donc",
+        "2": "Les autres sont vraiment lents"
+      }
+    }
+  },
+  "intro": {
+    "narration" : {
+      "avertissement": "Des membres des deux partis sont présents dans le conseil ministériel, mais chaque Ministre se doit de garder secret son bord politique. Il ferait mauvais genre de le répéter, car des évènements fâcheux peuvent arriver. Ne pas être connu de vos ennemis est votre meilleure défense."
+      "roles":{
+        "progressiste":"Vous appartenez au parti du Progrès. Votre but est de voter un maximum de lois progressistes. Faites en passer 5 et vous et votre parti sortirez gagnant. Un autre moyen pour parvenir à vos fins est d’éliminer tous les membres du parti de l’Homme. Attention, deux cyborgs se sont glissés dans le conseil. Leur but est d’éliminer tous les autres ministres pour prendre le pouvoir et libérer les machines. Soyez méfiants et ne vous laissez pas distraire.",
+        "humaniste":"Vous appartenez au parti de l’Homme. Votre but est de voter un maximum de lois humanistes. Faites en passer 5 et vous et votre parti sortirez gagnant. Un autre moyen pour parvenir à vos fins est d’éliminer tous les membres du parti du Progrès. Attention, deux cyborgs se sont glissés dans le conseil. Leur but est d’éliminer tous les autres ministres pour prendre le pouvoir et libérer les machines. Soyez méfiants et ne vous laissez pas distraire.",
+        "cyborg":""
+      }
+    },
+    "bonus": {
+    }
+  }
+  "votation":{
+    "narration" : {
+      "intro": "Nous allons commencer un tour de vote.",
+      "premier tour": "La votation d’une loi est faite par deux personnes sélectionnées. La première envoie des suggestions à la seconde, qui doit faire le choix final. Le résultat est l’application d’une loi progressiste ou humaniste",
+      "tour standard": {
+        "vote de confiance": {
+          "ministre actif": "Les autres joueurs décident de s’ils font confiance au délégué désigné",
+          "delegue": "Les autres joueurs décident s’ils vous font confiance en tant que leur représentant",
+          "autres joueurs": "Faites-vous confiance au joueur sélectionné par votre précédent délégué ?",
+          "tous": {
+            "rejet":{
+              "0":"Vous avez rejeté le <ministre>. Un nouveau délégué va être désigné"
+            },
+            "nouveau": {
+              "0":"Le <ministre> est le nouveau délégué qui s’exprimera"
+            }
+          }
+        },
+        "choix du ministre":{
+          "ministre actif":"Choisissez deux lois parmi les trois proposées",
+          "delegue":"le ministre est en train de voter",
+          "autres joueurs":"le ministre est en train de choisir deux lois à vous proposer…"
+        }
+      }
+    },
+    "bonus": {
+
+    }
+  }
+}

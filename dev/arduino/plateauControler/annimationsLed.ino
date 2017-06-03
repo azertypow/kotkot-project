@@ -8,7 +8,7 @@ void play_Intro(){
   
   // mise a jour des leds
   if(intro_ledMonte){
-    lightUpLedsFromTo(IntLed, 0, IntLed, intro_count ,intro_count + 1);
+    lightUpLedsFromTo(MAXLEDINTENSITY, 0, MAXLEDINTENSITY, intro_count ,intro_count + 1);
   }
   else {
     lightUpLedsFromTo(0, 0, 0, intro_count ,intro_count + 1);
@@ -38,6 +38,7 @@ void play_Intro(){
 }
 
 // lancer lors de l'attente de positionnement de tous les joueurs
+int random_placement_count = 0;
 void play_random_placement(){
-  lightUpAllLeds(IntLed, IntLed, IntLed);
+  lightUpallLeds(MAXLEDINTENSITY, MAXLEDINTENSITY, MAXLEDINTENSITY);
 }
