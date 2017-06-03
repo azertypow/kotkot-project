@@ -53,5 +53,29 @@
     "bonus": {
 
     }
+  },
+
+  "elimination": {
+    "narration": {
+      "premier tour": "Vous allez devoir éliminer un ministre qui sera désigné à la majorité. Attention, le ministre éliminé donnera son droit de vote au Ministre de son choix, ce dernier aura donc un poids plus conséquent lors des prochains votes. Etes-vous prêt ?",
+      "tour standard": {
+        "intro": "Vous allez de nouveau devoir éliminer un joueur. Etes-vous prêt ?",
+        "qui eliminer": "Qui souhaitez-vous éliminer ? Choisissez bien.",
+        "elimination normale": "Vous avez choisi d’éliminer le <ministre>",
+        "egalite": {
+          "premiere": "Attention, si vous n’arrivez pas à vous mettre d’accord c’est moi qui trancherai",
+          "deuxieme": "Je vous ai déjà prévenu, attention, je vais finir par décider à votre place",
+          "elimination": "Vous n’avez pas réussi à vous entendre, j’ai dû trancher à votre place. Le <ministre> est éliminé"
+        },
+        "passation du vote": {
+          "joueur elimine": "Tu dois quitter le jeu. Avant ça tu vas pouvoir donner ton droit de vote à un autre ministre. Ce dernier aura plus de pouvoir lors des prochaines éléctions et éliminations",
+          "autres joueurs": "<ministre> est en train de choisir un joueur à qui donner son droit de vote. Ce dernier aura plus de pouvoir lors des prochaines élections et éliminations",
+          "annonce resultat":"Joueur éliminé a choisi de donner son droit de vote à Joueur. Sa voix comptera maintenant X fois."
+        }
+      }
+    },
+    "bonus": {
+
+    }
   }
 }
