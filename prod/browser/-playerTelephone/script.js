@@ -181,30 +181,22 @@ function placeCursorBeginning() {
 
 function moveCursor(e) {
 
-
+    // on récupère la position x du doigt
     var posX = (e.targetTouches[0].clientX);
 
+    // on récupère la largeur de la div qui va contenir l'arc de cercle et on calcule sa position par rapport à la taille de l'écran
     var widthWheel = (subwheel.clientWidth)*1.8;
     var offsetLeftWheel = ((windowWidth-widthWheel)/2);
 
-    console.log(widthWheel);
-    console.log(offsetLeftWheel);
-
+    // si le doigt n'est pas sur l'arc de cercle (qu'il est trop à gauche ou trop à droite) on normalise les valeurs
     if (posX < offsetLeftWheel) {
         posX = offsetLeftWheel;
     } else if (posX>widthWheel + offsetLeftWheel) {
         posX = widthWheel + offsetLeftWheel;
     }
 
+    // on map cette position x pour obtenir un angle entre 0 et 360
     posX = map(posX, offsetLeftWheel, offsetLeftWheel+widthWheel, 0, 360);
-    // var topMarginWheelMark = 50;
-    // var bottomMarginWheelMark = wheelMark.clientHeight-cursorSlider.clientHeight;
-
-    // if (posY < topMarginWheelMark) {
-    //     posY = topMarginWheelMark;
-    // } else if (posY > bottomMarginWheelMark) {
-    //     posY = windowHeight-bottomMarginWheelMark;
-    // }
 
     var i = 180 + (posX*180/(windowHeight));
 
@@ -216,6 +208,7 @@ function moveCursor(e) {
 
     console.log("i " + i);
 
+    // calcule la position du disque sur l'arc de cercle
     // x et y sont inversés
     var x = Math.cos(i*Math.PI/180) * radius;
     var y = Math.sin(i*Math.PI/180) * radius;
@@ -223,25 +216,11 @@ function moveCursor(e) {
     cursor.style.left = x + "px";
     cursor.style.top = y + "px";
 
-    //console.log("posY " + posY);
 
-    // if (posY<0) {
-    //     posY = 0;
-    // } else if (posY>windowHeight) {
-    //     posY = windowHeight;
-    // }
-
-    //var sliderTopPosition = map(posY, 0, windowHeight, 0, bottomMarginWheelMark);
-
-    // cursorSlider.style.top = sliderTopPosition + "px";
-    // console.log("windowHeight " + windowHeight);
-    // console.log("posY " + posY);
-    // console.log("top slider cursor " + cursorSlider.style.top);
-
-    //console.log(cursor.style.left);
-
+    // on map la valeur de l'angle sur le nombre de joueurs (entre 0 et 30° = Joueur 0, entre 30 et 60 = Joueur 1 etc...)
     var selectedPlayer = map(i, 180, 360, 0, numberOfPlayers-1);
 
+    // on affiche le nom du joueur sélectionné
     var playerName = subwheel.getElementsByTagName('p')[0];
     playerName.textContent = listeDesMinistres[selectedPlayer];
 

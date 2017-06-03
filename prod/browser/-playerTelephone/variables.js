@@ -49,5 +49,4 @@ var listeDesMinistres = {
     "5":"Ministre de la Santé",
     "6":"Ministre du Travail",
     "7":"Ministre de l'Armée",
-
 };
