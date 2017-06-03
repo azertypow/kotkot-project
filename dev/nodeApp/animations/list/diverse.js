@@ -47,11 +47,6 @@ function gradientExecute(firstColor, secondColor, currentColor, sens, diffR, dif
         ColorRGB = currentColor;
         setColor(ledId, ColorRGB);
 
-
-        // if(firstColor.r > secondColor.r) {
-        //
-        // }
-
         if(currentColor.r >= 255 ||currentColor.r <= 0) {
             sens=-sens;
         }

@@ -45,7 +45,8 @@ var numberOfPlayers = 8;
 
 //playerOneLawSelection();
 //playerTwoLawSelection();
-elimination();
+//elimination();
+attenteDeConnexionDesJoueurs();
 
 
 // fonction à lancer pour que le joueur 2 puisse choisir sa loi parmi les 2 choix
@@ -73,12 +74,27 @@ function playerOneLawSelection() {
 }
 
 // fonction à lancer pour la phase d'élimination
-
 function elimination() {
 
     displayElimination();
     setTimeout(eliminateSomeone, 500);
 
+}
+
+
+/***************
+ *
+ *   Introduction
+ *
+ ***************/
+
+function attenteDeConnexionDesJoueurs() {
+    displayMessage("replace", "Attente de connexion des autres joueurs. ");
+
+    // si les joueurs mettent trop de temps à se connecter.
+    setTimeout(function () {
+        displayMessage("add", "Dis-leur de se dépêcher, on a pas toute la nuit");
+    }, 2000);
 }
 
 
@@ -106,7 +122,7 @@ function eliminateSomeone() {
     placeCursorBeginning();
     document.body.addEventListener('touchmove', moveCursor);
     phaseTitle.innerHTML = "";
-    displayMessage(messages.elimination);
+    displayMessage("replace", messages.elimination);
     showValidationButton();
 
 
@@ -125,13 +141,13 @@ function determinePlayerToEliminate() {
 
 function displayEliminatedPlayer() {
 
-    displayMessage(messages.joueurElimine + "Nom du joueur");
+    displayMessage("replace", messages.joueurElimine + "Nom du joueur");
 
 }
 
 function giveYourVoteToSomeone() {
 
-    displayMessage(messages.donneTonVote);
+    displayMessage("replace", messages.donneTonVote);
     showValidationButton();
 
 }
@@ -361,7 +377,7 @@ function generateLaw(i) {
 
     // quand trois lois sont affichées, on a la possibilité de les choisir
     if (displayedLaws === 3) {
-        displayMessage(messages.choisiDeuxLois);
+        displayMessage("replace", messages.choisiDeuxLois);
         var laws = document.getElementsByClassName("law");
         for (var i=0; i<laws.length; i++) {
             laws[i].addEventListener('click', selectTwoLaws);
@@ -447,9 +463,18 @@ function hideValidationButton() {
     button.classList.remove('active');
 }
 
-function displayMessage(message) {
-    var blocMessage = document.getElementById('message').getElementsByTagName('p')[0];
-    blocMessage.textContent = message;
+function displayMessage(mode, message) {
+
+    if (mode === "add") {
+        var blocMessage = document.getElementById('message').getElementsByTagName('p')[0];
+        blocMessage.textContent += message;
+    }
+
+    if (mode === "replace") {
+        var blocMessage = document.getElementById('message').getElementsByTagName('p')[0];
+        blocMessage.textContent = message;
+    }
+
 
 }
 
