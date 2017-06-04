@@ -9,8 +9,8 @@ var pathToText = '../../../data/text.json';
 // playerTwoLawSelection();
 // elimination();
 // installation();
-// brancheCasque();
-hasardSelectionJoueur();
+brancheCasque();
+// hasardSelectionJoueur();
 // ecouteDesRegles();
 
 
@@ -32,7 +32,4 @@ function brancheCasque() {
     displayMessage("replace", "Est-ce que ton casque est bien branché ?"); // text.messages.intro["casque branche"]
     displayButton("oui");
 }
-
-
-console.log("salut");
 
