@@ -4,8 +4,8 @@ var path = require("path");
 module.exports = {
     entry: {
         players: "./dev/browser/players/main.ts",
-        boardGame: "./dev/browser/boardGame/main.ts",
-        control: "./dev/browser/control/main.ts"
+        //boardGame: "./dev/browser/boardGame/main.ts",
+        //control: "./dev/browser/control/main.ts"
     },
 
     output: {

@@ -5,6 +5,5 @@
 interface PlayerData {
     index: number,
     status: string,
-    rules: string,
-    buttons: Array<string>,
+    ministre: string,
 }

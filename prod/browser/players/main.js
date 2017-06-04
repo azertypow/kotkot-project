@@ -63,50 +63,11 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 11);
+/******/ 	return __webpack_require__(__webpack_require__.s = 4);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var LoadJs = (function () {
-    function LoadJs() {
-    }
-    LoadJs.load = function (file) {
-        var jsElement = document.createElement("script");
-        jsElement.type = "text/javascript";
-        jsElement.src = file;
-        document.body.appendChild(jsElement);
-        return jsElement;
-    };
-    return LoadJs;
-}());
-exports.default = LoadJs;
-
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var LocationInfo = (function () {
-    function LocationInfo(urlToParse) {
-        this.parse = document.createElement("a");
-        this.parse.href = urlToParse;
-    }
-    return LocationInfo;
-}());
-exports.default = LocationInfo;
-
-
-/***/ }),
-/* 2 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -694,69 +655,56 @@ function removeWarning() {
 
 
 /***/ }),
-/* 3 */,
-/* 4 */,
-/* 5 */
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var PlayerTemplate = (function () {
-    function PlayerTemplate(initParam) {
-        this.player_info = {
-            index: initParam.setIndex,
-            status: initParam.setStatus,
-            rules: initParam.setRules,
-            buttons: initParam.setButtons,
-        };
-        this.setElements(initParam.indexElement, initParam.statusElement, initParam.rulesElement, initParam.buttonsElement);
-        this.initTemplate();
-        this.setValues(this.player_info);
+var LoadJs = (function () {
+    function LoadJs() {
     }
-    PlayerTemplate.prototype.setElements = function (indexElement, statusElement, rulesElement, buttonsElement) {
-        this.player_elements = {
-            index: indexElement,
-            status: statusElement,
-            rules: rulesElement,
-            buttons: buttonsElement,
-        };
+    LoadJs.load = function (file) {
+        var jsElement = document.createElement("script");
+        jsElement.type = "text/javascript";
+        jsElement.src = file;
+        document.body.appendChild(jsElement);
+        return jsElement;
     };
-    PlayerTemplate.prototype.initTemplate = function () {
-        this.player_elementsTemplate = {
-            index: this.player_elements.index.innerHTML,
-            status: this.player_elements.status.innerHTML,
-            rules: this.player_elements.rules.innerHTML,
-            buttons: this.player_elements.buttons.innerHTML,
-        };
-    };
-    PlayerTemplate.prototype.setValues = function (patern) {
-        console.log(patern);
-        var renderIndex = Mustache.render(this.player_elementsTemplate.index, patern);
-        var renderStatus = Mustache.render(this.player_elementsTemplate.status, patern);
-        var renderRules = Mustache.render(this.player_elementsTemplate.rules, patern);
-        var renderButtons = Mustache.render(this.player_elementsTemplate.buttons, patern);
-        this.player_elements.index.innerHTML = renderIndex;
-        this.player_elements.status.innerHTML = renderStatus;
-        this.player_elements.rules.innerHTML = renderRules;
-        this.player_elements.buttons.innerHTML = renderButtons;
-    };
-    return PlayerTemplate;
+    return LoadJs;
 }());
-exports.default = PlayerTemplate;
+exports.default = LoadJs;
 
 
 /***/ }),
-/* 6 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var LocationInfo = (function () {
+    function LocationInfo(urlToParse) {
+        this.parse = document.createElement("a");
+        this.parse.href = urlToParse;
+    }
+    return LocationInfo;
+}());
+exports.default = LocationInfo;
+
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var sequences_js_1 = __webpack_require__(0);
 var SocketClientApp = (function () {
     function SocketClientApp() {
     }
-    SocketClientApp.run = function (playerTemplate, currentHostname) {
+    SocketClientApp.run = function (currentHostname) {
         var socket = io.connect("http://" + currentHostname + ":1337");
         socket.on("connect", function () {
             console.log("socket client player connected");
@@ -765,16 +713,7 @@ var SocketClientApp = (function () {
             });
         });
         socket.on("init", function (data) {
-            playerTemplate.setValues(data);
-            var allButtons = document.querySelectorAll(".buttons button");
-            for (var i = 0; i < allButtons.length; i++) {
-                allButtons[i].addEventListener("click", function (e) {
-                    socket.emit("player-responses", e.target.innerHTML);
-                    for (var j = 0; j < allButtons.length; j++) {
-                        allButtons[j].style.display = "none";
-                    }
-                });
-            }
+            sequences_js_1.displayMessage("replace", "vous etes " + data.ministre);
         });
     };
     return SocketClientApp;
@@ -783,36 +722,20 @@ exports.default = SocketClientApp;
 
 
 /***/ }),
-/* 7 */,
-/* 8 */,
-/* 9 */,
-/* 10 */,
-/* 11 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var socketClientApp_1 = __webpack_require__(6);
-var playerTemplate_1 = __webpack_require__(5);
-var LoadJs_1 = __webpack_require__(0);
-var locationInfo_1 = __webpack_require__(1);
-var sequences = __webpack_require__(2);
-var initParam = {
-    setIndex: 'en attente…',
-    setStatus: 'en attente…',
-    setRules: 'attend les propositions que je te proposerais. =)',
-    setButtons: [],
-    indexElement: document.querySelector("#index"),
-    statusElement: document.querySelector("#status"),
-    rulesElement: document.querySelector("#rules"),
-    buttonsElement: document.querySelector(".buttons"),
-};
-var playerTemplate = new playerTemplate_1.default(initParam);
+var socketClientApp_1 = __webpack_require__(3);
+var LoadJs_1 = __webpack_require__(1);
+var locationInfo_1 = __webpack_require__(2);
+var sequences = __webpack_require__(0);
 var locationInfo = new locationInfo_1.default(window.location.href);
 var currentHostname = locationInfo.parse.hostname;
 LoadJs_1.default.load("http://" + currentHostname + ":1337/socket.io/socket.io.js").addEventListener("load", function () {
-    socketClientApp_1.default.run(playerTemplate, currentHostname);
+    socketClientApp_1.default.run(currentHostname);
 });
 console.log(radius);
 window.playerOneLawSelection = function () { sequences.playerOneLawSelection(); };
