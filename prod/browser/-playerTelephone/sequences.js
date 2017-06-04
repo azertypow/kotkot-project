@@ -508,7 +508,7 @@ function displayButton(buttonToDisplay) {
 // reçoit le contenu d'un bouton quand on clique dessus
 function receiveButtonValue(e) {
 
-    console.log((e.target.textContent).toLowerCase());
+    console.log(e.target.textContent);
     // e.target.removeEventListener(click, receiveButtonValue);
 
 }
