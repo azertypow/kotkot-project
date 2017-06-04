@@ -66,7 +66,8 @@ var sounds = [
     "humaniste",
     "cyborg",
     "est",
-    "le"
+    "le",
+    "bienvenue"
 ];
 
 
@@ -90,24 +91,33 @@ function reveleUnRole(tableauDesRoles, numeroDuJoueur) {
 
     var test = document.querySelector("[data-name='bienvenue']");
 
-    var phrase = [le, ministre, est, role];
+    playSound(test);
 
-    console.log(phrase);
 
-    phrase[0].play();
-    phrase[0].onended = function() {
-        phrase[1].play();
-        phrase[1].onended = function() {
-            phrase[2].play();
-            phrase[2].onended = function() {
-                phrase[3].play();
-            }
-        }
-    }
+
+    // var phrase = [le, ministre, est, role];
+    //
+    // console.log(phrase);
+    //
+    // phrase[0].play();
+    // phrase[0].onended = function() {
+    //     phrase[1].play();
+    //     phrase[1].onended = function() {
+    //         phrase[2].play();
+    //         phrase[2].onended = function() {
+    //             phrase[3].play();
+    //         }
+    //     }
+    // }
 }
 
 
-
+function playSound(sound) {
+    sound.play();
+    sound.onended = function() {
+        console.log("fini");
+    }
+}
 
 // preload des sounds
 function preloadSounds(sounds) {
@@ -124,7 +134,6 @@ function preloadSounds(sounds) {
        source.type = "audio/mpeg";
        audiotag.dataset.name = sounds[i];
        audiotag.appendChild(source);
-       source.addEventListener("load", test);
    }
 
 }
