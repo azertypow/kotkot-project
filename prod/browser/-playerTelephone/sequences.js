@@ -11,6 +11,7 @@ function playerTwoLawSelection() {
     background([0,0,255]);
     createLaws(2);
     setLaws(lawsArray);
+    document.querySelector('.valider').addEventListener('click', displayFinalLaw);
 
 }
 
@@ -145,8 +146,6 @@ function placeCursorBeginning() {
 
     var i = 180;
 
-    var rayon = 175;
-
     //donne une taille au rond intérieur en fonction de la taille de wheel
     subwheel.style.width = Math.floor((wheel.clientWidth)/2) + "px";
     subwheel.style.height = Math.floor((wheel.clientHeight)/2) + "px";
@@ -220,9 +219,12 @@ function hasardSelectionJoueur() {
 
     var message;
 
+
+
     setInterval(function() {
         var index = Math.floor(Math.random()*listeDesMinistres.length);
         message = listeDesMinistres[index];
+        console.log('jai lu');
         displayMessage("replace", message);
         // régler le style ? ici le message est un peu haut
         // document.getElementById("message").style.marginTop = "150px";
@@ -288,6 +290,7 @@ function setLaws(lawsArray) {
 
     for (var i=0; i<laws.length; i++) {
         laws[i].classList.add(lawsArray[i]);
+        laws[i].setAttribute('data-type', lawsArray[i].toLowerCase());
         laws[i].addEventListener('click', selectOneLaw);
         var lawContent = document.createElement("p");
         var cardType = lawsArray[i];
@@ -333,6 +336,28 @@ function selectOneLaw(e) {
         removeButtons();
     }
 
+
+
+}
+
+// reçoit le choix de J2
+function displayFinalLaw(e) {
+
+    var finalLaw;
+
+    var selectedLaws = document.querySelector(".selectedLaw");
+
+
+    if (selectedLaws.dataset.type === "humaniste" || selectedLaws.dataset.type === "progressiste") {
+        finalLaw = selectedLaws.dataset.type; // on récupère de data-type
+    } else {
+        console.log("Erreur : le data-type est incorrect");
+    }
+
+    console.log(finalLaw);
+
+    document.querySelector('.valider').removeEventListener('click', displayFinalLaw);
+
 }
 
 
@@ -355,7 +380,8 @@ function generateLaw(i) {
     var index = Math.floor(Math.random()*lawType.length);
     var cardType = lawType[index];
     var oneLaw = thisLaw;
-    oneLaw.className += " " + cardType.toLowerCase();
+    oneLaw.className += " " + cardType.toLowerCase(); // on ajoute la class "progressiste" ou "humaniste" pour avoir le bon style
+    oneLaw.setAttribute('data-type', cardType.toLowerCase()); // on ajoute le data-type pour le récupérer plus tard
     var lawContent = document.createElement("p");
     lawContent.textContent = "Loi " + cardType;
     oneLaw.appendChild(lawContent);
@@ -415,11 +441,10 @@ function sendChoicesToPlayerTwo() {
     var selectedLaws = document.getElementsByClassName("selectedLaw");
 
     for(var i=0; i<selectedLaws.length; i++) {
-        console.log(selectedLaws[i].classList);
-        if (selectedLaws[i].classList[1] === "humaniste" || selectedLaws[i].classList[1] === "progressiste") {
-            lawsArray[i] = selectedLaws[i].classList[1]; // la class 1 correspond au type de loi
+        if (selectedLaws[i].dataset.type === "humaniste" || selectedLaws[i].dataset.type === "progressiste") {
+            lawsArray[i] = selectedLaws[i].dataset.type; // on récupère de data-type
         } else {
-            console.log("classList[1] ne correspond pas au type de loi");
+            console.log("Erreur : le data-type est incorrect");
         }
 
     }
