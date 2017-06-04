@@ -20,15 +20,16 @@ function playerOneLawSelection() {
 
     background([0,0,255]);
 
+    // afficher le message d'action a faire
     displayMessage(messages.tireTroisLois);
     createLaws(3);
 
     // Ajoute les listeners
-    var aLaw = document.getElementsByClassName('law');
     setTimeout(function() {generateLaw(0);}, 1000);
     setTimeout(function() {generateLaw(1);}, 1200);
     setTimeout(function() {generateLaw(2);}, 1400);
 
+    // event listener pour envoyer le choix du DÉLÉGUÉ parmis les 2 cartes
     document.querySelector('.valider').addEventListener('click', sendChoicesToPlayerTwo);
 
 }
@@ -92,8 +93,6 @@ function ecouteDesRegles() {
  *
  ***************/
 
-
-
 function displayElimination() {
 
 
@@ -116,15 +115,6 @@ function eliminateSomeone() {
 
 
     //return playerToEliminate;
-
-}
-
-function determinePlayerToEliminate() {
-
-    // fonction qui reçoit les 8 valeurs de playerToEliminate et renvoie celui qui a eu le plus de voix contre lui.
-    // que faire en cas d'ex-aequo ?
-
-    // return eliminatedPlayer;
 
 }
 
@@ -222,6 +212,7 @@ function hasardSelectionJoueur() {
     setInterval(function() {
         var index = Math.floor(Math.random()*listeDesMinistres.length);
         message = listeDesMinistres[index];
+        console.log('jai lu');
         displayMessage("replace", message);
         // régler le style ? ici le message est un peu haut
         // document.getElementById("message").style.marginTop = "150px";
@@ -265,7 +256,7 @@ function createLaws(nbCards) {
         var oneLaw = document.createElement("div");
         oneLaw.className += "law";
         oneLaw.className += " law-" + i;
-        oneLaw.setAttribute('data-id', i);
+        oneLaw.setAttribute('data-id', i.toString());
         lawsBlock.appendChild(oneLaw);
     }
 }
@@ -398,7 +389,7 @@ function generateLaw(i) {
 
 }
 
-// permet au J1 de sélectionner les deux lois à envoyer
+// permet au MINITSTRE ACTIF de sélectionner les deux lois à envoyer
 function selectTwoLaws(e) {
 
     var currentSelectedLaws = document.getElementsByClassName("selectedLaw").length;
@@ -430,7 +421,7 @@ function selectTwoLaws(e) {
 
 }
 
-// Quand on clique sur "Valider" ça envoie les choix au J2
+// Quand on clique sur "Valider" ça envoie les choix au Délégué
 function sendChoicesToPlayerTwo() {
 
     var lawsArray = {   '0':'',
@@ -446,6 +437,7 @@ function sendChoicesToPlayerTwo() {
 
     }
 
+    // à récupérer pour le socket
     console.log(lawsArray);
 
     document.querySelector('.valider').removeEventListener('click', sendChoicesToPlayerTwo);
@@ -472,7 +464,7 @@ function displayButton(buttonToDisplay) {
 
     var button = "";
 
-
+    console.log(buttonToDisplay);
 
     if(typeof buttonToDisplay !== "string") { // c'est-à-dire si c'est un tableau, par exemple si on veut ajouter plusieurs boutons ("oui" et "non" par ex)
         if (buttonToDisplay[0] === "autre") { // si c'est un bouton personnalisé
@@ -501,8 +493,6 @@ function displayButton(buttonToDisplay) {
     }
 
 
-
-
 }
 
 // reçoit le contenu d'un bouton quand on clique dessus
@@ -513,6 +503,7 @@ function receiveButtonValue(e) {
 
 }
 
+// supprimer tous les boutons
 function removeButtons() {
     var buttons = document.getElementsByTagName('button');
     for (var i=0; i<buttons.length; i++) {
@@ -521,11 +512,13 @@ function removeButtons() {
 
 }
 
+/// MESSAGE
+// envoyer un message
 function displayMessage(mode, message) {
 
     if (mode === "add") {
         var blocMessage = document.querySelector('.message').getElementsByTagName('p')[0];
-        blocMessage.textContent += message;
+        blocMessage.innerHTML += "<br>"+message;
     }
 
     if (mode === "replace") {
@@ -541,6 +534,8 @@ function removeMessage() {
     blocMessage.innerHTML = "";
 }
 
+// WARNING
+/// afficher un warning
 function displayWarning(warning) {
     var blocWarning = document.querySelector('.warning');
     blocWarning.textContent = warning;
@@ -548,6 +543,7 @@ function displayWarning(warning) {
 
 }
 
+/// surpimer warning
 function removeWarning() {
     var blocWarning = document.querySelector('.warning');
     blocWarning.classList.remove('active');
