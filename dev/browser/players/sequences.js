@@ -31,6 +31,7 @@ export function playerOneLawSelection() {
 
     // event listener pour envoyer le choix du DÉLÉGUÉ parmis les 2 cartes
     document.querySelector('.valider').addEventListener('click', sendChoicesToPlayerTwo);
+
 }
 
 // fonction à lancer pour la phase d'élimination
@@ -208,8 +209,6 @@ export function hasardSelectionJoueur() {
 
     let message;
 
-
-
     setInterval(function() {
         let index = Math.floor(Math.random()*listeDesMinistres.length);
         message = listeDesMinistres[index];
@@ -330,7 +329,7 @@ export function selectOneLaw(e) {
 }
 
 // reçoit le choix de J2
-function displayFinalLaw(e) {
+export function displayFinalLaw(e) {
 
     let finalLaw = "";
 
@@ -370,6 +369,7 @@ export function generateLaw(i) {
     let cardType = lawType[index];
     let oneLaw = thisLaw;
     oneLaw.className += " " + cardType.toLowerCase(); // on ajoute la class "progressiste" ou "humaniste" pour avoir le bon style
+    oneLaw.setAttribute('data-type', cardType.toLowerCase()); // on ajoute le data-type pour le récupérer plus tard
     let lawContent = document.createElement("p");
     lawContent.textContent = "Loi " + cardType;
     oneLaw.appendChild(lawContent);
@@ -457,12 +457,12 @@ export function sendChoicesToPlayerTwo() {
 
 // Affiche les différents éléments d'interface -
 
-// on peut soit envoyer un nom de bouton si c'est oui/non/valider, par ex : displayButton("valider")
-// soit envoyer un tableau de boutons : displayButton(["oui", "non"])
+// on peut soit envoyer un nom de bouton si c'est oui/non ou valider, par ex : displayButton("valider")
+// soit envoyer un tableau de boutons si on veut "oui"/"non" : displayButton(["oui", "non"])
 // soit envoyer un ou plusieurs bouton(s) personnalisé(s) (autre) : displayButton(["autre", "nom du bouton", "nom de l'autre bouton"]);
 export function displayButton(buttonToDisplay) {
 
-    let button;
+    let button = "";
 
     console.log(buttonToDisplay);
 
@@ -481,11 +481,25 @@ export function displayButton(buttonToDisplay) {
                 button[i].classList.add('active');
             }
         }
-    } else {
+
+        for (let j=0; j<button.length; j++) {
+            button[j].addEventListener('click', receiveButtonValue); // ajoute un lsitenner pour récupérer le contenu du bouton
+        }
+
+    } else { // c'est-à-dire si le bouton est un bouton valider ou oui ou non (tout seul)
         button = document.querySelector("." + buttonToDisplay);
         button.classList.add('active');
+        button.addEventListener('click', receiveButtonValue); // ajoute un lsitenner pour récupérer le contenu du bouton
     }
 
+
+}
+
+// reçoit le contenu d'un bouton quand on clique dessus
+export function receiveButtonValue(e) {
+
+    console.log(e.target.textContent);
+    // e.target.removeEventListener(click, receiveButtonValue);
 
 }
 
@@ -512,7 +526,12 @@ export function displayMessage(mode, message) {
         blocMessage.textContent = message;
     }
 
+}
 
+export function removeMessage() {
+
+    let blocMessage = document.querySelector('.message').getElementsByTagName('p')[0];
+    blocMessage.innerHTML = "";
 }
 
 // WARNING
