@@ -219,12 +219,9 @@ function hasardSelectionJoueur() {
 
     var message;
 
-
-
     setInterval(function() {
         var index = Math.floor(Math.random()*listeDesMinistres.length);
         message = listeDesMinistres[index];
-        console.log('jai lu');
         displayMessage("replace", message);
         // régler le style ? ici le message est un peu haut
         // document.getElementById("message").style.marginTop = "150px";
@@ -343,7 +340,7 @@ function selectOneLaw(e) {
 // reçoit le choix de J2
 function displayFinalLaw(e) {
 
-    var finalLaw;
+    var finalLaw = "";
 
     var selectedLaws = document.querySelector(".selectedLaw");
 
@@ -468,14 +465,14 @@ function sendChoicesToPlayerTwo() {
 
 // Affiche les différents éléments d'interface -
 
-// on peut soit envoyer un nom de bouton si c'est oui/non/valider, par ex : displayButton("valider")
-// soit envoyer un tableau de boutons : displayButton(["oui", "non"])
+// on peut soit envoyer un nom de bouton si c'est oui/non ou valider, par ex : displayButton("valider")
+// soit envoyer un tableau de boutons si on veut "oui"/"non" : displayButton(["oui", "non"])
 // soit envoyer un ou plusieurs bouton(s) personnalisé(s) (autre) : displayButton(["autre", "nom du bouton", "nom de l'autre bouton"]);
 function displayButton(buttonToDisplay) {
 
-    var button;
+    var button = "";
 
-    console.log(buttonToDisplay);
+
 
     if(typeof buttonToDisplay !== "string") { // c'est-à-dire si c'est un tableau, par exemple si on veut ajouter plusieurs boutons ("oui" et "non" par ex)
         if (buttonToDisplay[0] === "autre") { // si c'est un bouton personnalisé
@@ -492,11 +489,27 @@ function displayButton(buttonToDisplay) {
                 button[i].classList.add('active');
             }
         }
-    } else {
+
+        for (var j=0; j<button.length; j++) {
+            button[j].addEventListener('click', receiveButtonValue); // ajoute un lsitenner pour récupérer le contenu du bouton
+        }
+
+    } else { // c'est-à-dire si le bouton est un bouton valider ou oui ou non (tout seul)
         button = document.querySelector("." + buttonToDisplay);
         button.classList.add('active');
+        button.addEventListener('click', receiveButtonValue); // ajoute un lsitenner pour récupérer le contenu du bouton
     }
 
+
+
+
+}
+
+// reçoit le contenu d'un bouton quand on clique dessus
+function receiveButtonValue(e) {
+
+    console.log((e.target.textContent).toLowerCase());
+    // e.target.removeEventListener(click, receiveButtonValue);
 
 }
 
@@ -520,7 +533,12 @@ function displayMessage(mode, message) {
         blocMessage.textContent = message;
     }
 
+}
 
+function removeMessage() {
+
+    var blocMessage = document.querySelector('.message').getElementsByTagName('p')[0];
+    blocMessage.innerHTML = "";
 }
 
 function displayWarning(warning) {
