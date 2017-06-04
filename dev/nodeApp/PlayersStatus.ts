@@ -14,12 +14,14 @@ export default class PlayersStatus{
 
         /// lister les roles
         const roles: Array<string> = [
-            "membre du parti de gauche",
-            "membre du parti de gauche",
-            "cyborg, membre du parti de gauche",
-            "membre du parti de droite",
-            "membre du parti de droite",
-            "cyborg, membre du parti de droite",
+            "Progressiste",
+            "Progressiste",
+            "Progressiste",
+            "Humaniste",
+            "Humaniste",
+            "Humaniste",
+            "Cyborg",
+            "Cyborg",
         ];
 
         /// vérifier que le nombre de role soit identique au nombre de joueur

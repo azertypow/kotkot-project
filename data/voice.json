@@ -1,4 +1,25 @@
 {
+  "dataJoueurs": {
+    "nomsJoueurs":{
+      "education":"Ministre de l'Education",
+      "industrie":"Ministre de l'Industrie",
+      "justice":  "Ministre de la Justice",
+      "information":"Ministre de l'Information",
+      "communication":"Ministre de la Communication",
+      "sante":"Ministre de la Santé",
+      "travail":"Ministre du Travail",
+      "armee":"Ministre de l'Armée"
+    },
+    "roles":{
+      "progressiste":"Progressiste",
+      "humaniste":"Humaniste",
+      "cyborg":"cyborgue"
+    },
+    "liaison":{
+      "est":"haie",
+      "le":"le"
+    }
+  },
   "pres intro":{
     "narration" : {
       "connection ok": "Connexion réussie. Regarde à quel ministère tu es assigné, et va t’asseoir à ta place",
