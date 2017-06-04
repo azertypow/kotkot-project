@@ -20,7 +20,7 @@
 <!--avant-->
 
 
-    <!--interface de validation-->
+    <!--interface de validation lié à la fonction sequence.displayButton()-->
     <section class="controls">
         <button class="valider">Valider</button>
         <div class="doublechoix">
@@ -37,11 +37,11 @@
     </section>
 
     <!-- wheels sont pour le système de potentiometre -->
-    <div id="potentiometer">
-        <div id="wheel">
-            <div id="subwheel">
-                <div id="cache"></div>
-                <div id="cursor"></div>
+    <div class="potentiometer">
+        <div class="wheel">
+            <div class="subwheel">
+                <div class="cache"></div>
+                <div class="cursor"></div>
                 <p></p>
             </div>
         </div>
@@ -59,6 +59,7 @@
     <section class="warning"></section>
 
     <script type="text/javascript" src="../../node_modules/mustache/mustache.min.js"></script>
+    <script type="text/javascript" src="./players/variables.js"></script>
     <script type="text/javascript" src="./players/main.js" ></script>
 </body>
 </html>

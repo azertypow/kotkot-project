@@ -2,45 +2,40 @@
  * Created by mathi on 03/06/2017.
  */
 
-const variables = require("./variables.js");
+// declare global variables
 
 // Ce sont les morceaux de code qui sont appelés pendant le déroulement du jeu qui se passe dans script.js
 
 
 // fonction à lancer pour que le joueur 2 puisse choisir sa loi parmi les 2 choix
 export function playerTwoLawSelection() {
-
     background([0,0,255]);
     createLaws(2);
     setLaws(lawsArray);
-
 }
 
 // fonction à lancer pour que le joueur 1 puisse choisir ses 2 lois parmi les 3 choix
 export function playerOneLawSelection() {
-
     background([0,0,255]);
 
-    displayMessage(variables.messages.tireTroisLois);
+    // afficher le message d'action a faire
+    displayMessage(messages.tireTroisLois);
     createLaws(3);
 
     // Ajoute les listeners
-    let aLaw = document.getElementsByClassName('law');
     setTimeout(function() {generateLaw(0);}, 1000);
     setTimeout(function() {generateLaw(1);}, 1200);
     setTimeout(function() {generateLaw(2);}, 1400);
 
-    document.getElementById('valider').addEventListener('click', sendChoicesToPlayerTwo);
-
+    // event listener pour envoyer le choix du DÉLÉGUÉ parmis les 2 cartes
+    document.querySelector('.valider').addEventListener('click', sendChoicesToPlayerTwo);
 }
 
 // fonction à lancer pour la phase d'élimination
 export function elimination() {
-
     background([255,0,0]);
     displayElimination();
     setTimeout(eliminateSomeone, 500);
-
 }
 
 
@@ -52,19 +47,14 @@ export function elimination() {
 
 // indique aux joueurs de brancher leurs casques
 export function brancheCasque() {
-
     background([0,0,0]);
     displayMessage("replace", "Est-ce que ton casque est bien branché ?");
     displayButton("oui");
-
-
 }
 
 // indique aux joueurs d'aller s'installer à leur place
 export function installation() {
-
     background([0,0,0]);
-
     displayMessage("replace", "Tu es Ministre de l'Education. Tu peux aller t'installer à ta place");
     displayButton(["autre", "Je suis assis à ma place"]);
 
@@ -76,16 +66,10 @@ export function installation() {
 
 // demande aux joueurs s'ils ont compris ou pas les règles.
 export function ecouteDesRegles() {
-
     background([0,0,0]);
-
     displayButton(["autre", "J'ai compris les règles", "Je souhaite les réécouter"]);
     // displayButton(["autre", "Je souhaite les réécouter"]);
-
 }
-
-
-
 
 /***************
  *
@@ -93,53 +77,33 @@ export function ecouteDesRegles() {
  *
  ***************/
 
-
-
 export function displayElimination() {
-
-
-
     // allume toutes les LED en rouge pour 5 secondes
 
     // affiche sur l'écran qu'on rentre en phase d'élimination
-    variables.title.innerHTML = "Élimination";
-
+    title.innerHTML = "Élimination";
 }
 
 export function eliminateSomeone() {
-
-    document.getElementById('potentiometer').style.display = "block";
+    document.querySelector('.potentiometer').style.display = "block";
     placeCursorBeginning();
     document.body.addEventListener('touchmove', moveCursor);
-    variables.title.innerHTML = "";
-    displayMessage("replace", variables.messages.elimination);
+    title.innerHTML = "";
+    displayMessage("replace", messages.elimination);
     displayButton("valider");
-
-
     //return playerToEliminate;
-
-}
-
-export function determinePlayerToEliminate() {
-
-    // fonction qui reçoit les 8 valeurs de playerToEliminate et renvoie celui qui a eu le plus de voix contre lui.
-    // que faire en cas d'ex-aequo ?
-
-    // return eliminatedPlayer;
-
 }
 
 export function displayEliminatedPlayer() {
 
-    displayMessage("replace", variables.messages.joueurElimine + "Nom du joueur");
+    displayMessage("replace", messages.joueurElimine + "Nom du joueur");
 
 }
 
 export function giveYourVoteToSomeone() {
 
-    displayMessage("replace", variables.messages.donneTonVote);
+    displayMessage("replace", messages.donneTonVote);
     displayButton("valider");
-
 
 }
 
@@ -147,15 +111,10 @@ export function placeCursorBeginning() {
 
     let i = 180;
 
-    let rayon = 175;
-
     //donne une taille au rond intérieur en fonction de la taille de wheel
-    variables.subwheel.style.width = Math.floor((wheel.clientWidth)/2) + "px";
-    variables.subwheel.style.height = Math.floor((wheel.clientHeight)/2) + "px";
-    variables.subwheel.style.borderRadius = Math.floor((wheel.clientWidth)/4) + "px";
-    // subwheel.style.width = rayon + "px";
-    // subwheel.style.height = rayon + "px";
-    // subwheel.style.borderRadius = rayon/2 + "px";
+    subwheel.style.width = Math.floor((wheel.clientWidth)/2) + "px";
+    subwheel.style.height = Math.floor((wheel.clientHeight)/2) + "px";
+    subwheel.style.borderRadius = Math.floor((wheel.clientWidth)/4) + "px";
     radius = parseInt(subwheel.style.borderRadius);
 
     let x = Math.cos(i*Math.PI/180) * radius;
@@ -169,7 +128,6 @@ export function placeCursorBeginning() {
     let borderParent = parseInt(subwheel.style.borderRadius);
     let valueTranslate = borderParent - Math.floor((cursor.clientWidth)/2);
     cursor.style.transform = "translate(" + valueTranslate + "px," + valueTranslate + "px)";
-
 
 }
 
@@ -267,11 +225,12 @@ export function background(color) {
 // crée les x emplacements pour les lois
 export function createLaws(nbCards) {
 
-    let lawsBlock = document.getElementById('laws');
+    let lawsBlock = document.querySelector('.laws');
     for (let i=0; i<nbCards; i++) {
         let oneLaw = document.createElement("div");
-        oneLaw.setAttribute("class", "law");
-        oneLaw.setAttribute("id", "law-" + i);
+        oneLaw.className += "law";
+        oneLaw.className += " law-" + i;
+        oneLaw.setAttribute('data-id', i.toString());
         lawsBlock.appendChild(oneLaw);
     }
 }
@@ -314,7 +273,7 @@ export function selectOneLaw(e) {
 
     let currentSelectedLaws = document.getElementsByClassName("selectedLaw").length;
 
-    let thisLaw = document.getElementById(e.target.id);
+    let thisLaw = e.target;
 
     if (thisLaw.classList.contains("selectedLaw")) {
         thisLaw.classList.remove("selectedLaw");
@@ -352,7 +311,7 @@ export function selectOneLaw(e) {
 // choisit une loi au hasard après le setTimeout
 export function generateLaw(i) {
 
-    //let thisLaw = document.getElementById(e.target.id);
+    //var thisLaw = document.getElementById(e.target.id);
 
     let thisLaw = document.getElementsByClassName('law')[i];
 
@@ -380,12 +339,13 @@ export function generateLaw(i) {
 
 }
 
-// permet au J1 de sélectionner les deux lois à envoyer
+// permet au MINITSTRE ACTIF de sélectionner les deux lois à envoyer
 export function selectTwoLaws(e) {
 
     let currentSelectedLaws = document.getElementsByClassName("selectedLaw").length;
 
-    let thisLaw = document.getElementById(e.target.id);
+    console.log(e);
+    let thisLaw = e.target;
 
     if (thisLaw.classList.contains("selectedLaw")) {
         thisLaw.classList.remove("selectedLaw");
@@ -411,7 +371,7 @@ export function selectTwoLaws(e) {
 
 }
 
-// Quand on clique sur "Valider" ça envoie les choix au J2
+// Quand on clique sur "Valider" ça envoie les choix au Délégué
 export function sendChoicesToPlayerTwo() {
 
     let lawsArray = {   '0':'',
@@ -420,24 +380,20 @@ export function sendChoicesToPlayerTwo() {
 
     for(let i=0; i<selectedLaws.length; i++) {
         console.log(selectedLaws[i].classList);
-        if (selectedLaws[i].classList[1] === "humaniste" || selectedLaws[i].classList[1] === "progressiste") {
-            lawsArray[i] = selectedLaws[i].classList[1]; // la class 1 correspond au type de loi
+        if (selectedLaws[i].classList[2] === "humaniste" || selectedLaws[i].classList[2] === "progressiste") {
+            lawsArray[i] = selectedLaws[i].classList[2]; // la class 1 correspond au type de loi
         } else {
             console.log("classList[1] ne correspond pas au type de loi");
         }
 
     }
 
+    // à récupérer pour le socket
     console.log(lawsArray);
 
-    document.getElementById('valider').removeEventListener('click', sendChoicesToPlayerTwo);
+    document.querySelector('.valider').removeEventListener('click', sendChoicesToPlayerTwo);
 
 }
-
-
-
-
-
 
 /***************
  *
@@ -467,18 +423,17 @@ export function displayButton(buttonToDisplay) {
         } else {
             button = [];
             for (let i=0; i<buttonToDisplay.length; i++) {
-                button[i] = document.getElementById(buttonToDisplay[i]);
+                button[i] = document.querySelector("." + buttonToDisplay[i]);
                 button[i].classList.add('active');
             }
         }
     } else {
-        button = document.getElementById(buttonToDisplay);
+        button = document.querySelector("." + buttonToDisplay);
         button.classList.add('active');
     }
-
-
 }
 
+// supprimer tous les boutons
 export function removeButtons() {
     let buttons = document.getElementsByTagName('button');
     for (let i=0; i<buttons.length; i++) {
@@ -487,30 +442,34 @@ export function removeButtons() {
 
 }
 
+/// MESSAGE
+// envoyer un message
 export function displayMessage(mode, message) {
 
     if (mode === "add") {
-        let blocMessage = document.getElementById('message').getElementsByTagName('p')[0];
-        blocMessage.textContent += message;
+        let blocMessage = document.querySelector('.message').getElementsByTagName('p')[0];
+        blocMessage.innerHTML += "<br>"+message;
     }
 
     if (mode === "replace") {
-        let blocMessage = document.getElementById('message').getElementsByTagName('p')[0];
+        let blocMessage = document.querySelector('.message').getElementsByTagName('p')[0];
         blocMessage.textContent = message;
     }
 
 
 }
 
+// WARNING
+/// afficher un warning
 export function displayWarning(warning) {
-    let blocWarning = document.getElementById('warning');
+    let blocWarning = document.querySelector('.warning');
     blocWarning.textContent = warning;
     blocWarning.classList.add('active');
 
 }
 
+/// surpimer warning
 export function removeWarning() {
-    let blocWarning = document.getElementById('warning');
+    let blocWarning = document.querySelector('.warning');
     blocWarning.classList.remove('active');
 }
-

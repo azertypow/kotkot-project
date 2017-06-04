@@ -119,7 +119,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony export (immutable) */ __webpack_exports__["ecouteDesRegles"] = ecouteDesRegles;
 /* harmony export (immutable) */ __webpack_exports__["displayElimination"] = displayElimination;
 /* harmony export (immutable) */ __webpack_exports__["eliminateSomeone"] = eliminateSomeone;
-/* harmony export (immutable) */ __webpack_exports__["determinePlayerToEliminate"] = determinePlayerToEliminate;
 /* harmony export (immutable) */ __webpack_exports__["displayEliminatedPlayer"] = displayEliminatedPlayer;
 /* harmony export (immutable) */ __webpack_exports__["giveYourVoteToSomeone"] = giveYourVoteToSomeone;
 /* harmony export (immutable) */ __webpack_exports__["placeCursorBeginning"] = placeCursorBeginning;
@@ -142,45 +141,40 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
  * Created by mathi on 03/06/2017.
  */
 
-const variables = __webpack_require__(13);
+// declare global variables
 
 // Ce sont les morceaux de code qui sont appelés pendant le déroulement du jeu qui se passe dans script.js
 
 
 // fonction à lancer pour que le joueur 2 puisse choisir sa loi parmi les 2 choix
 function playerTwoLawSelection() {
-
     background([0,0,255]);
     createLaws(2);
     setLaws(lawsArray);
-
 }
 
 // fonction à lancer pour que le joueur 1 puisse choisir ses 2 lois parmi les 3 choix
 function playerOneLawSelection() {
-
     background([0,0,255]);
 
-    displayMessage(variables.messages.tireTroisLois);
+    // afficher le message d'action a faire
+    displayMessage(messages.tireTroisLois);
     createLaws(3);
 
     // Ajoute les listeners
-    let aLaw = document.getElementsByClassName('law');
     setTimeout(function() {generateLaw(0);}, 1000);
     setTimeout(function() {generateLaw(1);}, 1200);
     setTimeout(function() {generateLaw(2);}, 1400);
 
-    document.getElementById('valider').addEventListener('click', sendChoicesToPlayerTwo);
-
+    // event listener pour envoyer le choix du DÉLÉGUÉ parmis les 2 cartes
+    document.querySelector('.valider').addEventListener('click', sendChoicesToPlayerTwo);
 }
 
 // fonction à lancer pour la phase d'élimination
 function elimination() {
-
     background([255,0,0]);
     displayElimination();
     setTimeout(eliminateSomeone, 500);
-
 }
 
 
@@ -192,19 +186,14 @@ function elimination() {
 
 // indique aux joueurs de brancher leurs casques
 function brancheCasque() {
-
     background([0,0,0]);
     displayMessage("replace", "Est-ce que ton casque est bien branché ?");
     displayButton("oui");
-
-
 }
 
 // indique aux joueurs d'aller s'installer à leur place
 function installation() {
-
     background([0,0,0]);
-
     displayMessage("replace", "Tu es Ministre de l'Education. Tu peux aller t'installer à ta place");
     displayButton(["autre", "Je suis assis à ma place"]);
 
@@ -216,16 +205,10 @@ function installation() {
 
 // demande aux joueurs s'ils ont compris ou pas les règles.
 function ecouteDesRegles() {
-
     background([0,0,0]);
-
     displayButton(["autre", "J'ai compris les règles", "Je souhaite les réécouter"]);
     // displayButton(["autre", "Je souhaite les réécouter"]);
-
 }
-
-
-
 
 /***************
  *
@@ -233,53 +216,33 @@ function ecouteDesRegles() {
  *
  ***************/
 
-
-
 function displayElimination() {
-
-
-
     // allume toutes les LED en rouge pour 5 secondes
 
     // affiche sur l'écran qu'on rentre en phase d'élimination
-    variables.title.innerHTML = "Élimination";
-
+    title.innerHTML = "Élimination";
 }
 
 function eliminateSomeone() {
-
-    document.getElementById('potentiometer').style.display = "block";
+    document.querySelector('.potentiometer').style.display = "block";
     placeCursorBeginning();
     document.body.addEventListener('touchmove', moveCursor);
-    variables.title.innerHTML = "";
-    displayMessage("replace", variables.messages.elimination);
+    title.innerHTML = "";
+    displayMessage("replace", messages.elimination);
     displayButton("valider");
-
-
     //return playerToEliminate;
-
-}
-
-function determinePlayerToEliminate() {
-
-    // fonction qui reçoit les 8 valeurs de playerToEliminate et renvoie celui qui a eu le plus de voix contre lui.
-    // que faire en cas d'ex-aequo ?
-
-    // return eliminatedPlayer;
-
 }
 
 function displayEliminatedPlayer() {
 
-    displayMessage("replace", variables.messages.joueurElimine + "Nom du joueur");
+    displayMessage("replace", messages.joueurElimine + "Nom du joueur");
 
 }
 
 function giveYourVoteToSomeone() {
 
-    displayMessage("replace", variables.messages.donneTonVote);
+    displayMessage("replace", messages.donneTonVote);
     displayButton("valider");
-
 
 }
 
@@ -287,15 +250,10 @@ function placeCursorBeginning() {
 
     let i = 180;
 
-    let rayon = 175;
-
     //donne une taille au rond intérieur en fonction de la taille de wheel
-    variables.subwheel.style.width = Math.floor((wheel.clientWidth)/2) + "px";
-    variables.subwheel.style.height = Math.floor((wheel.clientHeight)/2) + "px";
-    variables.subwheel.style.borderRadius = Math.floor((wheel.clientWidth)/4) + "px";
-    // subwheel.style.width = rayon + "px";
-    // subwheel.style.height = rayon + "px";
-    // subwheel.style.borderRadius = rayon/2 + "px";
+    subwheel.style.width = Math.floor((wheel.clientWidth)/2) + "px";
+    subwheel.style.height = Math.floor((wheel.clientHeight)/2) + "px";
+    subwheel.style.borderRadius = Math.floor((wheel.clientWidth)/4) + "px";
     radius = parseInt(subwheel.style.borderRadius);
 
     let x = Math.cos(i*Math.PI/180) * radius;
@@ -309,7 +267,6 @@ function placeCursorBeginning() {
     let borderParent = parseInt(subwheel.style.borderRadius);
     let valueTranslate = borderParent - Math.floor((cursor.clientWidth)/2);
     cursor.style.transform = "translate(" + valueTranslate + "px," + valueTranslate + "px)";
-
 
 }
 
@@ -407,11 +364,12 @@ function background(color) {
 // crée les x emplacements pour les lois
 function createLaws(nbCards) {
 
-    let lawsBlock = document.getElementById('laws');
+    let lawsBlock = document.querySelector('.laws');
     for (let i=0; i<nbCards; i++) {
         let oneLaw = document.createElement("div");
-        oneLaw.setAttribute("class", "law");
-        oneLaw.setAttribute("id", "law-" + i);
+        oneLaw.className += "law";
+        oneLaw.className += " law-" + i;
+        oneLaw.setAttribute('data-id', i.toString());
         lawsBlock.appendChild(oneLaw);
     }
 }
@@ -454,7 +412,7 @@ function selectOneLaw(e) {
 
     let currentSelectedLaws = document.getElementsByClassName("selectedLaw").length;
 
-    let thisLaw = document.getElementById(e.target.id);
+    let thisLaw = e.target;
 
     if (thisLaw.classList.contains("selectedLaw")) {
         thisLaw.classList.remove("selectedLaw");
@@ -492,7 +450,7 @@ function selectOneLaw(e) {
 // choisit une loi au hasard après le setTimeout
 function generateLaw(i) {
 
-    //let thisLaw = document.getElementById(e.target.id);
+    //var thisLaw = document.getElementById(e.target.id);
 
     let thisLaw = document.getElementsByClassName('law')[i];
 
@@ -520,12 +478,13 @@ function generateLaw(i) {
 
 }
 
-// permet au J1 de sélectionner les deux lois à envoyer
+// permet au MINITSTRE ACTIF de sélectionner les deux lois à envoyer
 function selectTwoLaws(e) {
 
     let currentSelectedLaws = document.getElementsByClassName("selectedLaw").length;
 
-    let thisLaw = document.getElementById(e.target.id);
+    console.log(e);
+    let thisLaw = e.target;
 
     if (thisLaw.classList.contains("selectedLaw")) {
         thisLaw.classList.remove("selectedLaw");
@@ -551,7 +510,7 @@ function selectTwoLaws(e) {
 
 }
 
-// Quand on clique sur "Valider" ça envoie les choix au J2
+// Quand on clique sur "Valider" ça envoie les choix au Délégué
 function sendChoicesToPlayerTwo() {
 
     let lawsArray = {   '0':'',
@@ -560,24 +519,20 @@ function sendChoicesToPlayerTwo() {
 
     for(let i=0; i<selectedLaws.length; i++) {
         console.log(selectedLaws[i].classList);
-        if (selectedLaws[i].classList[1] === "humaniste" || selectedLaws[i].classList[1] === "progressiste") {
-            lawsArray[i] = selectedLaws[i].classList[1]; // la class 1 correspond au type de loi
+        if (selectedLaws[i].classList[2] === "humaniste" || selectedLaws[i].classList[2] === "progressiste") {
+            lawsArray[i] = selectedLaws[i].classList[2]; // la class 1 correspond au type de loi
         } else {
             console.log("classList[1] ne correspond pas au type de loi");
         }
 
     }
 
+    // à récupérer pour le socket
     console.log(lawsArray);
 
-    document.getElementById('valider').removeEventListener('click', sendChoicesToPlayerTwo);
+    document.querySelector('.valider').removeEventListener('click', sendChoicesToPlayerTwo);
 
 }
-
-
-
-
-
 
 /***************
  *
@@ -607,18 +562,17 @@ function displayButton(buttonToDisplay) {
         } else {
             button = [];
             for (let i=0; i<buttonToDisplay.length; i++) {
-                button[i] = document.getElementById(buttonToDisplay[i]);
+                button[i] = document.querySelector("." + buttonToDisplay[i]);
                 button[i].classList.add('active');
             }
         }
     } else {
-        button = document.getElementById(buttonToDisplay);
+        button = document.querySelector("." + buttonToDisplay);
         button.classList.add('active');
     }
-
-
 }
 
+// supprimer tous les boutons
 function removeButtons() {
     let buttons = document.getElementsByTagName('button');
     for (let i=0; i<buttons.length; i++) {
@@ -627,33 +581,37 @@ function removeButtons() {
 
 }
 
+/// MESSAGE
+// envoyer un message
 function displayMessage(mode, message) {
 
     if (mode === "add") {
-        let blocMessage = document.getElementById('message').getElementsByTagName('p')[0];
-        blocMessage.textContent += message;
+        let blocMessage = document.querySelector('.message').getElementsByTagName('p')[0];
+        blocMessage.innerHTML += "<br>"+message;
     }
 
     if (mode === "replace") {
-        let blocMessage = document.getElementById('message').getElementsByTagName('p')[0];
+        let blocMessage = document.querySelector('.message').getElementsByTagName('p')[0];
         blocMessage.textContent = message;
     }
 
 
 }
 
+// WARNING
+/// afficher un warning
 function displayWarning(warning) {
-    let blocWarning = document.getElementById('warning');
+    let blocWarning = document.querySelector('.warning');
     blocWarning.textContent = warning;
     blocWarning.classList.add('active');
 
 }
 
+/// surpimer warning
 function removeWarning() {
-    let blocWarning = document.getElementById('warning');
+    let blocWarning = document.querySelector('.warning');
     blocWarning.classList.remove('active');
 }
-
 
 
 /***/ }),
@@ -777,84 +735,15 @@ var currentHostname = locationInfo.parse.hostname;
 LoadJs_1.default.load("http://" + currentHostname + ":1337/socket.io/socket.io.js").addEventListener("load", function () {
     socketClientApp_1.default.run(playerTemplate, currentHostname);
 });
-sequences.elimination();
+console.log(radius);
+window.playerOneLawSelection = function () { sequences.playerOneLawSelection(); };
+window.playerTwoLawSelection = function () { sequences.playerTwoLawSelection(); };
+window.elimination = function () { sequences.elimination(); };
+window.installation = function () { sequences.installation(); };
+window.brancheCasque = function () { sequences.brancheCasque(); };
+window.hasardSelectionJoueur = function () { sequences.hasardSelectionJoueur(); };
+window.ecouteDesRegles = function () { sequences.ecouteDesRegles(); };
 
-
-/***/ }),
-/* 12 */,
-/* 13 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "messages", function() { return messages; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "warnings", function() { return warnings; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "displayedLaws", function() { return displayedLaws; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "lawsArray", function() { return lawsArray; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "title", function() { return title; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "wheel", function() { return wheel; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "cursor", function() { return cursor; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "subwheel", function() { return subwheel; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "cursorSlider", function() { return cursorSlider; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "wheelMark", function() { return wheelMark; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "windowWidth", function() { return windowWidth; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "windowHeight", function() { return windowHeight; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "radius", function() { return radius; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "marge", function() { return marge; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "numberOfPlayers", function() { return numberOfPlayers; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "listeDesMinistres", function() { return listeDesMinistres; });
-/**
- * Created by mathi on 03/06/2017.
- */
-
-var messages = {
-    "tireTroisLois":"Tire trois lois au hasard",
-    "choisiDeuxLois":"Choisis-en deux à envoyer à l'autre joueur",
-    "elimination":"Choisis un joueur à éliminer",
-    "donneTonVote":"Choisis un joueur à qui donner tes votes. Attention, tu démultiplie la puissance de joueur.",
-    "joueurElimine":"Vous avez choisi d'éliminer"
-
-};
-
-var warnings = {
-    "maxTwoLaws":"Tu ne peux pas sélectionner plus de deux lois",
-    "maxOneLaw":"Tu ne peux pas sélectionner plus d'une loi",
-    "notEnoughLaws":"Tu dois sélectionner deux lois",
-    "tooSlow":"Dépêche-toi, tu n'as bientôt plus de temps"
-};
-
-var displayedLaws = 0;
-
-var lawsArray = {
-    '0':'humaniste',
-    '1':'progressiste'
-};
-
-var title = document.querySelector('.title h1');
-
-var wheel = document.getElementById('wheel');
-var cursor = document.getElementById('cursor');
-var subwheel = document.getElementById('subwheel');
-var cursorSlider = document.getElementById('cursorSlider');
-var wheelMark = document.getElementById('wheelMark');
-
-var windowWidth = window.innerWidth;
-var windowHeight = window.innerHeight;
-
-var radius;
-var marge = 50; // marge en haut et en bas du slider
-var numberOfPlayers = 8;
-
-var listeDesMinistres = {
-    "0":"Ministre de l'Education",
-    "1":"Ministre de l'Industrie",
-    "2":"Ministre de la Justice",
-    "3":"Ministre de l'Information",
-    "4":"Ministre de la Communication",
-    "5":"Ministre de la Santé",
-    "6":"Ministre du Travail",
-    "7":"Ministre de l'Armée",
-};
 
 /***/ })
 /******/ ]);
