@@ -5,7 +5,7 @@ class AssigningRoles {
         let allRolesAssigned = [];
         const numberOfRules = rules.length;
         console.log(`avant : ${numberOfRules}`);
-        for (let i = 1; i < numberOfRules + 1; i++) {
+        for (let i = 0; i < numberOfRules; i++) {
             const maxRandom = rules.length;
             console.log(maxRandom);
             const randomArrayIndex = this.getRandomInt(0, maxRandom);

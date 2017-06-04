@@ -24,8 +24,16 @@ export default class SocketClientApp {
         // initialisation status joueur
         socket.on("init", (data: PlayerData)=>{
             // afficher son status
+            console.log(data);
+            displayMessage("replace", `vous etes ${data.role}`);
+        });
 
-            displayMessage("replace", `vous etes ${data.ministre}`);
+        // afficher un message
+
+
+        // log from server
+        socket.on("log", (data)=>{
+           console.log(data);
         });
     }
 }

@@ -18,5 +18,5 @@ arduinoConnection.portSerial.arduino.once("connected", ()=>{
     VoiceGenerator.say_waitConnectionPlayers();
 
     // lancer le serveur et la connection des joueur socket
-    AppServer.run(1337);
+    AppServer.run("1337");
 });

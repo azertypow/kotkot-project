@@ -713,7 +713,11 @@ var SocketClientApp = (function () {
             });
         });
         socket.on("init", function (data) {
-            sequences_js_1.displayMessage("replace", "vous etes " + data.ministre);
+            console.log(data);
+            sequences_js_1.displayMessage("replace", "vous etes " + data.role);
+        });
+        socket.on("log", function (data) {
+            console.log(data);
         });
     };
     return SocketClientApp;

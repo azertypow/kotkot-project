@@ -9,10 +9,10 @@ import SocketControl from "./socketControl";
 import _GLOBAL from "./_GLOBAL";
 
 export default class AppServer {
-    static run(port: number){
+    static run(port: string){
 
         // server
-        const httpServer: Server = StaticServer.run("1337");
+        const httpServer: Server = StaticServer.run(port);
 
         // ouvrire les fenetre de simulation si on est en mode debugage
         if(_GLOBAL.debug){

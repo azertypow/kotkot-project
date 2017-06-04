@@ -8,5 +8,5 @@ const arduinoConnection = new ArduinoConnection_1.default();
 arduinoConnection.portSerial.arduino.once("connected", () => {
     console.log("EVENT CONNECTION ARDUINO OK");
     voiceGenerator_1.default.say_waitConnectionPlayers();
-    appServer_1.default.run(1337);
+    appServer_1.default.run("1337");
 });

@@ -11,7 +11,7 @@ export default class AssigningRoles {
         const numberOfRules: number = rules.length;
         console.log(`avant : ${numberOfRules}`);
 
-        for(let i: number = 1; i < numberOfRules + 1; i++){
+        for(let i: number = 0; i < numberOfRules; i++){
             const maxRandom = rules.length;
             console.log(maxRandom);
             const randomArrayIndex: number = this.getRandomInt(0, maxRandom);

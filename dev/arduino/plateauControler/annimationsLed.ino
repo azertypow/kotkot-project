@@ -18,7 +18,7 @@ void play_Intro(){
   Serial.println("animate off");
 
   // attente
-  delay(50);
+  delay(100);
 
   // savoir si on increment ou decrement les leds
   if(intro_count == NUMPIXELS - 1){

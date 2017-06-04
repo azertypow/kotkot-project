@@ -3,7 +3,6 @@
  */
 
 /// <reference path="../typescriptDeclaration/PlayerData.d.ts" />
-/// <reference path="../typescriptDeclaration/dataRules.d.ts"/>
 /// <reference path="../typescriptDeclaration/RoleAssigned.d.ts" />
 
 import io = require("socket.io")
@@ -11,8 +10,6 @@ import {Server} from "http"
 import Player from "./player"
 import Players from "./players"
 import SetPlayerData from "./setPlayerData"
-import Control from "./Control"
-import JsonData from "../general-data/jsonData"
 import _GLOBAL from "./_GLOBAL";
 import PlayersStatus from "./PlayersStatus";
 import Events = require("events");
@@ -28,38 +25,32 @@ export default class SocketControl{
         player: []
     };
 
-    static controller: Control;
+    // static socketId: string = "";
+    // static socketIp: string = "";
+    //
+    // public static checkIp(element: string): boolean{
+    //     // retourne l'ip du joueur
+    //     return element === this.socketIp;
+    // }
 
     public static connection(httpServer: Server){
         // socket.io
         let ioServer: SocketIO.Server = io.listen(httpServer);
 
         ioServer.sockets.on("connection",(socket: SocketIO.Socket)=>{
+
             // socket est la socket de l'utilisateur en ligne
             // tout ce qui est citué ici est donc propre a chaque connection
-            let socketId = socket.id;
-            let socketIp = socket.request.connection.remoteAddress;
+            const socketId = socket.id;
+            const socketIp = socket.request.connection.remoteAddress;
 
             // personne deconnecté
             socket.on("disconnect", ()=>{
-                console.log("un utilisateur s'est deconnecté");
+                console.log("un joueur s'est deconnecté");
                 console.log("\n");
             });
 
-            // control
-            /// connection ok pour le control
-            socket.on("control-connected", (info: Object)=>{
-                // connection info
-                console.log(`control ${socketId} connecté \n[ IP: ${socketIp} ]`);
-                console.log(info);
-                console.log("\n");
-
-                // mettre a jour les information du Control controler
-                this.controller = new Control(socketIp, socketId);
-            });
-
-            // client
-            /// connection ok pour le client
+            // connection ok pour le joueur
             socket.on("player-connected", (info: Object)=>{
                 // connection info
                 console.log(`player ${socketId} connecté \n[ IP: ${socketIp} ]`);
@@ -68,13 +59,9 @@ export default class SocketControl{
 
                 // verifier que le joueur qui se connect n'ai pas deja enregistré que si on est pas en mode DEBUGAGE
                 if(! _GLOBAL.debug){
-                    function checkIp(element: string){
-                        // retourne l'ip du joueur
-                        return element === socketIp;
-                    }
 
                     // la connection vient d'un nouveau joueur
-                    if(! this.players.allIp.some(checkIp)){
+                    if(! this.players.allIp.some((element)=>{return element === socketIp;})){
                         // creer les jouers et assigner les roles
                         this.createAndAssignationPlayers(socketIp, socketId, socket);
                     }
@@ -89,7 +76,7 @@ export default class SocketControl{
                                 currentPlayer.socketId = socketId;
 
                                 // mettre a jour les data ecran du joueur
-                                SetPlayerData.send(socket, currentPlayer, currentPlayer.data, this.players, this.controller, true);
+                                SetPlayerData.send(socket, currentPlayer, currentPlayer.data);
 
                                 // sortir
                                 break;
@@ -103,32 +90,6 @@ export default class SocketControl{
                     this.createAndAssignationPlayers(socketIp, socketId, socket);
                 }
             });
-
-            // emit du control
-            socket.on("control-directive", (data: DataRules)=> {
-                const listOfPlayersToSend: Array<number> = data.selectedPlayers;
-
-                for(let i:number = 0; i < listOfPlayersToSend.length; i++){
-
-                    const playerToSend: number =  listOfPlayersToSend[i];
-                    const player: Player = SetPlayerData.getPlayer(this.players, playerToSend );
-
-                    let dataToSend: PlayerData = {
-                        status: player.data.status,
-                        rules: data.rules,
-                        index: player.data.index,
-                        buttons: JsonData.rulesAndButtons[data.category][data.indexCategory].buttons,
-                    };
-
-                    // SetPlayerData
-                    SetPlayerData.sendTo(socket, this.players, playerToSend, dataToSend, this.controller, false);
-                }
-            });
-
-            // emition d'une reponse d'un player
-            socket.on("player-responses", (data: string)=>{
-                socket.to(this.controller.socketId).emit("player-responses", data);
-            });
         });
     }
 
@@ -136,7 +97,16 @@ export default class SocketControl{
 
         // creer un Player tant qu'on est pas au nombre demandé
         if(this.ilManqueDesJoueurs){
-            let player = new Player( this.players.count ,socketIp, socketId, {index: 1, rules: "empty", status: "empty", buttons: []});
+            const dataForPlayer: PlayerData = {
+                action: {
+                    emit:"displayMessage",
+                    options: "en attente de la connection de tous les joueurs",
+                },
+                emplacement: "",
+                nom: "",
+                role: "",
+            };
+            let player = new Player( this.players.count ,socketIp, socketId, dataForPlayer);
 
             // ajouter l'ip a la liste des ip
             this.players.allIp.push(socketIp);
@@ -147,14 +117,8 @@ export default class SocketControl{
             // ajouter a la list total de players
             this.players.player.push(player);
 
-            // mettre a jour l'affichage du client
-            const data: PlayerData = {
-                index: this.players.count,
-                status: "en attente de la connection de tous les joueurs",
-                rules: "les règles s'afficherons ici",
-                buttons: [],
-            };
-            SetPlayerData.send(socket, player, data, this.players, this.controller, true);
+            // mettre a jour l'affichage du player
+            SetPlayerData.send(socket, player, dataForPlayer);
 
             // regarder ou en est la liste
             console.log(this.players);
@@ -163,13 +127,14 @@ export default class SocketControl{
             if(this.players.count === _GLOBAL.numberOfPlayers){
                 console.log("total des joeurs connecté!\n");
 
-                this.allPlayers.emit("connected");
-
                 // générer les roles de chaques joueurs
-                PlayersStatus.generate(this.players, this.controller, socket, socketId, socketIp);
+                PlayersStatus.generate(this.players, socket, socketId, socketIp);
 
                 //enregistrer le fait que l'on ai tous les joueurs
                 this.ilManqueDesJoueurs = false;
+
+                // emetter que tous les joueurs sont connectés
+                this.allPlayers.emit("connected");
             }
         }
         else{

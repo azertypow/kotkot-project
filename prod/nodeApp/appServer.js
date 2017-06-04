@@ -6,7 +6,7 @@ const socketControl_1 = require("./socketControl");
 const _GLOBAL_1 = require("./_GLOBAL");
 class AppServer {
     static run(port) {
-        const httpServer = staticServer_1.default.run("1337");
+        const httpServer = staticServer_1.default.run(port);
         if (_GLOBAL_1.default.debug) {
             for (let i = 0; i < _GLOBAL_1.default.numberOfPlayers - 1; i++) {
                 child_process.exec("/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome\ --app=http://localhost:1337/prod/browser/players", function (error, stdout, stderr) {

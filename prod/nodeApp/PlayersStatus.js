@@ -4,14 +4,16 @@ const _GLOBAL_1 = require("./_GLOBAL");
 const assigningRoles_1 = require("./assigningRoles");
 const setPlayerData_1 = require("./setPlayerData");
 class PlayersStatus {
-    static generate(players, controller, socket, socketId, socketIp) {
+    static generate(players, socket, socketId, socketIp) {
         const roles = [
-            "membre du parti de gauche",
-            "membre du parti de gauche",
-            "cyborg, membre du parti de gauche",
-            "membre du parti de droite",
-            "membre du parti de droite",
-            "cyborg, membre du parti de droite",
+            "Progressiste",
+            "Progressiste",
+            "Progressiste",
+            "Humaniste",
+            "Humaniste",
+            "Humaniste",
+            "Cyborg",
+            "Cyborg",
         ];
         if (_GLOBAL_1.default.numberOfPlayers !== roles.length) {
             console.error("le nombre de role n'est pas égale au nombre de joueur !!");
@@ -20,25 +22,27 @@ class PlayersStatus {
         const rolesAssigned = assigningRoles_1.default.generate(roles);
         console.log(roles);
         for (let j = 0; j < rolesAssigned.length; j++) {
-            const currentPlayerSettings = setPlayerData_1.default.getPlayer(players, rolesAssigned[j].playerIndex);
+            const currentPlayer = setPlayerData_1.default.getPlayer(players, rolesAssigned[j].playerIndex);
             const dataToSend = {
-                index: rolesAssigned[j].playerIndex,
-                rules: currentPlayerSettings.data.rules,
-                status: rolesAssigned[j].playerRole,
-                buttons: currentPlayerSettings.data.buttons,
+                action: {
+                    emit: "displayMessage",
+                    options: rolesAssigned[j].playerRole,
+                },
+                emplacement: currentPlayer.data.emplacement,
+                nom: currentPlayer.data.nom,
+                role: rolesAssigned[j].playerRole,
             };
-            if (currentPlayerSettings.socketId === socketId) {
+            if (currentPlayer.socketId === socketId) {
                 console.log("meme socket");
-                console.log(currentPlayerSettings);
+                console.log(currentPlayer);
                 console.log(socketIp);
-                const currentPlayer = players.player[j];
-                setPlayerData_1.default.send(socket, currentPlayer, dataToSend, players, controller, true);
+                setPlayerData_1.default.send(socket, currentPlayer, dataToSend);
             }
             else {
                 console.log("diff");
-                console.log(currentPlayerSettings);
+                console.log(currentPlayer);
                 console.log(socketIp);
-                setPlayerData_1.default.sendTo(socket, players, rolesAssigned[j].playerIndex, dataToSend, controller, true);
+                setPlayerData_1.default.sendTo(socket, players, rolesAssigned[j].playerIndex, dataToSend);
             }
         }
     }
