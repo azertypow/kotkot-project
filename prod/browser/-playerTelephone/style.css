@@ -146,7 +146,7 @@ h1 {
 
 .warning.active {
     opacity: 1;
-    margin-left: 0px;
+    margin-left: 0;
     transition: margin-left 0.5s ease, opacity 0.5s ease;
 }
 

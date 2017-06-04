@@ -16,7 +16,8 @@
     "start-dev-compilation": "webpack --devtool source-map --watch",
     "start-dev-server": "webpack-dev-server",
     "build-nodeApp": "tsc",
-    "get-local-ip": "ifconfig | grep \"inet \" | grep -v \"127.\" | cut -d\\  -f2"
+    "get-local-ip": "ifconfig | grep \"inet \" | grep -v \"127.\" | cut -d\\  -f2",
+    "sass": "node-sass --watch --source-map true --output-style compressed prod/browser/main.scss prod/browser/main.css"
   },
   "repository": {
     "type": "git",

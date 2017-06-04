@@ -3,12 +3,12 @@
  */
 
 /// <reference types="socket.io-client" />
-/// <reference path="../../typescriptDeclaration/Player_template_dataToSend.d.ts" />
+/// <reference path="../../typescriptDeclaration/PlayerData.d.ts" />
 
-import PlayerTemplate from "./playerTemplate";
+import {displayMessage} from "./sequences.js"
 
 export default class SocketClientApp {
-    public static run(playerTemplate: PlayerTemplate, currentHostname: string) {
+    public static run(currentHostname: string) {
         // initialiser le socket
         let socket: SocketIOClient.Socket = io.connect(`http://${currentHostname}:1337`);
 
@@ -22,21 +22,10 @@ export default class SocketClientApp {
         });
 
         // initialisation status joueur
-        socket.on("init", (data: Player_template_dataToSend)=>{
-            playerTemplate.setValues(data);
+        socket.on("init", (data: PlayerData)=>{
+            // afficher son status
 
-            // event sur les boutons
-            const allButtons: NodeListOf<Element> = document.querySelectorAll(".buttons button");
-
-            for(let i: number = 0; i<allButtons.length; i++){
-                (<HTMLElement>allButtons[i]).addEventListener("click", (e)=>{
-                    socket.emit("player-responses", (<HTMLElement>e.target).innerHTML);
-
-                    for(let j: number = 0; j<allButtons.length; j++){
-                        (<HTMLElement>allButtons[j]).style.display = "none";
-                    }
-                });
-            }
+            displayMessage("replace", `vous etes ${data.ministre}`);
         });
     }
 }
