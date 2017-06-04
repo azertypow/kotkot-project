@@ -2,20 +2,22 @@
  * Created by mathi on 03/06/2017.
  */
 
-// declare global variables
-
 // Ce sont les morceaux de code qui sont appelés pendant le déroulement du jeu qui se passe dans script.js
 
 
 // fonction à lancer pour que le joueur 2 puisse choisir sa loi parmi les 2 choix
 export function playerTwoLawSelection() {
+
     background([0,0,255]);
     createLaws(2);
     setLaws(lawsArray);
+    document.querySelector('.valider').addEventListener('click', displayFinalLaw);
+
 }
 
 // fonction à lancer pour que le joueur 1 puisse choisir ses 2 lois parmi les 3 choix
 export function playerOneLawSelection() {
+
     background([0,0,255]);
 
     // afficher le message d'action a faire
@@ -33,9 +35,11 @@ export function playerOneLawSelection() {
 
 // fonction à lancer pour la phase d'élimination
 export function elimination() {
+
     background([255,0,0]);
     displayElimination();
     setTimeout(eliminateSomeone, 500);
+
 }
 
 
@@ -47,14 +51,19 @@ export function elimination() {
 
 // indique aux joueurs de brancher leurs casques
 export function brancheCasque() {
+
     background([0,0,0]);
     displayMessage("replace", "Est-ce que ton casque est bien branché ?");
     displayButton("oui");
+
+
 }
 
 // indique aux joueurs d'aller s'installer à leur place
 export function installation() {
+
     background([0,0,0]);
+
     displayMessage("replace", "Tu es Ministre de l'Education. Tu peux aller t'installer à ta place");
     displayButton(["autre", "Je suis assis à ma place"]);
 
@@ -66,10 +75,16 @@ export function installation() {
 
 // demande aux joueurs s'ils ont compris ou pas les règles.
 export function ecouteDesRegles() {
+
     background([0,0,0]);
+
     displayButton(["autre", "J'ai compris les règles", "Je souhaite les réécouter"]);
     // displayButton(["autre", "Je souhaite les réécouter"]);
+
 }
+
+
+
 
 /***************
  *
@@ -78,20 +93,28 @@ export function ecouteDesRegles() {
  ***************/
 
 export function displayElimination() {
+
+
+
     // allume toutes les LED en rouge pour 5 secondes
 
     // affiche sur l'écran qu'on rentre en phase d'élimination
     title.innerHTML = "Élimination";
+
 }
 
 export function eliminateSomeone() {
+
     document.querySelector('.potentiometer').style.display = "block";
     placeCursorBeginning();
     document.body.addEventListener('touchmove', moveCursor);
     title.innerHTML = "";
     displayMessage("replace", messages.elimination);
     displayButton("valider");
+
+
     //return playerToEliminate;
+
 }
 
 export function displayEliminatedPlayer() {
@@ -104,6 +127,7 @@ export function giveYourVoteToSomeone() {
 
     displayMessage("replace", messages.donneTonVote);
     displayButton("valider");
+
 
 }
 
@@ -184,9 +208,12 @@ export function hasardSelectionJoueur() {
 
     let message;
 
+
+
     setInterval(function() {
         let index = Math.floor(Math.random()*listeDesMinistres.length);
         message = listeDesMinistres[index];
+        console.log('jai lu');
         displayMessage("replace", message);
         // régler le style ? ici le message est un peu haut
         // document.getElementById("message").style.marginTop = "150px";
@@ -252,6 +279,7 @@ export function setLaws(lawsArray) {
 
     for (let i=0; i<laws.length; i++) {
         laws[i].classList.add(lawsArray[i]);
+        laws[i].setAttribute('data-type', lawsArray[i].toLowerCase());
         laws[i].addEventListener('click', selectOneLaw);
         let lawContent = document.createElement("p");
         let cardType = lawsArray[i];
@@ -297,6 +325,28 @@ export function selectOneLaw(e) {
         removeButtons();
     }
 
+
+
+}
+
+// reçoit le choix de J2
+function displayFinalLaw(e) {
+
+    let finalLaw = "";
+
+    let selectedLaws = document.querySelector(".selectedLaw");
+
+
+    if (selectedLaws.dataset.type === "humaniste" || selectedLaws.dataset.type === "progressiste") {
+        finalLaw = selectedLaws.dataset.type; // on récupère de data-type
+    } else {
+        console.log("Erreur : le data-type est incorrect");
+    }
+
+    console.log(finalLaw);
+
+    document.querySelector('.valider').removeEventListener('click', displayFinalLaw);
+
 }
 
 
@@ -319,7 +369,7 @@ export function generateLaw(i) {
     let index = Math.floor(Math.random()*lawType.length);
     let cardType = lawType[index];
     let oneLaw = thisLaw;
-    oneLaw.className += " " + cardType.toLowerCase();
+    oneLaw.className += " " + cardType.toLowerCase(); // on ajoute la class "progressiste" ou "humaniste" pour avoir le bon style
     let lawContent = document.createElement("p");
     lawContent.textContent = "Loi " + cardType;
     oneLaw.appendChild(lawContent);
@@ -379,11 +429,10 @@ export function sendChoicesToPlayerTwo() {
     let selectedLaws = document.getElementsByClassName("selectedLaw");
 
     for(let i=0; i<selectedLaws.length; i++) {
-        console.log(selectedLaws[i].classList);
-        if (selectedLaws[i].classList[2] === "humaniste" || selectedLaws[i].classList[2] === "progressiste") {
-            lawsArray[i] = selectedLaws[i].classList[2]; // la class 1 correspond au type de loi
+        if (selectedLaws[i].dataset.type === "humaniste" || selectedLaws[i].dataset.type === "progressiste") {
+            lawsArray[i] = selectedLaws[i].dataset.type; // on récupère de data-type
         } else {
-            console.log("classList[1] ne correspond pas au type de loi");
+            console.log("Erreur : le data-type est incorrect");
         }
 
     }
@@ -394,6 +443,11 @@ export function sendChoicesToPlayerTwo() {
     document.querySelector('.valider').removeEventListener('click', sendChoicesToPlayerTwo);
 
 }
+
+
+
+
+
 
 /***************
  *
@@ -431,6 +485,8 @@ export function displayButton(buttonToDisplay) {
         button = document.querySelector("." + buttonToDisplay);
         button.classList.add('active');
     }
+
+
 }
 
 // supprimer tous les boutons
@@ -473,3 +529,4 @@ export function removeWarning() {
     let blocWarning = document.querySelector('.warning');
     blocWarning.classList.remove('active');
 }
+

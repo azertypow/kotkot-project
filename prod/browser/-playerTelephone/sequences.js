@@ -343,7 +343,7 @@ function selectOneLaw(e) {
 // reçoit le choix de J2
 function displayFinalLaw(e) {
 
-    var finalLaw;
+    var finalLaw = "";
 
     var selectedLaws = document.querySelector(".selectedLaw");
 
