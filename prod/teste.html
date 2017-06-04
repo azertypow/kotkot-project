@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>teste</title>
+</head>
+<body>
+    <script>
+
+        var audio = new Audio();
+        audio.src = "http://developer.mozilla.org/@api/deki/files/2926/=AudioTest_(1).ogg";
+        audio.preload = "auto";
+        audio.muted = "true";
+        audio.play();
+        audio.addEventListener("canplaythrough", function () {
+            console.log("okkkk");
+        })
+    </script>
+</body>
+</html>
