@@ -26,7 +26,6 @@ var reponsesDesJoueurs = {
 var messages = {
     "tireTroisLois":"Tire trois lois au hasard",
     "choisiDeuxLois":"Choisis-en deux à envoyer à l'autre joueur",
-    "elimination":"Choisis un joueur à éliminer",
     "donneTonVote":"Choisis un joueur à qui donner ton vote.",
     "joueurElimine":"Vous avez choisi d'éliminer",
     "bienrecu":"Bien reçu ;)",
@@ -40,6 +39,11 @@ var messages = {
             "majoritenon":"Vous n'avez pas fait confiance à ce ministre. Je vais en désigner un pour vous",
             "nouveauchoix":"est désigné comme nouveau ministre actif"
         }
+    },
+    "elimination": {
+        "premier tour":"Vous allez devoir éliminer un joueur qui sera désigné à la majorité. Attention, le joueur éliminé donnera son droit de vote au Ministre de son choix, ce dernier sera plus puissant lors des prochains votes. Etes-vous prêt ?",
+        "init":"Vous allez de nouveau devoir éliminer un joueur. Etes-vous prêt ?",
+        "choisi":"Choisis un joueur à éliminer"
     }
 
 };

@@ -86,8 +86,6 @@ function voteDeConfiance(joueur, ministreActif) {
         console.log("Erreur : la variable 'joueur' ne correspond à aucune des valeurs attendues ('autre', 'ministreActif', 'delegue'");
     }
 
-
-
 }
 
 // après avoir lancé le vote de confiance on reçoit un ensemble de "oui" ou "non" de la part des joueurs
@@ -148,10 +146,6 @@ function deliberationVoteConfiance(reponsesDesJoueurs) {
             },4000);
         }, 2000);
 
-
-
-
-
     }
 
 }
@@ -199,11 +193,29 @@ function elimination() {
 
     background([255,0,0]);
     displayTitle("Élimination");
+
     setTimeout(function() {
-        eliminateSomeone(listeDesMinistresRestant);
+        if (premierTour) {
+            title.textContent = "";
+            displayMessage("replace", messages.elimination["premier tour"]);
+            displayButton(["oui", "non"]);
+            document.querySelector('.doublechoix').style.top = "60%"; // on modifie légèrement la marge comme le message est long
+        } else {
+            displayMessage("replace", messages.elimination.init);
+            displayButton(["oui", "non"]);
+        }
     }, titleDuration);
 
+    setTimeout(function() {
+        eliminateSomeone(listeDesMinistresRestant);
+    }, 3000);
+
+
+
 }
+
+
+
 
 
 /***************
@@ -260,17 +272,18 @@ function ecouteDesRegles() {
 // afficher le potentiometre pour le vote
 function eliminateSomeone(listeDesMinistresRestant) {
 
-    // on enlève le titre
-    title.innerHTML = "";
+    clear();
+
+    displayMessage("replace", messages.elimination.choisi);
+    displayButton("valider");
 
     document.querySelector('.potentiometer').style.display = "block";
     placeCursorBeginning();
     document.body.addEventListener('touchmove', function(e){
-        moveCursor(e, listeDesMinistresRestant);
+        var playerToEliminate = moveCursor(e, listeDesMinistresRestant);
+        console.log("player " + playerToEliminate);
+        document.querySelector('.valider').addEventListener('click', displayEliminatedPlayer(playerToEliminate));
     });
-    displayMessage("replace", messages.elimination);
-    displayButton("valider");
-
 
     //return playerToEliminate (nom du ministrer, exemple "Ministre de l'éducation");
 
@@ -279,8 +292,8 @@ function eliminateSomeone(listeDesMinistresRestant) {
 // afficher le joueur elliminé
 function displayEliminatedPlayer(playerData_Name) {
 
-    displayMessage("replace", messages.joueurElimine + playerData_Name);
-
+    // displayMessage("replace", messages.joueurElimine + playerData_Name);
+    console.log("playyyyyyyyer " + playerData_Name);
 }
 
 function giveYourVoteToSomeone(listeDesMinistresRestant) {
@@ -366,11 +379,11 @@ function moveCursor(e, listeDesMinistresRestant) {
     // on ajoute 1 à la deuxième valeur pour que le 360 soit compris dans le dernier joueur de la liste
     var selectedPlayer = map(i, 180, 361, 0, (listeDesMinistresRestant.length));
 
-    console.log(selectedPlayer);
-
     // on affiche le nom du joueur sélectionné
     var playerName = subwheel.getElementsByTagName('p')[0];
     playerName.textContent = listeDesMinistresRestant[selectedPlayer];
+
+    return selectedPlayer;
 
 
 }
@@ -416,23 +429,6 @@ function createLaws(nbCards) {
         lawsBlock.appendChild(oneLaw);
     }
 }
-
-// animation sur ecran joueur si il y a selection au hasard du nouveau joueur suite à un vote de confiance non validé
-// function hasardSelectionJoueur(animHasard, listeDesMinistresRestant) {
-//
-//     var message;
-//
-//     animHasard = setInterval(function() {
-//         var index = Math.floor(Math.random()*listeDesMinistresRestant.length);
-//         message = listeDesMinistresRestant[index];
-//         console.log('jai lu');
-//         displayMessage("replace", message);
-//         // régler le style ? ici le message est un peu haut
-//         // document.getElementById("message").style.marginTop = "150px";
-//     }, 70);
-//
-//
-// }
 
 
 
@@ -503,9 +499,7 @@ function selectOneLaw(e) {
 function displayFinalLaw(e) {
 
     var finalLaw = "";
-
     var selectedLaws = document.querySelector(".selectedLaw");
-
 
     if (selectedLaws.dataset.type === "humaniste" || selectedLaws.dataset.type === "progressiste") {
         finalLaw = selectedLaws.dataset.type; // on récupère de data-type
@@ -642,8 +636,6 @@ function displayButton(buttonToDisplay) {
 
     var button = "";
 
-    console.log(buttonToDisplay);
-
     if(typeof buttonToDisplay !== "string") { // c'est-à-dire si c'est un tableau, par exemple si on veut ajouter plusieurs boutons ("oui" et "non" par ex)
         if (buttonToDisplay[0] === "autre") { // si c'est un bouton personnalisé
             button = document.getElementsByClassName(buttonToDisplay[0]);
@@ -677,9 +669,7 @@ function displayButton(buttonToDisplay) {
 function receiveButtonValue(e) {
 
     console.log(e.target.textContent);
-
     bienRecu(); // quand un joueur appuie sur un bouton, on lui envoie un message comme quoi on a bien reçu sa répons
-
     e.target.removeEventListener('click', receiveButtonValue);
 
 }
@@ -704,7 +694,7 @@ function displayMessage(mode, message) {
 
     if (mode === "replace") {
         var blocMessage = document.querySelector('.message').getElementsByTagName('p')[0];
-        blocMessage.textContent = message;
+        blocMessage.innerHTML = message;
     }
 
 }
