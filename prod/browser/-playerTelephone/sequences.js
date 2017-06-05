@@ -149,8 +149,16 @@ function displayEliminatedPlayer(playerData_Name) {
 
 }
 
-function giveYourVoteToSomeone(nombreDeJouerRestant) {
+function giveYourVoteToSomeone(listeDesMinistresRestant) {
 
+    clear();
+
+    document.querySelector('.potentiometer').style.display = "block";
+    placeCursorBeginning();
+    document.body.addEventListener('touchmove', function(e){
+        moveCursor(e, listeDesMinistresRestant);
+    });
+    title.innerHTML = "";
     displayMessage("replace", messages.donneTonVote);
     displayButton("valider");
 

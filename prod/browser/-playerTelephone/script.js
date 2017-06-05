@@ -12,13 +12,14 @@ var pathToText = '../../../data/text.json';
 // brancheCasque();
 // hasardSelectionJoueur();
 // ecouteDesRegles();
+// giveYourVoteToSomeone(nombreDeJouerRestant);
 
 
 // faire giveyouvotetosomeone
 // faire le vote de confiance
-// regarder le fonction movecursor
 // animation de random des cartes lors de playerOneLawSelection
 ///// ajouter le copyright
+///// regarder le fonction movecursor
 
 
 // fetchJSONFile(pathToText, function(text){
