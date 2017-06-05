@@ -14,9 +14,11 @@ var pathToText = '../../../data/text.json';
 // ecouteDesRegles();
 
 
-// Quand un joueur lance l'application
-
-// importe les fichiers json
+// faire giveyouvotetosomeone
+// faire le vote de confiance
+// ajouter le copyright
+// regarder le fonction movecursor
+// animation de random des cartes lors de playerOneLawSelection
 
 
 

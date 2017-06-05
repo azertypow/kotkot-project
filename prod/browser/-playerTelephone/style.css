@@ -139,6 +139,8 @@ h1 {
     padding: 12px;
     margin-left: -20px;
     transition: margin-left 0.5s ease, opacity 0.5s ease;
+    position: fixed;
+    bottom: 20px;
 }
 .warning::before {
     content: " ❌ ";
@@ -268,4 +270,17 @@ h1 {
     position: absolute;
     bottom: 1px;
     margin-left: -5px;
+}
+
+
+.copyright {
+    font-size: 60%;
+    color: white;
+    position: fixed;
+    bottom: 20px;
+}
+
+.copyright::before {
+    content: '׃';
+
 }
