@@ -4,35 +4,35 @@
 
 /// <reference path="../typescriptDeclaration/RoleAssigned.d.ts" />
 
-export default class AssigningRoles {
-    public static generate(rules: Array<string>): Array<RoleAssigned>{
+export default class PlayerAssignation {
+    public static generate(list: Array<string>): Array<Assignation>{
 
-        let allRolesAssigned: Array<RoleAssigned> = [];
-        const numberOfRules: number = rules.length;
+        let allAssigned: Array<Assignation> = [];
+        const numberOfRules: number = list.length;
         console.log(`avant : ${numberOfRules}`);
 
         for(let i: number = 0; i < numberOfRules; i++){
-            const maxRandom = rules.length;
+            const maxRandom = list.length;
             console.log(maxRandom);
             const randomArrayIndex: number = this.getRandomInt(0, maxRandom);
             console.log(randomArrayIndex);
-            let roleInCreation: RoleAssigned = {
+            let roleInCreation: Assignation = {
                 playerIndex: i,
-                playerRole: rules[randomArrayIndex],
+                assignation: list[randomArrayIndex],
             };
             console.log(roleInCreation);
 
             // supprimer le role pris
-            rules.splice(randomArrayIndex, 1);
-            console.log(rules);
+            list.splice(randomArrayIndex, 1);
+            console.log(list);
 
             // ajouter le role en creation a la liste des role
-            allRolesAssigned.push(roleInCreation);
+            allAssigned.push(roleInCreation);
         }
 
         console.log(`après : ${numberOfRules}`);
 
-        return allRolesAssigned;
+        return allAssigned;
     }
 
     private static getRandomInt(min: number, max: number): number {

@@ -3,7 +3,7 @@
  */
 
 import _GLOBAL from "./_GLOBAL"
-import AssigningRoles from "./assigningRoles"
+import PlayerAssignation from "./PlayerAssignation"
 import Player from "./player"
 import Players from "./players"
 import SetPlayerData from "./setPlayerData"
@@ -23,6 +23,18 @@ export default class PlayersStatus{
             "Cyborg",
         ];
 
+        // liste des emplacements
+        const emplacements: Array<string> = [
+            "education",
+            "industrie",
+            "justice",
+            "information",
+            "communication",
+            "sante",
+            "travail",
+            "armee",
+        ];
+
         /// vérifier que le nombre de role soit identique au nombre de joueur
         if(_GLOBAL.numberOfPlayers !== roles.length){
             console.error("le nombre de role n'est pas égale au nombre de joueur !!");
@@ -30,8 +42,12 @@ export default class PlayersStatus{
         }
 
         /// assignation des roles
-        const rolesAssigned: Array<RoleAssigned> = AssigningRoles.generate(roles);
+        const rolesAssigned: Array<Assignation> = PlayerAssignation.generate(roles);
         console.log(roles);
+
+        /// assignation des emplacements
+        const placementAssigned: Array<Assignation> = PlayerAssignation.generate(emplacements);
+        console.log(placementAssigned);
 
         /// envoyer les roles aux joeurs
         for(let j: number = 0; j < rolesAssigned.length; j++){
@@ -39,34 +55,19 @@ export default class PlayersStatus{
             // recupérer l'objet du joueur en cour
             const currentPlayer: Player = SetPlayerData.getPlayer(players, rolesAssigned[j].playerIndex);
 
-            // préparer les data a envoyer et a mettre a jour sur le joueur en cour
-            const dataToSend: PlayerData = {
+            // mise a jours des datas du joueurs
+            currentPlayer.data = {
                 action:{
                     emit: "displayMessage",
-                    options: rolesAssigned[j].playerRole,
+                    options: rolesAssigned[j].assignation,
                 },
-                emplacement: currentPlayer.data.emplacement,
+                emplacement: placementAssigned[j].assignation,
                 nom: currentPlayer.data.nom,
-                role: rolesAssigned[j].playerRole,
+                role: rolesAssigned[j].assignation,
             };
 
-            // regarder si les data en cour son a envoyer au socket du client actuel ou a un autre
-            if( currentPlayer.socketId === socketId ){
-                console.log("meme socket");
-                console.log(currentPlayer);
-                console.log(socketIp);
-
-                // socket du joueur a metre a jour est celui sur lequel on est connecté
-                SetPlayerData.send(socket, currentPlayer, dataToSend);
-            }
-            else {
-                console.log("diff");
-                console.log(currentPlayer);
-                console.log(socketIp);
-
-                // socket autre, on doit donner un identifiant pour envoyer les data
-                SetPlayerData.sendTo(socket, players, rolesAssigned[j].playerIndex, dataToSend);
-            }
+            // envoyer la demande de mettre son casque
+            SetPlayerData.directive("brancheCasque", "", currentPlayer.id);
         }
     }
 }

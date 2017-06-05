@@ -58,7 +58,7 @@ void loop() {
     allDataReceivedPrevious = false;
   }
   // lire recu par serialport
-  if(Serial.available()){
+  if(Serial.available() > 0){
     // signaler la venu de donné en cour
     incomingData = true;
 
@@ -72,27 +72,22 @@ void loop() {
     }
     
     //tant que des données sont en attente
-    //if(Serial.available() > 55){
-      while (Serial.available()) {
-        char c = Serial.read();
-        reception += c;
-        
-        //Serial.println(reception);
-        //delay(1);
-      }
+    while (Serial.available()) {
+      char c = Serial.read();
+      reception += c;
+    }
 
-      // traité ce qui a été recu jusqu'a présent
-      parseSerialReceived(reception);
-      
-      // vidée ce qui a été recu jusqu'a présent
-      reception="";
+    // traité ce qui a été recu jusqu'a présent
+    parseSerialReceived(reception);
+    
+    // vidée ce qui a été recu jusqu'a présent
+    reception="";
 
-      // signaler le fait que l'arduino a bien recu des données (mais pas forcément complete), SEULEMENT SI LA CONNECTION A ÉTÉ VALIDÉE
-      if(serialConnected){
-        Serial.println("recu");
-        Serial.println("fin boucle");
-      }
-    //}
+    // signaler le fait que l'arduino a bien recu des données (mais pas forcément complete), SEULEMENT SI LA CONNECTION A ÉTÉ VALIDÉE
+    if(serialConnected){
+      Serial.println("recu");
+      Serial.println("fin boucle");
+    }
   }
   else{
     // signaler qu'ocune données n'a été recu

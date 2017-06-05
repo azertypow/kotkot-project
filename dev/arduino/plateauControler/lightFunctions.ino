@@ -3,6 +3,8 @@ void lightUpallLeds(int r, int g, int b){
   for(int i = 0; i < NUMPIXELS; i++){
     pixels.setPixelColor(i, pixels.Color(r,g,b));
   }
+
+  // mise a jour des leds
   pixels.show();
 }
 
@@ -11,7 +13,15 @@ void lightUpLedsFromTo(int r, int g, int b, int ledIndexFrom, int ledIndexTo){
   for(int i = ledIndexFrom; i < ledIndexTo; i++){
     pixels.setPixelColor(i, pixels.Color(r,g,b));
   }
+  
+  // signaler a nodejs la mise a jour des led
+  Serial.println("animate on");
+  
+  // mise a jour des leds
   pixels.show();
+    
+  // signaler a nodejs la mise a jour des led
+  Serial.println("animate off");
 }
 
 //–––––individuel–––––//

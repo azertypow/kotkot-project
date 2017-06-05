@@ -25,7 +25,7 @@ export default class SocketClientApp {
         socket.on("init", (data: PlayerData)=>{
             // afficher son status
             console.log(data);
-            sequences.displayMessage("replace", `vous etes ${data.role}`);
+            sequences.displayMessage("replace", `vous etes ${data.action.options}`);
         });
 
         //——————————
@@ -132,7 +132,7 @@ export default class SocketClientApp {
         });
 
         // log from server
-        socket.on("log", (data)=>{
+        socket.on("log", (data: any)=>{
            console.log(data);
         });
     }

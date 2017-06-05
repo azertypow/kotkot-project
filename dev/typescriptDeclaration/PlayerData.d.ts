@@ -7,7 +7,7 @@ interface PlayerData {
         emit: string,
         options: string,
     },
-    emplacement: string, // ministaire, emplacement sur le plateau
-    nom: string, // phrase avec son emplacement, son affectation
-    role: string, // partie dasn lequel le joueur se trouve
+    emplacement: string, // ministaire, emplacement sur le plateau "écologie, …"
+    nom: string, // phrase avec son emplacement, son affectation "ministre de l'écologie, …"
+    role: string, // partie dasn lequel le joueur se trouve "Progressiste | Humaniste | Cyborg"
 }

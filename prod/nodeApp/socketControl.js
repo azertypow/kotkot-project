@@ -9,8 +9,10 @@ const Events = require("events");
 const MessagesFromPlayers_1 = require("./MessagesFromPlayers");
 class SocketControl {
     static connection(httpServer) {
-        let ioServer = io.listen(httpServer);
+        const ioServer = io.listen(httpServer);
+        this.ioServer = ioServer;
         ioServer.sockets.on("connection", (socket) => {
+            this.socket = socket;
             const socketId = socket.id;
             const socketIp = socket.request.connection.remoteAddress;
             socket.on("disconnect", () => {
