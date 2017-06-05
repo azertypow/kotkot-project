@@ -7,6 +7,7 @@
 import io = require("socket.io")
 import Player from "./player"
 import Players from "./players"
+import socketControl from "./socketControl"
 
 export default class SetPlayerData {
     static send(socket: SocketIO.Socket, player: Player, data: PlayerData){
@@ -21,12 +22,7 @@ export default class SetPlayerData {
     static sendTo(socket: SocketIO.Socket, players:Players, playerIndexToSend: number, data: PlayerData){
 
         // envoyer data
-        socket.to(players.player[playerIndexToSend].socketId).emit("displayEliminatedPlayer", "jorge");
-        socket.to(players.player[playerIndexToSend].socketId).emit("log", `players.player[playerIndexToSend].socketId: ${players.player[playerIndexToSend].socketId}`);
-        socket.to(players.player[playerIndexToSend].socketId).emit("log", `socket: ${socket}`);
-        socket.to(players.player[playerIndexToSend].socketId).emit("log", `players: ${players}`);
-        socket.to(players.player[playerIndexToSend].socketId).emit("log", `playerIndexToSend: ${playerIndexToSend}`);
-        socket.to(players.player[playerIndexToSend].socketId).emit("log", `data: ${data}`);
+        socket.to(players.player[playerIndexToSend].socketId).emit("init", data);
 
         // mettre a jour les datas stocké sur le serveru
         players.player[playerIndexToSend].data = data;
@@ -35,4 +31,10 @@ export default class SetPlayerData {
     static getPlayer(players: Players, playerIndex: number): Player {
         return players.player[playerIndex];
     }
+
+    static directive(functionName: string, functionArguments: string | Object, playerIndexToSend: number,){
+        socketControl.ioServer.to(socketControl.players.player[playerIndexToSend].socketId).emit(functionName, functionArguments);
+        socketControl.ioServer.to(socketControl.players.player[playerIndexToSend].socketId).emit("log", functionName);
+        socketControl.ioServer.to(socketControl.players.player[playerIndexToSend].socketId).emit("log", functionArguments);
+    };
 }

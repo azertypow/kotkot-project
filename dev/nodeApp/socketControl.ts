@@ -19,6 +19,8 @@ export default class SocketControl{
 
     private static ilManqueDesJoueurs: boolean = true;
     public static allPlayers: Events = new Events();
+    public static ioServer: SocketIO.Server;
+    public static socket: SocketIO.Socket;
 
     static players: Players = {
         allIp: [],
@@ -36,9 +38,13 @@ export default class SocketControl{
 
     public static connection(httpServer: Server){
         // socket.io
-        let ioServer: SocketIO.Server = io.listen(httpServer);
+        const ioServer: SocketIO.Server = io.listen(httpServer);
+        this.ioServer = ioServer;
 
         ioServer.sockets.on("connection",(socket: SocketIO.Socket)=>{
+
+            // stocker le socket
+            this.socket = socket;
 
             // socket est la socket de l'utilisateur en ligne
             // tout ce qui est citué ici est donc propre a chaque connection

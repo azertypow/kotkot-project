@@ -168,8 +168,13 @@ function brancheCasque() {
     clear();
     background([0,0,0]);
     displayMessage("replace", "Est-ce que ton casque est bien branché ?");
-    displayButton("oui");
-
+    displayButton("oui", ()=>{
+        var returnMessage = function () {
+            displayMessage("replace", "Merci.<br>Votre assignation ministairielle va vous être envoyée.");
+            document.querySelector(".oui").removeEventListener("click", returnMessage);
+        };
+        document.querySelector(".oui").addEventListener("click", returnMessage);
+    });
 
 }
 
@@ -583,7 +588,7 @@ function sendChoicesToPlayerTwo() {
 // on peut soit envoyer un nom de bouton si c'est oui/non ou valider, par ex : displayButton("valider")
 // soit envoyer un tableau de boutons si on veut "oui"/"non" : displayButton(["oui", "non"])
 // soit envoyer un ou plusieurs bouton(s) personnalisé(s) (autre) : displayButton(["autre", "nom du bouton", "nom de l'autre bouton"]);
-function displayButton(buttonToDisplay) {
+function displayButton(buttonToDisplay, callback) {
 
     let button = "";
 
@@ -615,7 +620,9 @@ function displayButton(buttonToDisplay) {
         button.addEventListener('click', receiveButtonValue); // ajoute un lsitenner pour récupérer le contenu du bouton
     }
 
-
+    if(callback && typeof callback == "function") {
+        callback();
+    }
 }
 
 // reçoit le contenu d'un bouton quand on clique dessus
@@ -646,7 +653,7 @@ function displayMessage(mode, message) {
 
     if (mode === "replace") {
         let blocMessage = document.querySelector('.message').getElementsByTagName('p')[0];
-        blocMessage.textContent = message;
+        blocMessage.innerHTML = message;
     }
 
 }
@@ -760,7 +767,7 @@ var SocketClientApp = (function () {
         });
         socket.on("init", function (data) {
             console.log(data);
-            sequences.displayMessage("replace", "vous etes " + data.role);
+            sequences.displayMessage("replace", "vous etes " + data.action.options);
         });
         socket.on("playerTwoLawSelection", function () {
             sequences.playerTwoLawSelection();
