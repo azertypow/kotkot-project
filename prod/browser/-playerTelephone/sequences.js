@@ -5,18 +5,158 @@
 // Ce sont les morceaux de code qui sont appelés pendant le déroulement du jeu qui se passe dans script.js
 
 
-// Ne sera pas dans le code final mais pour me permettre de tester temporairement le code
-let listeDesMinistresRestant = [
-    "Ministre de l'Education",
-    "Ministre de l'Industrie",
-    "Ministre de la Communication",
-    "Ministre de la Santé",
-    "Ministre du Travail",
-    "Ministre de l'Armée"
-];
+
+
+// fonction à lancer pour démarrer une phase de vote des lois
+function startVote() {
+
+    clear();
+    background([0,0,255]);
+    displayTitle("Votation");
+
+    setTimeout(function() {
+        if (premierTour) {
+            choisiDeuxMinistres(listeDesMinistresRestant);
+            // ici il faudrait lancer le son d'explication du vote
+            premierTour = false;
+        } else {
+            choisiDelegue(listeDesMinistresRestant);
+            var ministreActif = "Ministre du Travail";
+            var joueur = "autre"; // joueur === "autre" || "ministreActif" || "delegue"
+            voteDeConfiance(joueur, ministreActif);
+        }
+        // voteDeConfiance(listeDesMinistresRestant);
+    }, titleDuration);
+
+
+}
+
+
+// sauf au premier tour - choisi au hasard le délégué
+function choisiDelegue(ministres) {
+
+
+
+    // on tire un nombre au hasard pour choisir le délégué
+    var index = Math.floor(Math.random()*ministres.length);
+    var delegue = ministres[index];
+
+    console.log("delegue " + delegue);
+
+    // return delegue;
+}
+
+// si on est au premier tour, choisi les deux ministres qui seronts respectivement
+// ministre actif et délégué
+function choisiDeuxMinistres(ministresRestants) {
+
+    // on crée une liste temporaire pour pouvoir en retirer le ministre actif
+    // la fonction concat permet d'assembler deux tableaux en un nouveau
+    var temp = [];
+    var ministresRestantsTemporaires = listeDesMinistresRestant.concat(temp);
+
+
+    // on tire un nombre au hasard pour choisir le ministre actif
+    var index = Math.floor(Math.random()*ministresRestantsTemporaires.length);
+    var ministreActif = ministresRestants[index];
+
+    // on enlève le ministre actif du tableau temporaire des ministres restants
+    var ministreARetirer = ministresRestantsTemporaires.indexOf(ministreActif);
+    ministresRestantsTemporaires.splice(ministreARetirer, 1);
+    // on tire un nombre au hasard pour choisir le délégué
+    index = Math.floor(Math.random()*ministresRestantsTemporaires.length);
+    var delegue = ministresRestantsTemporaires[index];
+
+
+    console.log("ministre actif " + ministreActif);
+    console.log("delegue " + delegue);
+}
+
+// lance le vote de confiance sur le ministre actif choisi par le précédent délégué
+function voteDeConfiance(joueur, ministreActif) {
+
+    title.textContent = "";
+
+    if (joueur === "autre") {
+        displayMessage("replace", messages.voteConfiance.init["autres1"]);
+        displayButton(['oui', 'non']);
+    } else if (joueur === "ministreActif" || joueur === "delegue") {
+        displayMessage("replace", messages.voteConfiance.init["ministre+delegue"]);
+    } else {
+        console.log("Erreur : la variable 'joueur' ne correspond à aucune des valeurs attendues ('autre', 'ministreActif', 'delegue'");
+    }
+
+}
+
+// après avoir lancé le vote de confiance on reçoit un ensemble de "oui" ou "non" de la part des joueurs
+// la fonction permet de délibérer si on garde ce ministre actif ou pas
+function deliberationVoteConfiance(reponsesDesJoueurs) {
+
+    //reponsesDesJoueurs est de type
+    //  reponsesDesJoueurs = {
+    //     "Ministre de l'Education":"oui",
+    //     "Ministre de l'Industrie":"oui",
+    //     "Ministre de la Justice":"non",
+    //     "Ministre de l'Information":"oui",
+    //     ...
+    //  }
+
+    var oui = 0;
+    var non = 0;
+    var nbReponses = 0;
+    var ministres = [];
+
+    // on compte le nombre de votes
+    for (var i in reponsesDesJoueurs) {
+        if(reponsesDesJoueurs.hasOwnProperty(i)){
+            ministres.push(i);
+            nbReponses++;
+        }
+    }
+
+    // on compatibilise le nombre de oui et de non
+    for (var i=0; i<nbReponses; i++) {
+        if (reponsesDesJoueurs[ministres[i]] === "oui") {
+            oui++;
+        } else {
+            non++;
+        }
+    }
+
+    if (oui > non) {
+        displayMessage("replace", messages.voteConfiance.resultat.majoriteoui);
+    } else {
+        //playSound("Vous avez rejeté le <joueur>. Un nouveau délégué va être désigné")
+
+        // on affiche d'abord un message comme quoi le vote de confiance a échoué
+        displayMessage("replace", messages.voteConfiance.resultat.majoritenon);
+        setTimeout(function() {
+
+            // puis on affiche une animation des noms de joueurs à la suite pour montrer qu'il y a un tirage au sort
+            var animHasard = setInterval(function() {
+                var index = Math.floor(Math.random()*listeDesMinistresRestant.length);
+                var message = listeDesMinistresRestant[index];
+                displayMessage("replace", message);
+            }, 70);
+
+            // enfin on affiche un joueur désigné au hasard par la machine
+            setTimeout(function(){
+                clearInterval(animHasard);
+                var index = Math.floor(Math.random()*ministres.length);
+                displayMessage("replace", ministres[index] + " " + messages.voteConfiance.resultat.nouveauchoix);
+                console.log("le nouveau ministre actif est " + ministres[index]);
+            },4000);
+        }, 2000);
+
+    }
+
+}
+
+
+
 
 // fonction à lancer pour que le Délégué puisse choisir sa loi parmi les 2 choix
-export function playerTwoLawSelection() {
+function playerTwoLawSelection() {
 
     clear();
 
@@ -28,7 +168,7 @@ export function playerTwoLawSelection() {
 }
 
 // fonction à lancer pour que le joueur 1 puisse choisir ses 2 lois parmi les 3 choix
-export function playerOneLawSelection() {
+function playerOneLawSelection() {
 
     clear();
 
@@ -49,17 +189,35 @@ export function playerOneLawSelection() {
 }
 
 // fonction à lancer pour la phase d'élimination
-export function elimination() {
+function elimination() {
 
     clear();
 
     background([255,0,0]);
-    displayElimination();
+    displayTitle("Élimination");
+
+    setTimeout(function() {
+        if (premierTour) {
+            title.textContent = "";
+            displayMessage("replace", messages.elimination["premier tour"]);
+            displayButton(["oui", "non"]);
+            document.querySelector('.doublechoix').style.top = "60%"; // on modifie légèrement la marge comme le message est long
+        } else {
+            displayMessage("replace", messages.elimination.init);
+            displayButton(["oui", "non"]);
+        }
+    }, titleDuration);
+
     setTimeout(function() {
         eliminateSomeone(listeDesMinistresRestant);
-    }, 500);
+    }, 3000);
+
+
 
 }
+
+
+
 
 
 /***************
@@ -69,7 +227,7 @@ export function elimination() {
  ***************/
 
 // indique aux joueurs de brancher leurs casques
-export function brancheCasque() {
+function brancheCasque() {
 
     clear();
     background([0,0,0]);
@@ -85,7 +243,7 @@ export function brancheCasque() {
 }
 
 // indique aux joueurs d'aller s'installer à leur place
-export function installation() {
+function installation() {
 
     clear();
     background([0,0,0]);
@@ -100,7 +258,7 @@ export function installation() {
 }
 
 // demande aux joueurs s'ils ont compris ou pas les règles.
-export function ecouteDesRegles() {
+function ecouteDesRegles() {
 
     clear();
     background([0,0,0]);
@@ -118,43 +276,34 @@ export function ecouteDesRegles() {
  *
  ***************/
 
-// afficher la phase d'élimination sur ecran
-export function displayElimination() {
-
-
-
-    // allume toutes les LED en rouge pour 5 secondes
-
-    // affiche sur l'écran qu'on rentre en phase d'élimination
-    title.innerHTML = "Élimination";
-
-}
-
 // afficher le potentiometre pour le vote
-export function eliminateSomeone(listeDesMinistresRestant) {
+function eliminateSomeone(listeDesMinistresRestant) {
+
+    clear();
+
+    displayMessage("replace", messages.elimination.choisi);
+    displayButton("valider");
 
     document.querySelector('.potentiometer').style.display = "block";
     placeCursorBeginning();
     document.body.addEventListener('touchmove', function(e){
-        moveCursor(e, listeDesMinistresRestant);
+        var playerToEliminate = moveCursor(e, listeDesMinistresRestant);
+        console.log("player " + playerToEliminate);
+        document.querySelector('.valider').addEventListener('click', displayEliminatedPlayer(playerToEliminate));
     });
-    title.innerHTML = "";
-    displayMessage("replace", messages.elimination);
-    displayButton("valider");
-
 
     //return playerToEliminate (nom du ministrer, exemple "Ministre de l'éducation");
 
 }
 
 // afficher le joueur elliminé
-export function displayEliminatedPlayer(playerData_Name) {
+function displayEliminatedPlayer(playerData_Name) {
 
-    displayMessage("replace", messages.joueurElimine + playerData_Name);
-
+    // displayMessage("replace", messages.joueurElimine + playerData_Name);
+    console.log("playyyyyyyyer " + playerData_Name);
 }
 
-export function giveYourVoteToSomeone(listeDesMinistresRestant) {
+function giveYourVoteToSomeone(listeDesMinistresRestant) {
 
     clear();
     background([255,0,0]);
@@ -170,9 +319,9 @@ export function giveYourVoteToSomeone(listeDesMinistresRestant) {
 
 }
 
-export function placeCursorBeginning() {
+function placeCursorBeginning() {
 
-    let i = 180;
+    var i = 180;
 
     //donne une taille au rond intérieur en fonction de la taille de wheel
     subwheel.style.width = Math.floor((wheel.clientWidth)/2) + "px";
@@ -180,28 +329,28 @@ export function placeCursorBeginning() {
     subwheel.style.borderRadius = Math.floor((wheel.clientWidth)/4) + "px";
     radius = parseInt(subwheel.style.borderRadius);
 
-    let x = Math.cos(i*Math.PI/180) * radius;
-    let y = Math.sin(i*Math.PI/180) * radius;
+    var x = Math.cos(i*Math.PI/180) * radius;
+    var y = Math.sin(i*Math.PI/180) * radius;
 
     // positionne le cursor
     cursor.style.left = x + "px";
     cursor.style.top = y + "px";
 
     // lui donne le bon translate
-    let borderParent = parseInt(subwheel.style.borderRadius);
-    let valueTranslate = borderParent - Math.floor((cursor.clientWidth)/2);
+    var borderParent = parseInt(subwheel.style.borderRadius);
+    var valueTranslate = borderParent - Math.floor((cursor.clientWidth)/2);
     cursor.style.transform = "translate(" + valueTranslate + "px," + valueTranslate + "px)";
 
 }
 
-export function moveCursor(e, listeDesMinistresRestant) {
+function moveCursor(e, listeDesMinistresRestant) {
 
     // on récupère la position x du doigt
-    let posX = (e.targetTouches[0].clientX);
+    var posX = (e.targetTouches[0].clientX);
 
     // on récupère la largeur de la div qui va contenir l'arc de cercle et on calcule sa position par rapport à la taille de l'écran
-    let widthWheel = (subwheel.clientWidth)*1.8; // on a appliqué un scale sur le
-    let offsetLeftWheel = ((windowWidth-widthWheel)/2);
+    var widthWheel = (subwheel.clientWidth)*1.8; // on a appliqué un scale sur le
+    var offsetLeftWheel = ((windowWidth-widthWheel)/2);
 
     // si le doigt n'est pas sur l'arc de cercle (qu'il est trop à gauche ou trop à droite) on normalise les valeurs
     if (posX < offsetLeftWheel) {
@@ -214,7 +363,7 @@ export function moveCursor(e, listeDesMinistresRestant) {
     // ici on map entre -20 et 300 parce que ça rend plus facile la manipulation avec le doigt
     posX = map(posX, offsetLeftWheel, offsetLeftWheel+widthWheel, 0, 380);
 
-    let i = 180 + (posX*180/(windowHeight));
+    var i = 180 + (posX*180/(windowHeight));
 
     if (i<180) {
         i=180;
@@ -226,8 +375,8 @@ export function moveCursor(e, listeDesMinistresRestant) {
 
     // calcule la position du disque sur l'arc de cercle
     // x et y sont inversés
-    let x = Math.cos(i*Math.PI/180) * radius;
-    let y = Math.sin(i*Math.PI/180) * radius;
+    var x = Math.cos(i*Math.PI/180) * radius;
+    var y = Math.sin(i*Math.PI/180) * radius;
 
     cursor.style.left = x + "px";
     cursor.style.top = y + "px";
@@ -235,13 +384,13 @@ export function moveCursor(e, listeDesMinistresRestant) {
 
     // on map la valeur de l'angle sur le nombre de joueurs (entre 0 et 30° = Joueur 0, entre 30 et 60 = Joueur 1 etc...)
     // on ajoute 1 à la deuxième valeur pour que le 360 soit compris dans le dernier joueur de la liste
-    let selectedPlayer = map(i, 180, 361, 0, (listeDesMinistresRestant.length));
-
-    console.log(selectedPlayer);
+    var selectedPlayer = map(i, 180, 361, 0, (listeDesMinistresRestant.length));
 
     // on affiche le nom du joueur sélectionné
-    let playerName = subwheel.getElementsByTagName('p')[0];
+    var playerName = subwheel.getElementsByTagName('p')[0];
     playerName.textContent = listeDesMinistresRestant[selectedPlayer];
+
+    return selectedPlayer;
 
 
 }
@@ -255,13 +404,13 @@ export function moveCursor(e, listeDesMinistresRestant) {
  *
  ***************/
 
-export function map(valueToMap, minInput, maxInput, minOutput, maxOutput) {
+function map(valueToMap, minInput, maxInput, minOutput, maxOutput) {
 
     return Math.floor((valueToMap - minInput) * (maxOutput - minOutput) / (maxInput - minInput) + minOutput);
 
 }
 
-export function background(color) {
+function background(color) {
 
     document.getElementsByTagName('html')[0].style.backgroundColor = "rgb(" + color[0] + "," +  color[1] + "," + color[2] + ")";
 }
@@ -276,33 +425,16 @@ export function background(color) {
  ***************/
 
 // crée les x emplacements pour les lois
-export function createLaws(nbCards) {
+function createLaws(nbCards) {
 
-    let lawsBlock = document.querySelector('.laws');
-    for (let i=0; i<nbCards; i++) {
-        let oneLaw = document.createElement("div");
+    var lawsBlock = document.querySelector('.laws');
+    for (var i=0; i<nbCards; i++) {
+        var oneLaw = document.createElement("div");
         oneLaw.className += "law";
         oneLaw.className += " law-" + i;
         oneLaw.setAttribute('data-id', i.toString());
         lawsBlock.appendChild(oneLaw);
     }
-}
-
-// animation sur ecran joueur si il y a selection au hasard du nouveau joueur suite à un vote de confiance non validé
-export function hasardSelectionJoueur(listeDesMinistresRestant) {
-
-    let message;
-
-    setInterval(function() {
-        let index = Math.floor(Math.random()*listeDesMinistresRestant.length);
-        message = listeDesMinistresRestant[index];
-        console.log('jai lu');
-        displayMessage("replace", message);
-        // régler le style ? ici le message est un peu haut
-        // document.getElementById("message").style.marginTop = "150px";
-    }, 70);
-
-
 }
 
 
@@ -314,16 +446,16 @@ export function hasardSelectionJoueur(listeDesMinistresRestant) {
  ***************/
 
 // affiche les deux lois choisies par le Ministre actif sur ecran du Délégué
-export function setLaws(lawsArray) {
+function setLaws(lawsArray) {
 
-    let laws = document.getElementsByClassName('law');
+    var laws = document.getElementsByClassName('law');
 
-    for (let i=0; i<laws.length; i++) {
+    for (var i=0; i<laws.length; i++) {
         laws[i].classList.add(lawsArray[i]);
         laws[i].setAttribute('data-type', lawsArray[i].toLowerCase());
         laws[i].addEventListener('click', selectOneLaw);
-        let lawContent = document.createElement("p");
-        let cardType = lawsArray[i];
+        var lawContent = document.createElement("p");
+        var cardType = lawsArray[i];
         if (cardType === "humaniste") {
             cardType = "Humaniste"
         } else if (cardType === "progressiste") {
@@ -338,11 +470,11 @@ export function setLaws(lawsArray) {
 }
 
 // permet au Délégué de sélectionner une loi à envoyer au serveur
-export function selectOneLaw(e) {
+function selectOneLaw(e) {
 
-    let currentSelectedLaws = document.getElementsByClassName("selectedLaw").length;
+    var currentSelectedLaws = document.getElementsByClassName("selectedLaw").length;
 
-    let thisLaw = e.target;
+    var thisLaw = e.target;
 
     if (thisLaw.classList.contains("selectedLaw")) {
         thisLaw.classList.remove("selectedLaw");
@@ -371,12 +503,10 @@ export function selectOneLaw(e) {
 }
 
 // envois le choix de Délégué au serveur au click sur le validé
-export function displayFinalLaw(e) {
+function displayFinalLaw(e) {
 
-    let finalLaw = "";
-
-    let selectedLaws = document.querySelector(".selectedLaw");
-
+    var finalLaw = "";
+    var selectedLaws = document.querySelector(".selectedLaw");
 
     if (selectedLaws.dataset.type === "humaniste" || selectedLaws.dataset.type === "progressiste") {
         finalLaw = selectedLaws.dataset.type; // on récupère de data-type
@@ -400,19 +530,19 @@ export function displayFinalLaw(e) {
 
 
 // choisit une loi au hasard après le setTimeout
-export function generateLaw(i) {
+function generateLaw(i) {
 
-    //let thisLaw = document.getElementById(e.target.id);
+    //var thisLaw = document.getElementById(e.target.id);
 
-    let thisLaw = document.getElementsByClassName('law')[i];
+    var thisLaw = document.getElementsByClassName('law')[i];
 
-    let lawType = ["Humaniste", "Progressiste"];
-    let index = Math.floor(Math.random()*lawType.length);
-    let cardType = lawType[index];
-    let oneLaw = thisLaw;
+    var lawType = ["Humaniste", "Progressiste"];
+    var index = Math.floor(Math.random()*lawType.length);
+    var cardType = lawType[index];
+    var oneLaw = thisLaw;
     oneLaw.className += " " + cardType.toLowerCase(); // on ajoute la class "progressiste" ou "humaniste" pour avoir le bon style
     oneLaw.setAttribute('data-type', cardType.toLowerCase()); // on ajoute le data-type pour le récupérer plus tard
-    let lawContent = document.createElement("p");
+    var lawContent = document.createElement("p");
     lawContent.textContent = "Loi " + cardType;
     oneLaw.appendChild(lawContent);
 
@@ -423,8 +553,8 @@ export function generateLaw(i) {
     // quand trois lois sont affichées, on a la possibilité de les choisir
     if (displayedLaws === 3) {
         displayMessage("replace", messages.choisiDeuxLois);
-        let laws = document.getElementsByClassName("law");
-        for (let i=0; i<laws.length; i++) {
+        var laws = document.getElementsByClassName("law");
+        for (var i=0; i<laws.length; i++) {
             laws[i].addEventListener('click', selectTwoLaws);
         }
     }
@@ -432,12 +562,12 @@ export function generateLaw(i) {
 }
 
 // permet au MINITSTRE ACTIF de sélectionner les deux lois à envoyer
-export function selectTwoLaws(e) {
+function selectTwoLaws(e) {
 
-    let currentSelectedLaws = document.getElementsByClassName("selectedLaw").length;
+    var currentSelectedLaws = document.getElementsByClassName("selectedLaw").length;
 
     console.log(e);
-    let thisLaw = e.target;
+    var thisLaw = e.target;
 
     if (thisLaw.classList.contains("selectedLaw")) {
         thisLaw.classList.remove("selectedLaw");
@@ -464,13 +594,13 @@ export function selectTwoLaws(e) {
 }
 
 // Quand on clique sur "Valider" ça envoie les choix au Délégué
-export function sendChoicesToPlayerTwo() {
+function sendChoicesToPlayerTwo() {
 
-    let lawsArray = {   '0':'',
+    var lawsArray = {   '0':'',
         '1':''};
-    let selectedLaws = document.getElementsByClassName("selectedLaw");
+    var selectedLaws = document.getElementsByClassName("selectedLaw");
 
-    for(let i=0; i<selectedLaws.length; i++) {
+    for(var i=0; i<selectedLaws.length; i++) {
         if (selectedLaws[i].dataset.type === "humaniste" || selectedLaws[i].dataset.type === "progressiste") {
             lawsArray[i] = selectedLaws[i].dataset.type; // on récupère de data-type
         } else {
@@ -499,32 +629,37 @@ export function sendChoicesToPlayerTwo() {
 
 // Affiche les différents éléments d'interface -
 
+// afficher le titre d'une phase quand on rentre dedans
+function displayTitle(titleToDisplay) {
+    // allume toutes les leds de la couleur de la phase
+    // affiche sur l'écran qu'on rentre en phase d'élimination
+    title.innerHTML = titleToDisplay;
+}
+
 // on peut soit envoyer un nom de bouton si c'est oui/non ou valider, par ex : displayButton("valider")
 // soit envoyer un tableau de boutons si on veut "oui"/"non" : displayButton(["oui", "non"])
 // soit envoyer un ou plusieurs bouton(s) personnalisé(s) (autre) : displayButton(["autre", "nom du bouton", "nom de l'autre bouton"]);
-export function displayButton(buttonToDisplay, callback) {
+function displayButton(buttonToDisplay, callback) {
 
-    let button = "";
-
-    console.log(buttonToDisplay);
+    var button = "";
 
     if(typeof buttonToDisplay !== "string") { // c'est-à-dire si c'est un tableau, par exemple si on veut ajouter plusieurs boutons ("oui" et "non" par ex)
         if (buttonToDisplay[0] === "autre") { // si c'est un bouton personnalisé
             button = document.getElementsByClassName(buttonToDisplay[0]);
-            for (let i=1; i<buttonToDisplay.length; i++) {
+            for (var i=1; i<buttonToDisplay.length; i++) {
                 button[i-1].textContent = buttonToDisplay[i];
                 button[i-1].classList.add('active');
             }
 
         } else {
             button = [];
-            for (let i=0; i<buttonToDisplay.length; i++) {
+            for (var i=0; i<buttonToDisplay.length; i++) {
                 button[i] = document.querySelector("." + buttonToDisplay[i]);
                 button[i].classList.add('active');
             }
         }
 
-        for (let j=0; j<button.length; j++) {
+        for (var j=0; j<button.length; j++) {
             button[j].addEventListener('click', receiveButtonValue); // ajoute un lsitenner pour récupérer le contenu du bouton
         }
 
@@ -540,18 +675,18 @@ export function displayButton(buttonToDisplay, callback) {
 }
 
 // reçoit le contenu d'un bouton quand on clique dessus
-export function receiveButtonValue(e) {
+function receiveButtonValue(e) {
 
     console.log(e.target.textContent);
-    bienRecu(); // quand un joueur appuie sur un bouton, on lui envoie un message comme quoi on a bien reçu sa réponse
-    // e.target.removeEventListener(click, receiveButtonValue);
+    bienRecu(); // quand un joueur appuie sur un bouton, on lui envoie un message comme quoi on a bien reçu sa répons
+    e.target.removeEventListener('click', receiveButtonValue);
 
 }
 
 // supprimer tous les boutons
-export function removeButtons() {
-    let buttons = document.getElementsByTagName('button');
-    for (let i=0; i<buttons.length; i++) {
+function removeButtons() {
+    var buttons = document.getElementsByTagName('button');
+    for (var i=0; i<buttons.length; i++) {
         buttons[i].classList.remove('active');
     }
 
@@ -559,71 +694,66 @@ export function removeButtons() {
 
 /// MESSAGE
 // envoyer un message
-export function displayMessage(mode, message) {
+function displayMessage(mode, message) {
 
     if (mode === "add") {
-        let blocMessage = document.querySelector('.message').getElementsByTagName('p')[0];
+        var blocMessage = document.querySelector('.message').getElementsByTagName('p')[0];
         blocMessage.innerHTML += "<br>"+message;
     }
 
     if (mode === "replace") {
-        let blocMessage = document.querySelector('.message').getElementsByTagName('p')[0];
+        var blocMessage = document.querySelector('.message').getElementsByTagName('p')[0];
         blocMessage.innerHTML = message;
     }
 
 }
 
-export function removeMessage() {
+function removeMessage() {
 
-    let blocMessage = document.querySelector('.message').getElementsByTagName('p')[0];
+    var blocMessage = document.querySelector('.message').getElementsByTagName('p')[0];
     blocMessage.innerHTML = "";
 }
 
 // WARNING
 /// afficher un warning
-export function displayWarning(warning) {
-    let blocWarning = document.querySelector('.warning');
+function displayWarning(warning) {
+    var blocWarning = document.querySelector('.warning');
     blocWarning.textContent = warning;
     blocWarning.classList.add('active');
 
 }
 
 /// surpimer warning
-export function removeWarning() {
-    let blocWarning = document.querySelector('.warning');
+function removeWarning() {
+    var blocWarning = document.querySelector('.warning');
     blocWarning.classList.remove('active');
 }
 
 
 
 // fonction pour effacer les éléments de l'interface précédente
-export function clear() {
+function clear() {
 
-    let elementsTexte = document.querySelectorAll('.autre, h1, p, .warning, .laws');
-    let elementsTous = document.querySelectorAll('button, h1, p, div');
-    let elementsActive = document.querySelectorAll('.active');
+    var elementsTexte = document.querySelectorAll('.autre, h1, p, .warning, .laws');
+    var elementsTous = document.querySelectorAll('button, h1, p, div');
+    var elementsActive = document.querySelectorAll('.active');
 
-    console.log(elementsActive);
-
-    for (let i = 0; i<elementsTexte.length; i++) {
-        console.log(elementsTexte[i]);
+    for (var i = 0; i<elementsTexte.length; i++) {
         elementsTexte[i].textContent = "";
     }
 
-    for (let i=0; i<elementsTous.length; i++) {
-        console.log(elementsTous[i]);
+    for (var i=0; i<elementsTous.length; i++) {
         elementsTous[i].removeAttribute('style');
     }
 
-    for (let i=0; i<elementsActive.length; i++) {
-        console.log(elementsActive[i]);
+    for (var i=0; i<elementsActive.length; i++) {
         elementsActive[i].classList.remove('active');
     }
 
 }
 
 // envoie un feedback pour dire qu'on a bien reçu le message
-export function bienRecu() {
+function bienRecu() {
     clear();
     background([0,0,0]);
     displayMessage("replace", messages.bienrecu);

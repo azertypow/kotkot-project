@@ -62,12 +62,6 @@ export default class SocketClientApp {
             sequences.ecouteDesRegles();
         });
 
-        // afficher la phase d'élimination sur ecran
-        socket.on("displayElimination", ()=>{
-            sequences.displayElimination();
-            // penser a allumer les leds sur le plateau
-        });
-
         // afficher le potentiometre pour le vote
         socket.on("eliminateSomeone", (listeDesMinistresRestant: Array<string>)=>{
             sequences.eliminateSomeone(listeDesMinistresRestant);
@@ -80,11 +74,6 @@ export default class SocketClientApp {
 
         socket.on("giveYourVoteToSomeone", (nombreDeJouerRestant: number)=>{
             sequences.giveYourVoteToSomeone(nombreDeJouerRestant);
-        });
-
-        // animation sur ecran joueur si il y a selection au asard du nouveau joueur suite à un vote de confiance non validé
-        socket.on("hasardSelectionJoueur", (listeDesMinistresRestant: Array<string>)=>{
-            sequences.hasardSelectionJoueur(listeDesMinistresRestant);
         });
 
         // affiche les deux lois choisies par le Ministre actif sur ecran du Délégué

@@ -5,8 +5,158 @@
 // Ce sont les morceaux de code qui sont appelés pendant le déroulement du jeu qui se passe dans script.js
 
 
+
+
+// fonction à lancer pour démarrer une phase de vote des lois
+export function startVote() {
+
+    clear();
+    background([0,0,255]);
+    displayTitle("Votation");
+
+    setTimeout(function() {
+        if (premierTour) {
+            choisiDeuxMinistres(listeDesMinistresRestant);
+            // ici il faudrait lancer le son d'explication du vote
+            premierTour = false;
+        } else {
+            choisiDelegue(listeDesMinistresRestant);
+            var ministreActif = "Ministre du Travail";
+            var joueur = "autre"; // joueur === "autre" || "ministreActif" || "delegue"
+            voteDeConfiance(joueur, ministreActif);
+        }
+        // voteDeConfiance(listeDesMinistresRestant);
+    }, titleDuration);
+
+
+}
+
+
+// sauf au premier tour - choisi au hasard le délégué
+export function choisiDelegue(ministres) {
+
+
+
+    // on tire un nombre au hasard pour choisir le délégué
+    var index = Math.floor(Math.random()*ministres.length);
+    var delegue = ministres[index];
+
+    console.log("delegue " + delegue);
+
+    // return delegue;
+}
+
+// si on est au premier tour, choisi les deux ministres qui seronts respectivement
+// ministre actif et délégué
+export function choisiDeuxMinistres(ministresRestants) {
+
+    // on crée une liste temporaire pour pouvoir en retirer le ministre actif
+    // la fonction concat permet d'assembler deux tableaux en un nouveau
+    var temp = [];
+    var ministresRestantsTemporaires = listeDesMinistresRestant.concat(temp);
+
+
+    // on tire un nombre au hasard pour choisir le ministre actif
+    var index = Math.floor(Math.random()*ministresRestantsTemporaires.length);
+    var ministreActif = ministresRestants[index];
+
+    // on enlève le ministre actif du tableau temporaire des ministres restants
+    var ministreARetirer = ministresRestantsTemporaires.indexOf(ministreActif);
+    ministresRestantsTemporaires.splice(ministreARetirer, 1);
+    // on tire un nombre au hasard pour choisir le délégué
+    index = Math.floor(Math.random()*ministresRestantsTemporaires.length);
+    var delegue = ministresRestantsTemporaires[index];
+
+
+    console.log("ministre actif " + ministreActif);
+    console.log("delegue " + delegue);
+}
+
+// lance le vote de confiance sur le ministre actif choisi par le précédent délégué
+export function voteDeConfiance(joueur, ministreActif) {
+
+    title.textContent = "";
+
+    if (joueur === "autre") {
+        displayMessage("replace", messages.voteConfiance.init["autres1"]);
+        displayButton(['oui', 'non']);
+    } else if (joueur === "ministreActif" || joueur === "delegue") {
+        displayMessage("replace", messages.voteConfiance.init["ministre+delegue"]);
+    } else {
+        console.log("Erreur : la variable 'joueur' ne correspond à aucune des valeurs attendues ('autre', 'ministreActif', 'delegue'");
+    }
+
+}
+
+// après avoir lancé le vote de confiance on reçoit un ensemble de "oui" ou "non" de la part des joueurs
+// la fonction permet de délibérer si on garde ce ministre actif ou pas
+export function deliberationVoteConfiance(reponsesDesJoueurs) {
+
+    //reponsesDesJoueurs est de type
+    //  reponsesDesJoueurs = {
+    //     "Ministre de l'Education":"oui",
+    //     "Ministre de l'Industrie":"oui",
+    //     "Ministre de la Justice":"non",
+    //     "Ministre de l'Information":"oui",
+    //     ...
+    //  }
+
+    var oui = 0;
+    var non = 0;
+    var nbReponses = 0;
+    var ministres = [];
+
+    // on compte le nombre de votes
+    for (var i in reponsesDesJoueurs) {
+        if(reponsesDesJoueurs.hasOwnProperty(i)){
+            ministres.push(i);
+            nbReponses++;
+        }
+    }
+
+    // on compatibilise le nombre de oui et de non
+    for (var i=0; i<nbReponses; i++) {
+        if (reponsesDesJoueurs[ministres[i]] === "oui") {
+            oui++;
+        } else {
+            non++;
+        }
+    }
+
+    if (oui > non) {
+        displayMessage("replace", messages.voteConfiance.resultat.majoriteoui);
+    } else {
+        //playSound("Vous avez rejeté le <joueur>. Un nouveau délégué va être désigné")
+
+        // on affiche d'abord un message comme quoi le vote de confiance a échoué
+        displayMessage("replace", messages.voteConfiance.resultat.majoritenon);
+        setTimeout(function() {
+
+            // puis on affiche une animation des noms de joueurs à la suite pour montrer qu'il y a un tirage au sort
+            var animHasard = setInterval(function() {
+                var index = Math.floor(Math.random()*listeDesMinistresRestant.length);
+                var message = listeDesMinistresRestant[index];
+                displayMessage("replace", message);
+            }, 70);
+
+            // enfin on affiche un joueur désigné au hasard par la machine
+            setTimeout(function(){
+                clearInterval(animHasard);
+                var index = Math.floor(Math.random()*ministres.length);
+                displayMessage("replace", ministres[index] + " " + messages.voteConfiance.resultat.nouveauchoix);
+                console.log("le nouveau ministre actif est " + ministres[index]);
+            },4000);
+        }, 2000);
+
+    }
+
+}
+
+
+
+
 // fonction à lancer pour que le Délégué puisse choisir sa loi parmi les 2 choix
-function playerTwoLawSelection() {
+export function playerTwoLawSelection() {
 
     clear();
 
@@ -20,7 +170,7 @@ function playerTwoLawSelection() {
 }
 
 // fonction à lancer pour que le joueur 1 puisse choisir ses 2 lois parmi les 3 choix
-function playerOneLawSelection() {
+export function playerOneLawSelection() {
 
     clear();
 
@@ -41,17 +191,35 @@ function playerOneLawSelection() {
 }
 
 // fonction à lancer pour la phase d'élimination
-function elimination() {
+export function elimination() {
 
     clear();
 
     background([255,0,0]);
-    displayElimination();
+    displayTitle("Élimination");
+
+    setTimeout(function() {
+        if (premierTour) {
+            title.textContent = "";
+            displayMessage("replace", messages.elimination["premier tour"]);
+            displayButton(["oui", "non"]);
+            document.querySelector('.doublechoix').style.top = "60%"; // on modifie légèrement la marge comme le message est long
+        } else {
+            displayMessage("replace", messages.elimination.init);
+            displayButton(["oui", "non"]);
+        }
+    }, titleDuration);
+
     setTimeout(function() {
         eliminateSomeone(listeDesMinistresRestant);
-    }, 500);
+    }, 3000);
+
+
 
 }
+
+
+
 
 
 /***************
@@ -61,7 +229,7 @@ function elimination() {
  ***************/
 
 // indique aux joueurs de brancher leurs casques
-function brancheCasque() {
+export function brancheCasque() {
 
     clear();
     background([0,0,0]);
@@ -77,7 +245,7 @@ function brancheCasque() {
 }
 
 // indique aux joueurs d'aller s'installer à leur place
-function installation() {
+export function installation() {
 
     clear();
     background([0,0,0]);
@@ -92,7 +260,7 @@ function installation() {
 }
 
 // demande aux joueurs s'ils ont compris ou pas les règles.
-function ecouteDesRegles() {
+export function ecouteDesRegles() {
 
     clear();
     background([0,0,0]);
@@ -110,43 +278,34 @@ function ecouteDesRegles() {
  *
  ***************/
 
-// afficher la phase d'élimination sur ecran
-function displayElimination() {
-
-
-
-    // allume toutes les LED en rouge pour 5 secondes
-
-    // affiche sur l'écran qu'on rentre en phase d'élimination
-    title.innerHTML = "Élimination";
-
-}
-
 // afficher le potentiometre pour le vote
-function eliminateSomeone(listeDesMinistresRestant) {
+export function eliminateSomeone(listeDesMinistresRestant) {
+
+    clear();
+
+    displayMessage("replace", messages.elimination.choisi);
+    displayButton("valider");
 
     document.querySelector('.potentiometer').style.display = "block";
     placeCursorBeginning();
     document.body.addEventListener('touchmove', function(e){
-        moveCursor(e, listeDesMinistresRestant);
+        var playerToEliminate = moveCursor(e, listeDesMinistresRestant);
+        console.log("player " + playerToEliminate);
+        document.querySelector('.valider').addEventListener('click', displayEliminatedPlayer(playerToEliminate));
     });
-    title.innerHTML = "";
-    displayMessage("replace", messages.elimination);
-    displayButton("valider");
-
 
     //return playerToEliminate (nom du ministrer, exemple "Ministre de l'éducation");
 
 }
 
 // afficher le joueur elliminé
-function displayEliminatedPlayer(playerData_Name) {
+export function displayEliminatedPlayer(playerData_Name) {
 
-    displayMessage("replace", messages.joueurElimine + playerData_Name);
-
+    // displayMessage("replace", messages.joueurElimine + playerData_Name);
+    console.log("playyyyyyyyer " + playerData_Name);
 }
 
-function giveYourVoteToSomeone(listeDesMinistresRestant) {
+export function giveYourVoteToSomeone(listeDesMinistresRestant) {
 
     clear();
     background([255,0,0]);
@@ -162,7 +321,7 @@ function giveYourVoteToSomeone(listeDesMinistresRestant) {
 
 }
 
-function placeCursorBeginning() {
+export function placeCursorBeginning() {
 
     var i = 180;
 
@@ -186,7 +345,7 @@ function placeCursorBeginning() {
 
 }
 
-function moveCursor(e, listeDesMinistresRestant) {
+export function moveCursor(e, listeDesMinistresRestant) {
 
     // on récupère la position x du doigt
     var posX = (e.targetTouches[0].clientX);
@@ -229,11 +388,11 @@ function moveCursor(e, listeDesMinistresRestant) {
     // on ajoute 1 à la deuxième valeur pour que le 360 soit compris dans le dernier joueur de la liste
     var selectedPlayer = map(i, 180, 361, 0, (listeDesMinistresRestant.length));
 
-    console.log(selectedPlayer);
-
     // on affiche le nom du joueur sélectionné
     var playerName = subwheel.getElementsByTagName('p')[0];
     playerName.textContent = listeDesMinistresRestant[selectedPlayer];
+
+    return selectedPlayer;
 
 
 }
@@ -247,13 +406,13 @@ function moveCursor(e, listeDesMinistresRestant) {
  *
  ***************/
 
-function map(valueToMap, minInput, maxInput, minOutput, maxOutput) {
+export function map(valueToMap, minInput, maxInput, minOutput, maxOutput) {
 
     return Math.floor((valueToMap - minInput) * (maxOutput - minOutput) / (maxInput - minInput) + minOutput);
 
 }
 
-function background(color) {
+export function background(color) {
 
     document.getElementsByTagName('html')[0].style.backgroundColor = "rgb(" + color[0] + "," +  color[1] + "," + color[2] + ")";
 }
@@ -268,7 +427,7 @@ function background(color) {
  ***************/
 
 // crée les x emplacements pour les lois
-function createLaws(nbCards) {
+export function createLaws(nbCards) {
 
     var lawsBlock = document.querySelector('.laws');
     for (var i=0; i<nbCards; i++) {
@@ -280,23 +439,6 @@ function createLaws(nbCards) {
     }
 }
 
-// animation sur ecran joueur si il y a selection au hasard du nouveau joueur suite à un vote de confiance non validé
-function hasardSelectionJoueur(listeDesMinistresRestant) {
-
-    var message;
-
-    setInterval(function() {
-        var index = Math.floor(Math.random()*listeDesMinistresRestant.length);
-        message = listeDesMinistresRestant[index];
-        console.log('jai lu');
-        displayMessage("replace", message);
-        // régler le style ? ici le message est un peu haut
-        // document.getElementById("message").style.marginTop = "150px";
-    }, 70);
-
-
-}
-
 
 
 /***************
@@ -306,7 +448,7 @@ function hasardSelectionJoueur(listeDesMinistresRestant) {
  ***************/
 
 // affiche les deux lois choisies par le Ministre actif sur ecran du Délégué
-function setLaws(lawsArray) {
+export function setLaws(lawsArray) {
 
     var laws = document.getElementsByClassName('law');
 
@@ -330,7 +472,7 @@ function setLaws(lawsArray) {
 }
 
 // permet au Délégué de sélectionner une loi à envoyer au serveur
-function selectOneLaw(e) {
+export function selectOneLaw(e) {
 
     var currentSelectedLaws = document.getElementsByClassName("selectedLaw").length;
 
@@ -363,12 +505,10 @@ function selectOneLaw(e) {
 }
 
 // envois le choix de Délégué au serveur au click sur le validé
-function displayFinalLaw(e, socket) {
+export function displayFinalLaw(e, socket) {
 
     var finalLaw = "";
-
     var selectedLaws = document.querySelector(".selectedLaw");
-
 
     if (selectedLaws.dataset.type === "humaniste" || selectedLaws.dataset.type === "progressiste") {
         finalLaw = selectedLaws.dataset.type; // on récupère de data-type
@@ -394,7 +534,7 @@ function displayFinalLaw(e, socket) {
 
 
 // choisit une loi au hasard après le setTimeout
-function generateLaw(i) {
+export function generateLaw(i) {
 
     //var thisLaw = document.getElementById(e.target.id);
 
@@ -426,7 +566,7 @@ function generateLaw(i) {
 }
 
 // permet au MINITSTRE ACTIF de sélectionner les deux lois à envoyer
-function selectTwoLaws(e) {
+export function selectTwoLaws(e) {
 
     var currentSelectedLaws = document.getElementsByClassName("selectedLaw").length;
 
@@ -458,7 +598,7 @@ function selectTwoLaws(e) {
 }
 
 // Quand on clique sur "Valider" ça envoie les choix au Délégué
-function sendChoicesToPlayerTwo() {
+export function sendChoicesToPlayerTwo() {
 
     var lawsArray = {   '0':'',
         '1':''};
@@ -493,14 +633,19 @@ function sendChoicesToPlayerTwo() {
 
 // Affiche les différents éléments d'interface -
 
+// afficher le titre d'une phase quand on rentre dedans
+export function displayTitle(titleToDisplay) {
+    // allume toutes les leds de la couleur de la phase
+    // affiche sur l'écran qu'on rentre en phase d'élimination
+    title.innerHTML = titleToDisplay;
+}
+
 // on peut soit envoyer un nom de bouton si c'est oui/non ou valider, par ex : displayButton("valider")
 // soit envoyer un tableau de boutons si on veut "oui"/"non" : displayButton(["oui", "non"])
 // soit envoyer un ou plusieurs bouton(s) personnalisé(s) (autre) : displayButton(["autre", "nom du bouton", "nom de l'autre bouton"]);
-function displayButton(buttonToDisplay, callback) {
+export function displayButton(buttonToDisplay, callback) {
 
     var button = "";
-
-    console.log(buttonToDisplay);
 
     if(typeof buttonToDisplay !== "string") { // c'est-à-dire si c'est un tableau, par exemple si on veut ajouter plusieurs boutons ("oui" et "non" par ex)
         if (buttonToDisplay[0] === "autre") { // si c'est un bouton personnalisé
@@ -534,16 +679,16 @@ function displayButton(buttonToDisplay, callback) {
 }
 
 // reçoit le contenu d'un bouton quand on clique dessus
-function receiveButtonValue(e) {
+export function receiveButtonValue(e) {
 
     console.log(e.target.textContent);
-    bienRecu(); // quand un joueur appuie sur un bouton, on lui envoie un message comme quoi on a bien reçu sa réponse
-    // e.target.removeEventListener(click, receiveButtonValue);
+    bienRecu(); // quand un joueur appuie sur un bouton, on lui envoie un message comme quoi on a bien reçu sa répons
+    e.target.removeEventListener('click', receiveButtonValue);
 
 }
 
 // supprimer tous les boutons
-function removeButtons() {
+export function removeButtons() {
     var buttons = document.getElementsByTagName('button');
     for (var i=0; i<buttons.length; i++) {
         buttons[i].classList.remove('active');
@@ -553,7 +698,7 @@ function removeButtons() {
 
 /// MESSAGE
 // envoyer un message
-function displayMessage(mode, message) {
+export function displayMessage(mode, message) {
 
     if (mode === "add") {
         var blocMessage = document.querySelector('.message').getElementsByTagName('p')[0];
@@ -567,7 +712,7 @@ function displayMessage(mode, message) {
 
 }
 
-function removeMessage() {
+export function removeMessage() {
 
     var blocMessage = document.querySelector('.message').getElementsByTagName('p')[0];
     blocMessage.innerHTML = "";
@@ -575,7 +720,7 @@ function removeMessage() {
 
 // WARNING
 /// afficher un warning
-function displayWarning(warning) {
+export function displayWarning(warning) {
     var blocWarning = document.querySelector('.warning');
     blocWarning.textContent = warning;
     blocWarning.classList.add('active');
@@ -583,7 +728,7 @@ function displayWarning(warning) {
 }
 
 /// surpimer warning
-function removeWarning() {
+export function removeWarning() {
     var blocWarning = document.querySelector('.warning');
     blocWarning.classList.remove('active');
 }
@@ -591,33 +736,28 @@ function removeWarning() {
 
 
 // fonction pour effacer les éléments de l'interface précédente
-function clear() {
+export function clear() {
 
     var elementsTexte = document.querySelectorAll('.autre, h1, p, .warning, .laws');
     var elementsTous = document.querySelectorAll('button, h1, p, div');
     var elementsActive = document.querySelectorAll('.active');
 
-    console.log(elementsActive);
-
     for (var i = 0; i<elementsTexte.length; i++) {
-        console.log(elementsTexte[i]);
         elementsTexte[i].textContent = "";
     }
 
     for (var i=0; i<elementsTous.length; i++) {
-        console.log(elementsTous[i]);
         elementsTous[i].removeAttribute('style');
     }
 
     for (var i=0; i<elementsActive.length; i++) {
-        console.log(elementsActive[i]);
         elementsActive[i].classList.remove('active');
     }
 
 }
 
 // envoie un feedback pour dire qu'on a bien reçu le message
-function bienRecu() {
+export function bienRecu() {
     clear();
     background([0,0,0]);
     displayMessage("replace", messages.bienrecu);
