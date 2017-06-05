@@ -5,15 +5,59 @@
 // Ce sont les morceaux de code qui sont appelés pendant le déroulement du jeu qui se passe dans script.js
 
 
-// Ne sera pas dans le code final mais pour me permettre de tester temporairement le code
-var listeDesMinistresRestant = [
-    "Ministre de l'Education",
-    "Ministre de l'Industrie",
-    "Ministre de la Communication",
-    "Ministre de la Santé",
-    "Ministre du Travail",
-    "Ministre de l'Armée"
-];
+
+
+// fonction à lancer pour démarrer une phase de vote des lois
+function startVote() {
+
+    clear();
+    background([0,0,255]);
+    displayTitle("Votation");
+
+    setTimeout(function() {
+        if (premierTour) {
+            choisiDeuxMinistres(listeDesMinistresRestant);
+        }
+        // voteDeConfiance(listeDesMinistresRestant);
+    }, titleDuration);
+
+
+}
+
+// si on est au premier tour, choisi les deux ministres qui seronts respectivement
+// ministre actif et délégué
+function choisiDeuxMinistres(ministresRestants) {
+
+    // on crée une liste temporaire pour pouvoir en retirer le ministre actif
+    // la fonction concat permet d'assembler deux tableaux en un nouveau
+    var temp = [];
+    var ministresRestantsTemporaires = listeDesMinistresRestant.concat(temp);
+
+    var ministreActif = "";
+    var delegue = "";
+
+    // on tire un nombre au hasard pour choisir le ministre actif
+    var index = Math.floor(Math.random()*ministresRestantsTemporaires.length);
+    ministreActif = ministresRestants[index];
+
+    // on enlève le ministre actif du tableau temporaire des ministres restants
+    var ministreARetirer = ministresRestantsTemporaires.indexOf(ministreActif);
+    ministresRestantsTemporaires.splice(ministreARetirer, 1);
+    // on tire un nombre au hasard pour choisir le délégué
+    index = Math.floor(Math.random()*ministresRestantsTemporaires.length);
+    delegue = ministresRestantsTemporaires[index];
+
+
+    console.log("ministre actif " + ministreActif);
+    console.log("delegue " + delegue);
+}
+
+// lance le vote de confiance sur le ministre qui s'exprimera choisi par le précédent m
+function voteDeConfiance(delegueChoisi) {
+
+
+
+}
 
 // fonction à lancer pour que le Délégué puisse choisir sa loi parmi les 2 choix
 function playerTwoLawSelection() {
@@ -54,10 +98,10 @@ function elimination() {
     clear();
 
     background([255,0,0]);
-    displayElimination();
+    displayTitle("Élimination");
     setTimeout(function() {
         eliminateSomeone(listeDesMinistresRestant);
-    }, 500);
+    }, titleDuration);
 
 }
 
@@ -113,27 +157,17 @@ function ecouteDesRegles() {
  *
  ***************/
 
-// afficher la phase d'élimination sur ecran
-function displayElimination() {
-
-
-
-    // allume toutes les LED en rouge pour 5 secondes
-
-    // affiche sur l'écran qu'on rentre en phase d'élimination
-    title.innerHTML = "Élimination";
-
-}
-
 // afficher le potentiometre pour le vote
 function eliminateSomeone(listeDesMinistresRestant) {
+
+    // on enlève le titre
+    title.innerHTML = "";
 
     document.querySelector('.potentiometer').style.display = "block";
     placeCursorBeginning();
     document.body.addEventListener('touchmove', function(e){
         moveCursor(e, listeDesMinistresRestant);
     });
-    title.innerHTML = "";
     displayMessage("replace", messages.elimination);
     displayButton("valider");
 
@@ -493,6 +527,13 @@ function sendChoicesToPlayerTwo() {
  ***************/
 
 // Affiche les différents éléments d'interface -
+
+// afficher le titre d'une phase quand on rentre dedans
+function displayTitle(titleToDisplay) {
+    // allume toutes les leds de la couleur de la phase
+    // affiche sur l'écran qu'on rentre en phase d'élimination
+    title.innerHTML = titleToDisplay;
+}
 
 // on peut soit envoyer un nom de bouton si c'est oui/non ou valider, par ex : displayButton("valider")
 // soit envoyer un tableau de boutons si on veut "oui"/"non" : displayButton(["oui", "non"])

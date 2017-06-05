@@ -20,9 +20,7 @@ var pathToText = '../../../data/text.json';
 
 // faire le vote de confiance
 // animation de random des cartes lors de playerOneLawSelection
-///// ajouter le copyright
-///// regarder le fonction movecursor
-///// faire giveyouvotetosomeone
+
 
 
 // fetchJSONFile(pathToText, function(text){

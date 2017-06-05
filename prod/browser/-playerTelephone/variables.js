@@ -1,6 +1,16 @@
 /**
  * Created by mathi on 03/06/2017.
  */
+// Ne sera pas dans le code final mais pour me permettre de tester temporairement le code
+
+var listeDesMinistresRestant = [
+    "Ministre de l'Education",
+    "Ministre de l'Industrie",
+    "Ministre de la Communication",
+    "Ministre de la Santé",
+    "Ministre du Travail",
+    "Ministre de l'Armée"
+];
 
 var messages = {
     "tireTroisLois":"Tire trois lois au hasard",
@@ -40,13 +50,5 @@ var windowHeight = window.innerHeight;
 var radius;
 var numberOfPlayers = 8;
 
-var listeDesMinistres = {
-    "0":"Ministre de l'Education",
-    "1":"Ministre de l'Industrie",
-    "2":"Ministre de la Justice",
-    "3":"Ministre de l'Information",
-    "4":"Ministre de la Communication",
-    "5":"Ministre de la Santé",
-    "6":"Ministre du Travail",
-    "7":"Ministre de l'Armée"
-};
+var titleDuration = 500; // la durée d'affichage des titres en ms
+var premierTour = true;
