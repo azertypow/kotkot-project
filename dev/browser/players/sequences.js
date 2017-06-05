@@ -8,6 +8,8 @@
 // fonction à lancer pour que le Délégué puisse choisir sa loi parmi les 2 choix
 export function playerTwoLawSelection() {
 
+    clear();
+
     background([0,0,255]);
     createLaws(2);
     setLaws(lawsArray);
@@ -19,6 +21,8 @@ export function playerTwoLawSelection() {
 
 // fonction à lancer pour que le joueur 1 puisse choisir ses 2 lois parmi les 3 choix
 export function playerOneLawSelection() {
+
+    clear();
 
     background([0,0,255]);
 
@@ -39,6 +43,8 @@ export function playerOneLawSelection() {
 // fonction à lancer pour la phase d'élimination
 export function elimination() {
 
+    clear();
+
     background([255,0,0]);
     displayElimination();
     setTimeout(eliminateSomeone, 500);
@@ -55,6 +61,7 @@ export function elimination() {
 // indique aux joueurs de brancher leurs casques
 export function brancheCasque() {
 
+    clear();
     background([0,0,0]);
     displayMessage("replace", "Est-ce que ton casque est bien branché ?");
     displayButton("oui");
@@ -65,6 +72,7 @@ export function brancheCasque() {
 // indique aux joueurs d'aller s'installer à leur place
 export function installation() {
 
+    clear();
     background([0,0,0]);
 
     displayMessage("replace", "Tu es Ministre de l'Education. Tu peux aller t'installer à ta place");
@@ -79,8 +87,8 @@ export function installation() {
 // demande aux joueurs s'ils ont compris ou pas les règles.
 export function ecouteDesRegles() {
 
+    clear();
     background([0,0,0]);
-
     displayButton(["autre", "J'ai compris les règles", "Je souhaite les réécouter"]);
     // displayButton(["autre", "Je souhaite les réécouter"]);
 
@@ -112,7 +120,7 @@ export function eliminateSomeone(listeDesMinistresRestant) {
 
     document.querySelector('.potentiometer').style.display = "block";
     placeCursorBeginning();
-    document.body.addEventListener('touchmove', function(e, listeDesMinistresRestant){
+    document.body.addEventListener('touchmove', function(){
         moveCursor(e, listeDesMinistresRestant);
     });
     title.innerHTML = "";
@@ -206,7 +214,7 @@ export function moveCursor(e, listeDesMinistresRestant) {
 
     // on affiche le nom du joueur sélectionné
     let playerName = subwheel.getElementsByTagName('p')[0];
-    playerName.textContent = listeDesMinistres[selectedPlayer];
+    playerName.textContent = listeDesMinistresRestant[selectedPlayer];
 
 
 }
@@ -560,3 +568,30 @@ export function removeWarning() {
     blocWarning.classList.remove('active');
 }
 
+
+
+// fonction pour effacer les éléments de l'interface précédente
+export function clear() {
+
+    let elementsTexte = document.querySelectorAll('.autre, h1, p, .warning, .laws');
+    let elementsTous = document.querySelectorAll('button, h1, p, div');
+    let elementsActive = document.querySelectorAll('.active');
+
+    console.log(elementsActive);
+
+    for (let i = 0; i<elementsTexte.length; i++) {
+        console.log(elementsTexte[i]);
+        elementsTexte[i].textContent = "";
+    }
+
+    for (let i=0; i<elementsTous.length; i++) {
+        console.log(elementsTous[i]);
+        elementsTous[i].removeAttribute('style');
+    }
+
+    for (let i=0; i<elementsActive.length; i++) {
+        console.log(elementsActive[i]);
+        elementsActive[i].classList.remove('active');
+    }
+
+}

@@ -9,7 +9,7 @@ var pathToText = '../../../data/text.json';
 // playerTwoLawSelection();
 // elimination();
 // installation();
-brancheCasque();
+// brancheCasque();
 // hasardSelectionJoueur();
 // ecouteDesRegles();
 
@@ -23,13 +23,4 @@ brancheCasque();
 // fetchJSONFile(pathToText, function(text){
 //     console.log(text.messages.intro["casque branche"]);
 // });
-
-
-// Quand un joueur lance l'application
-// indique aux joueurs de brancher leurs casques
-function brancheCasque() {
-    background([0,0,0]);
-    displayMessage("replace", "Est-ce que ton casque est bien branché ?"); // text.messages.intro["casque branche"]
-    displayButton("oui");
-}
 

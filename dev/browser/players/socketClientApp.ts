@@ -126,6 +126,11 @@ export default class SocketClientApp {
             sequences.removeWarning();
         });
 
+        // tout effecer
+        socket.on("clear", ()=>{
+            sequences.clear();
+        });
+
         // log from server
         socket.on("log", (data)=>{
            console.log(data);

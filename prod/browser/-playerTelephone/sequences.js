@@ -5,7 +5,7 @@
 // Ce sont les morceaux de code qui sont appelés pendant le déroulement du jeu qui se passe dans script.js
 
 
-// fonction à lancer pour que le joueur 2 puisse choisir sa loi parmi les 2 choix
+// fonction à lancer pour que le Délégué puisse choisir sa loi parmi les 2 choix
 function playerTwoLawSelection() {
 
     clear();
@@ -48,7 +48,6 @@ function elimination() {
     setTimeout(eliminateSomeone, 500);
 
 }
-
 
 
 /***************
@@ -102,6 +101,7 @@ function ecouteDesRegles() {
  *
  ***************/
 
+// afficher la phase d'élimination sur ecran
 function displayElimination() {
 
 
@@ -113,31 +113,34 @@ function displayElimination() {
 
 }
 
-function eliminateSomeone() {
+// afficher le potentiometre pour le vote
+function eliminateSomeone(listeDesMinistresRestant) {
 
     document.querySelector('.potentiometer').style.display = "block";
     placeCursorBeginning();
-    document.body.addEventListener('touchmove', moveCursor);
+    document.body.addEventListener('touchmove', function(){
+        moveCursor(e, listeDesMinistresRestant);
+    });
     title.innerHTML = "";
     displayMessage("replace", messages.elimination);
     displayButton("valider");
 
 
-    //return playerToEliminate;
+    //return playerToEliminate (nom du ministrer, exemple "Ministre de l'éducation");
 
 }
 
-function displayEliminatedPlayer() {
+// afficher le joueur elliminé
+function displayEliminatedPlayer(playerData_Name) {
 
-    displayMessage("replace", messages.joueurElimine + "Nom du joueur");
+    displayMessage("replace", messages.joueurElimine + playerData_Name);
 
 }
 
-function giveYourVoteToSomeone() {
+function giveYourVoteToSomeone(nombreDeJouerRestant) {
 
     displayMessage("replace", messages.donneTonVote);
     displayButton("valider");
-
 
 }
 
@@ -165,7 +168,7 @@ function placeCursorBeginning() {
 
 }
 
-function moveCursor(e) {
+function moveCursor(e, listeDesMinistresRestant) {
 
     // on récupère la position x du doigt
     var posX = (e.targetTouches[0].clientX);
@@ -209,18 +212,19 @@ function moveCursor(e) {
 
     // on affiche le nom du joueur sélectionné
     var playerName = subwheel.getElementsByTagName('p')[0];
-    playerName.textContent = listeDesMinistres[selectedPlayer];
+    playerName.textContent = listeDesMinistresRestant[selectedPlayer];
 
 
 }
 
-function hasardSelectionJoueur() {
+// animation sur ecran joueur si il y a selection au asard du nouveau joueur suite à un vote de confiance non validé
+function hasardSelectionJoueur(listeDesMinistresRestant) {
 
     var message;
 
     setInterval(function() {
-        var index = Math.floor(Math.random()*listeDesMinistres.length);
-        message = listeDesMinistres[index];
+        var index = Math.floor(Math.random()*listeDesMinistresRestant.length);
+        message = listeDesMinistresRestant[index];
         console.log('jai lu');
         displayMessage("replace", message);
         // régler le style ? ici le message est un peu haut
@@ -280,7 +284,7 @@ function createLaws(nbCards) {
  *
  ***************/
 
-// affiche les deux lois choisies par le J1
+// affiche les deux lois choisies par le Ministre actif sur ecran du Délégué
 function setLaws(lawsArray) {
 
     var laws = document.getElementsByClassName('law');
@@ -304,7 +308,7 @@ function setLaws(lawsArray) {
 
 }
 
-// permet au J2 de sélectionner une loi à envoyer
+// permet au Délégué de sélectionner une loi à envoyer au serveur
 function selectOneLaw(e) {
 
     var currentSelectedLaws = document.getElementsByClassName("selectedLaw").length;
@@ -337,7 +341,7 @@ function selectOneLaw(e) {
 
 }
 
-// envoie le choix du délégué au serveur
+// envois le choix de Délégué au serveur au click sur le validé
 function displayFinalLaw(e) {
 
     var finalLaw = "";
@@ -570,14 +574,17 @@ function clear() {
     console.log(elementsActive);
 
     for (var i = 0; i<elementsTexte.length; i++) {
+        console.log(elementsTexte[i]);
         elementsTexte[i].textContent = "";
     }
 
     for (var i=0; i<elementsTous.length; i++) {
+        console.log(elementsTous[i]);
         elementsTous[i].removeAttribute('style');
     }
 
     for (var i=0; i<elementsActive.length; i++) {
+        console.log(elementsActive[i]);
         elementsActive[i].classList.remove('active');
     }
 
