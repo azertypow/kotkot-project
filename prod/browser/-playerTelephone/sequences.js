@@ -17,11 +17,33 @@ function startVote() {
     setTimeout(function() {
         if (premierTour) {
             choisiDeuxMinistres(listeDesMinistresRestant);
+            // ici il faudrait lancer le son d'explication du vote
+            premierTour = false;
+        } else {
+            choisiDelegue(listeDesMinistresRestant);
+            var ministreActif = "Ministre du Travail";
+            var joueur = "autre"; // joueur === "autre" || "ministreActif" || "delegue"
+            voteDeConfiance(joueur, ministreActif);
         }
-        // voteDeConfiance(listeDesMinistresRestant);
+         // voteDeConfiance(listeDesMinistresRestant);
     }, titleDuration);
 
 
+}
+
+
+// sauf au premier tour - choisi au hasard le délégué
+function choisiDelegue(ministres) {
+
+
+
+    // on tire un nombre au hasard pour choisir le délégué
+    var index = Math.floor(Math.random()*ministres.length);
+    var delegue = ministres[index];
+
+    console.log("delegue " + delegue);
+
+    // return delegue;
 }
 
 // si on est au premier tour, choisi les deux ministres qui seronts respectivement
@@ -33,31 +55,109 @@ function choisiDeuxMinistres(ministresRestants) {
     var temp = [];
     var ministresRestantsTemporaires = listeDesMinistresRestant.concat(temp);
 
-    var ministreActif = "";
-    var delegue = "";
 
     // on tire un nombre au hasard pour choisir le ministre actif
     var index = Math.floor(Math.random()*ministresRestantsTemporaires.length);
-    ministreActif = ministresRestants[index];
+    var ministreActif = ministresRestants[index];
 
     // on enlève le ministre actif du tableau temporaire des ministres restants
     var ministreARetirer = ministresRestantsTemporaires.indexOf(ministreActif);
     ministresRestantsTemporaires.splice(ministreARetirer, 1);
     // on tire un nombre au hasard pour choisir le délégué
     index = Math.floor(Math.random()*ministresRestantsTemporaires.length);
-    delegue = ministresRestantsTemporaires[index];
+    var delegue = ministresRestantsTemporaires[index];
 
 
     console.log("ministre actif " + ministreActif);
     console.log("delegue " + delegue);
 }
 
-// lance le vote de confiance sur le ministre qui s'exprimera choisi par le précédent m
-function voteDeConfiance(delegueChoisi) {
+// lance le vote de confiance sur le ministre actif choisi par le précédent délégué
+function voteDeConfiance(joueur, ministreActif) {
+
+    title.textContent = "";
+
+    if (joueur === "autre") {
+        displayMessage("replace", messages.voteConfiance.init["autres1"]);
+        displayButton(['oui', 'non']);
+    } else if (joueur === "ministreActif" || joueur === "delegue") {
+        displayMessage("replace", messages.voteConfiance.init["ministre+delegue"]);
+    } else {
+        console.log("Erreur : la variable 'joueur' ne correspond à aucune des valeurs attendues ('autre', 'ministreActif', 'delegue'");
+    }
 
 
 
 }
+
+// après avoir lancé le vote de confiance on reçoit un ensemble de "oui" ou "non" de la part des joueurs
+// la fonction permet de délibérer si on garde ce ministre actif ou pas
+function deliberationVoteConfiance(reponsesDesJoueurs) {
+
+    //reponsesDesJoueurs est de type
+    //  reponsesDesJoueurs = {
+    //     "Ministre de l'Education":"oui",
+    //     "Ministre de l'Industrie":"oui",
+    //     "Ministre de la Justice":"non",
+    //     "Ministre de l'Information":"oui",
+    //     ...
+    //  }
+
+    var oui = 0;
+    var non = 0;
+    var nbReponses = 0;
+    var ministres = [];
+
+    // on compte le nombre de votes
+    for (var i in reponsesDesJoueurs) {
+        ministres.push(i);
+        nbReponses++;
+    }
+
+    // on compatibilise le nombre de oui et de non
+    for (var i=0; i<nbReponses; i++) {
+        if (reponsesDesJoueurs[ministres[i]] === "oui") {
+            oui++;
+        } else {
+            non++;
+        }
+    }
+
+    if (oui > non) {
+        displayMessage("replace", messages.voteConfiance.resultat.majoriteoui);
+    } else {
+        //playSound("Vous avez rejeté le <joueur>. Un nouveau délégué va être désigné")
+
+        // on affiche d'abord un message comme quoi le vote de confiance a échoué
+        displayMessage("replace", messages.voteConfiance.resultat.majoritenon);
+        setTimeout(function() {
+
+            // puis on affiche une animation des noms de joueurs à la suite pour montrer qu'il y a un tirage au sort
+            var animHasard = setInterval(function() {
+                var index = Math.floor(Math.random()*listeDesMinistresRestant.length);
+                var message = listeDesMinistresRestant[index];
+                displayMessage("replace", message);
+            }, 70);
+
+            // enfin on affiche un joueur désigné au hasard par la machine
+            setTimeout(function(){
+                clearInterval(animHasard);
+                var index = Math.floor(Math.random()*ministres.length);
+                displayMessage("replace", ministres[index] + " " + messages.voteConfiance.resultat.nouveauchoix);
+                console.log("le nouveau ministre actif est " + ministres[index]);
+            },4000);
+        }, 2000);
+
+
+
+
+
+    }
+
+}
+
+
+
 
 // fonction à lancer pour que le Délégué puisse choisir sa loi parmi les 2 choix
 function playerTwoLawSelection() {
@@ -318,21 +418,21 @@ function createLaws(nbCards) {
 }
 
 // animation sur ecran joueur si il y a selection au hasard du nouveau joueur suite à un vote de confiance non validé
-function hasardSelectionJoueur(listeDesMinistresRestant) {
-
-    var message;
-
-    setInterval(function() {
-        var index = Math.floor(Math.random()*listeDesMinistresRestant.length);
-        message = listeDesMinistresRestant[index];
-        console.log('jai lu');
-        displayMessage("replace", message);
-        // régler le style ? ici le message est un peu haut
-        // document.getElementById("message").style.marginTop = "150px";
-    }, 70);
-
-
-}
+// function hasardSelectionJoueur(animHasard, listeDesMinistresRestant) {
+//
+//     var message;
+//
+//     animHasard = setInterval(function() {
+//         var index = Math.floor(Math.random()*listeDesMinistresRestant.length);
+//         message = listeDesMinistresRestant[index];
+//         console.log('jai lu');
+//         displayMessage("replace", message);
+//         // régler le style ? ici le message est un peu haut
+//         // document.getElementById("message").style.marginTop = "150px";
+//     }, 70);
+//
+//
+// }
 
 
 
@@ -577,8 +677,10 @@ function displayButton(buttonToDisplay) {
 function receiveButtonValue(e) {
 
     console.log(e.target.textContent);
-    bienRecu(); // quand un joueur appuie sur un bouton, on lui envoie un message comme quoi on a bien reçu sa réponse
-    // e.target.removeEventListener(click, receiveButtonValue);
+
+    bienRecu(); // quand un joueur appuie sur un bouton, on lui envoie un message comme quoi on a bien reçu sa répons
+
+    e.target.removeEventListener('click', receiveButtonValue);
 
 }
 
@@ -637,20 +739,15 @@ function clear() {
     var elementsTous = document.querySelectorAll('button, h1, p, div');
     var elementsActive = document.querySelectorAll('.active');
 
-    console.log(elementsActive);
-
     for (var i = 0; i<elementsTexte.length; i++) {
-        console.log(elementsTexte[i]);
         elementsTexte[i].textContent = "";
     }
 
     for (var i=0; i<elementsTous.length; i++) {
-        console.log(elementsTous[i]);
         elementsTous[i].removeAttribute('style');
     }
 
     for (var i=0; i<elementsActive.length; i++) {
-        console.log(elementsActive[i]);
         elementsActive[i].classList.remove('active');
     }
 
