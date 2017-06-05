@@ -8,6 +8,8 @@
 // fonction à lancer pour que le joueur 2 puisse choisir sa loi parmi les 2 choix
 function playerTwoLawSelection() {
 
+    clear();
+
     background([0,0,255]);
     createLaws(2);
     setLaws(lawsArray);
@@ -17,6 +19,8 @@ function playerTwoLawSelection() {
 
 // fonction à lancer pour que le joueur 1 puisse choisir ses 2 lois parmi les 3 choix
 function playerOneLawSelection() {
+
+    clear();
 
     background([0,0,255]);
 
@@ -37,11 +41,14 @@ function playerOneLawSelection() {
 // fonction à lancer pour la phase d'élimination
 function elimination() {
 
+    clear();
+
     background([255,0,0]);
     displayElimination();
     setTimeout(eliminateSomeone, 500);
 
 }
+
 
 
 /***************
@@ -53,6 +60,7 @@ function elimination() {
 // indique aux joueurs de brancher leurs casques
 function brancheCasque() {
 
+    clear();
     background([0,0,0]);
     displayMessage("replace", "Est-ce que ton casque est bien branché ?");
     displayButton("oui");
@@ -63,6 +71,7 @@ function brancheCasque() {
 // indique aux joueurs d'aller s'installer à leur place
 function installation() {
 
+    clear();
     background([0,0,0]);
 
     displayMessage("replace", "Tu es Ministre de l'Education. Tu peux aller t'installer à ta place");
@@ -77,8 +86,8 @@ function installation() {
 // demande aux joueurs s'ils ont compris ou pas les règles.
 function ecouteDesRegles() {
 
+    clear();
     background([0,0,0]);
-
     displayButton(["autre", "J'ai compris les règles", "Je souhaite les réécouter"]);
     // displayButton(["autre", "Je souhaite les réécouter"]);
 
@@ -328,7 +337,7 @@ function selectOneLaw(e) {
 
 }
 
-// reçoit le choix de J2
+// envoie le choix du délégué au serveur
 function displayFinalLaw(e) {
 
     var finalLaw = "";
@@ -549,3 +558,27 @@ function removeWarning() {
     blocWarning.classList.remove('active');
 }
 
+
+
+// fonction pour effacer les éléments de l'interface précédente
+function clear() {
+
+    var elementsTexte = document.querySelectorAll('.autre, h1, p, .warning, .laws');
+    var elementsTous = document.querySelectorAll('button, h1, p, div');
+    var elementsActive = document.querySelectorAll('.active');
+
+    console.log(elementsActive);
+
+    for (var i = 0; i<elementsTexte.length; i++) {
+        elementsTexte[i].textContent = "";
+    }
+
+    for (var i=0; i<elementsTous.length; i++) {
+        elementsTous[i].removeAttribute('style');
+    }
+
+    for (var i=0; i<elementsActive.length; i++) {
+        elementsActive[i].classList.remove('active');
+    }
+
+}
