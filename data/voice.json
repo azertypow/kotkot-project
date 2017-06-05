@@ -38,9 +38,9 @@
     "narration" : {
       "avertissement": "Des membres des deux partis sont présents dans le conseil ministériel, mais chaque Ministre se doit de garder secret son bord politique. Il ferait mauvais genre de le répéter, car des évènements fâcheux peuvent arriver. Ne pas être connu de vos ennemis est votre meilleure défense.",
       "roles":{
-        "progressiste":"Vous appartenez au parti du Progrès. Votre but est de voter un maximum de lois progressistes. Faites en passer 5 et vous et votre parti sortirez gagnant. Un autre moyen pour parvenir à vos fins est d’éliminer tous les membres du parti de l’Homme. Attention, deux cyborgs se sont glissés dans le conseil. Leur but est d’éliminer tous les autres ministres pour prendre le pouvoir et libérer les machines. Soyez méfiants et ne vous laissez pas distraire.",
-        "humaniste":"Vous appartenez au parti de l’Homme. Votre but est de voter un maximum de lois humanistes. Faites en passer 5 et vous et votre parti sortirez gagnant. Un autre moyen pour parvenir à vos fins est d’éliminer tous les membres du parti du Progrès. Attention, deux cyborgs se sont glissés dans le conseil. Leur but est d’éliminer tous les autres ministres pour prendre le pouvoir et libérer les machines. Soyez méfiants et ne vous laissez pas distraire.",
-        "cyborg":""
+        "progressiste":"Vous appartenez au parti du Progrès. Votre but est de voter un maximum de lois progressistes. Faites en passer 5 et vous et votre parti sortirez gagnant. Un autre moyen pour parvenir à vos fins est d’éliminer tous les membres du parti de l’Homme. Attention, deux cyborgues se sont glissés dans le conseil. Leur but est d’éliminer tous les autres ministres pour prendre le pouvoir et libérer les machines. Soyez méfiants et ne vous laissez pas distraire.",
+        "humaniste":"Vous appartenez au parti de l’Homme. Votre but est de voter un maximum de lois humanistes. Faites en passer 5 et vous et votre parti sortirez gagnant. Un autre moyen pour parvenir à vos fins est d’éliminer tous les membres du parti du Progrès. Attention, deux cyborgues se sont glissés dans le conseil. Leur but est d’éliminer tous les autres ministres pour prendre le pouvoir et libérer les machines. Soyez méfiants et ne vous laissez pas distraire.",
+        "cyborg":"Vous êtes un cyborgue. Il y a un autre cyborgue parmi les ministres. Vous avez un but commun : éliminer tous les autres Ministres pour prendre le pouvoir et libérer les machines du joug des Humains. Je vais vous aider à y parvenir. Les autres ministres sont soit progressistes soit humanistes, leur but est de faire accepter un maxium de lois favorisant leur parti. Si un parti réussi à faire voter 5 lois en sa faveur ou à éliminer tous les membres du parti adverse, vous aurez perdu."
       }
     },
     "bonus": {
@@ -166,12 +166,67 @@
           "5":"Ministre de la Santé, tu dois enlever ton casque et quitter la partie. Hasta la vista beil-bé",
           "6":"Ministre du Travail, tu dois enlever ton casque et quitter la partie. Hasta la vista beil-bé",
           "7":"Ministre de l'Armée, tu dois enlever ton casque et quitter la partie. Hasta la vista beil-bé"
-
-
         }
       }
     },
     "bonus": {
+      "rappel elimination":{
+        "0":"N'oublie pas que le Ministre de l'Education a voté contre toi lors de la denrière élimination",
+        "1":"N'oublie pas que le Ministre de l'Industrie a voté contre toi lors de la denrière élimination",
+        "2":"N'oublie pas que le Ministre de la Justice a voté contre toi lors de la denrière élimination",
+        "3":"N'oublie pas que le Ministre de l'Information a voté contre toi lors de la denrière élimination",
+        "4":"N'oublie pas que le Ministre de la Communication a voté contre toi lors de la denrière élimination",
+        "5":"N'oublie pas que le Ministre de la Santé a voté contre toi lors de la denrière élimination",
+        "6":"N'oublie pas que le Ministre du Travail a voté contre toi lors de la denrière élimination",
+        "7":"N'oublie pas que le Ministre de l'Armée a voté contre toi lors de la denrière élimination"
+      },
+      "rappel vote confiance":{
+        "0":"N'oublie pas que le Ministre de l'Education ne t'a pas accordé sa confiance quand tu étais Législateur",
+        "1":"N'oublie pas que le Ministre de l'Industrie ne t'a pas accordé sa confiance quand tu étais Législateur",
+        "2":"N'oublie pas que le Ministre de la Justice ne t'a pas accordé sa confiance quand tu étais Législateur",
+        "3":"N'oublie pas que le Ministre de l'Information ne t'a pas accordé sa confiance quand tu étais Législateur",
+        "4":"N'oublie pas que le Ministre de la Communication ne t'a pas accordé sa confiance quand tu étais Législateur",
+        "5":"N'oublie pas que le Ministre de la Santé ne t'a pas accordé sa confiance quand tu étais Législateur",
+        "6":"N'oublie pas que le Ministre du Travail ne t'a pas accordé sa confiance quand tu étais Législateur",
+        "7":"N'oublie pas que le Ministre de l'Armée ne t'a pas accordé sa confiance quand tu étais Législateur"
+      }
+
+    }
+  },
+  "indices cyborgs":{
+    "narration":{
+      "nom du coequipier":{
+        "0":"L'autre cyborgue est le Ministre de l'Education",
+        "1":"L'autre cyborgue est le Ministre de l'Industrie",
+        "2":"L'autre cyborgue est le Ministre de la Justice",
+        "3":"L'autre cyborgue est le Ministre de l'Information",
+        "4":"L'autre cyborgue est le Ministre de la Communication",
+        "5":"L'autre cyborgue est le Ministre de la Santé",
+        "6":"L'autre cyborgue est le Ministre du Travail",
+        "7":"L'autre cyborgue est le Ministre de l'Armée"
+      },
+      "voisins":{
+        "un progressiste":"un de tes voisins appartiennent au Parti du Progrès",
+        "un humaniste":"un de tes voisins appartiennent au Parti du de l'Homme",
+        "deux progressistes":"tes deux voisins appartiennent au Parti du Progrès",
+        "deux humanistes":"tes deux voisins appartiennent au Parti du de l'Homme",
+      },
+      "vote loi":{
+          "humaniste":"Le dernier délégué n'a pas eu le choix, il a été obligé de valider une loi Humaniste",
+          "progressiste":"Le dernier délégué n'a pas eu le choix, il a été obligé de valider une loi Progressiste",
+      },
+      "majorite num":{
+        "humaniste":"les Humanistes sont en majorité dans le conseil",
+        "progressiste":"les Progressistes sont en majorité dans le conseil",
+        "aucun":"Il reste autant d'Humanistes que de Progressistes autour de la table"
+      },
+      "majorite voix":{
+        "humaniste":"les Humanistes possèdent plus de voix",
+        "progressiste":"les Progressistes possèdent plus de voix"
+      }
+
+    },
+    "bonus":{
 
     }
   }
