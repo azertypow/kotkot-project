@@ -149,8 +149,17 @@ function displayEliminatedPlayer(playerData_Name) {
 
 }
 
-function giveYourVoteToSomeone(nombreDeJouerRestant) {
+function giveYourVoteToSomeone(listeDesMinistresRestant) {
 
+    clear();
+    background([255,0,0]);
+
+    document.querySelector('.potentiometer').style.display = "block";
+    placeCursorBeginning();
+    document.body.addEventListener('touchmove', function(e){
+        moveCursor(e, listeDesMinistresRestant);
+    });
+    title.innerHTML = "";
     displayMessage("replace", messages.donneTonVote);
     displayButton("valider");
 
@@ -232,22 +241,7 @@ function moveCursor(e, listeDesMinistresRestant) {
 
 }
 
-// animation sur ecran joueur si il y a selection au asard du nouveau joueur suite à un vote de confiance non validé
-function hasardSelectionJoueur(listeDesMinistresRestant) {
 
-    var message;
-
-    setInterval(function() {
-        var index = Math.floor(Math.random()*listeDesMinistresRestant.length);
-        message = listeDesMinistresRestant[index];
-        console.log('jai lu');
-        displayMessage("replace", message);
-        // régler le style ? ici le message est un peu haut
-        // document.getElementById("message").style.marginTop = "150px";
-    }, 70);
-
-
-}
 
 
 /***************
@@ -289,7 +283,22 @@ function createLaws(nbCards) {
     }
 }
 
+// animation sur ecran joueur si il y a selection au hasard du nouveau joueur suite à un vote de confiance non validé
+function hasardSelectionJoueur(listeDesMinistresRestant) {
 
+    var message;
+
+    setInterval(function() {
+        var index = Math.floor(Math.random()*listeDesMinistresRestant.length);
+        message = listeDesMinistresRestant[index];
+        console.log('jai lu');
+        displayMessage("replace", message);
+        // régler le style ? ici le message est un peu haut
+        // document.getElementById("message").style.marginTop = "150px";
+    }, 70);
+
+
+}
 
 
 
@@ -527,6 +536,7 @@ function displayButton(buttonToDisplay) {
 function receiveButtonValue(e) {
 
     console.log(e.target.textContent);
+    bienRecu(); // quand un joueur appuie sur un bouton, on lui envoie un message comme quoi on a bien reçu sa réponse
     // e.target.removeEventListener(click, receiveButtonValue);
 
 }
@@ -603,4 +613,11 @@ function clear() {
         elementsActive[i].classList.remove('active');
     }
 
+}
+
+// envoie un feedback pour dire qu'on a bien reçu le message
+function bienRecu() {
+    clear();
+    background([0,0,0]);
+    displayMessage("replace", messages.bienrecu);
 }

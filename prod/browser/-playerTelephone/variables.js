@@ -6,8 +6,9 @@ var messages = {
     "tireTroisLois":"Tire trois lois au hasard",
     "choisiDeuxLois":"Choisis-en deux à envoyer à l'autre joueur",
     "elimination":"Choisis un joueur à éliminer",
-    "donneTonVote":"Choisis un joueur à qui donner tes votes. Attention, tu démultiplie la puissance de joueur.",
-    "joueurElimine":"Vous avez choisi d'éliminer"
+    "donneTonVote":"Choisis un joueur à qui donner ton vote.",
+    "joueurElimine":"Vous avez choisi d'éliminer",
+    "bienrecu":"Bien reçu ;)"
 
 };
 
