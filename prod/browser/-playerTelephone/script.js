@@ -5,6 +5,8 @@
 
 var pathToText = '../../../data/text.json';
 
+// Liste des fonctions
+
 // playerOneLawSelection();
 // playerTwoLawSelection();
 // elimination();
@@ -15,11 +17,12 @@ var pathToText = '../../../data/text.json';
 // giveYourVoteToSomeone(nombreDeJouerRestant);
 
 
-// faire giveyouvotetosomeone
+
 // faire le vote de confiance
 // animation de random des cartes lors de playerOneLawSelection
 ///// ajouter le copyright
 ///// regarder le fonction movecursor
+///// faire giveyouvotetosomeone
 
 
 // fetchJSONFile(pathToText, function(text){
