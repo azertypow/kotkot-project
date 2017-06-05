@@ -5,6 +5,16 @@
 // Ce sont les morceaux de code qui sont appelés pendant le déroulement du jeu qui se passe dans script.js
 
 
+// Ne sera pas dans le code final mais pour me permettre de tester temporairement le code
+var listeDesMinistresRestant = [
+    "Ministre de l'Education",
+    "Ministre de l'Industrie",
+    "Ministre de la Communication",
+    "Ministre de la Santé",
+    "Ministre du Travail",
+    "Ministre de l'Armée"
+];
+
 // fonction à lancer pour que le Délégué puisse choisir sa loi parmi les 2 choix
 function playerTwoLawSelection() {
 
@@ -45,7 +55,9 @@ function elimination() {
 
     background([255,0,0]);
     displayElimination();
-    setTimeout(eliminateSomeone, 500);
+    setTimeout(function() {
+        eliminateSomeone(listeDesMinistresRestant);
+    }, 500);
 
 }
 
@@ -118,7 +130,7 @@ function eliminateSomeone(listeDesMinistresRestant) {
 
     document.querySelector('.potentiometer').style.display = "block";
     placeCursorBeginning();
-    document.body.addEventListener('touchmove', function(){
+    document.body.addEventListener('touchmove', function(e){
         moveCursor(e, listeDesMinistresRestant);
     });
     title.innerHTML = "";
@@ -186,7 +198,7 @@ function moveCursor(e, listeDesMinistresRestant) {
 
     // on est sensé mapper cette position x pour obtenir un angle entre 0 et 360
     // ici on map entre -20 et 300 parce que ça rend plus facile la manipulation avec le doigt
-    posX = map(posX, offsetLeftWheel, offsetLeftWheel+widthWheel, -20, 300);
+    posX = map(posX, offsetLeftWheel, offsetLeftWheel+widthWheel, 0, 380);
 
     var i = 180 + (posX*180/(windowHeight));
 
@@ -208,7 +220,10 @@ function moveCursor(e, listeDesMinistresRestant) {
 
 
     // on map la valeur de l'angle sur le nombre de joueurs (entre 0 et 30° = Joueur 0, entre 30 et 60 = Joueur 1 etc...)
-    var selectedPlayer = map(i, 180, 360, 0, numberOfPlayers-1);
+    // on ajoute 1 à la deuxième valeur pour que le 360 soit compris dans le dernier joueur de la liste
+    var selectedPlayer = map(i, 180, 361, 0, (listeDesMinistresRestant.length));
+
+    console.log(selectedPlayer);
 
     // on affiche le nom du joueur sélectionné
     var playerName = subwheel.getElementsByTagName('p')[0];
