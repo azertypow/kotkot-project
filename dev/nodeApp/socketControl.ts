@@ -10,9 +10,10 @@ import {Server} from "http"
 import Player from "./player"
 import Players from "./players"
 import SetPlayerData from "./setPlayerData"
-import _GLOBAL from "./_GLOBAL";
-import PlayersStatus from "./PlayersStatus";
-import Events = require("events");
+import _GLOBAL from "./_GLOBAL"
+import PlayersStatus from "./PlayersStatus"
+import Events = require("events")
+import MessagesFromPlayers from "./MessagesFromPlayers"
 
 export default class SocketControl{
 
@@ -90,6 +91,9 @@ export default class SocketControl{
                     this.createAndAssignationPlayers(socketIp, socketId, socket);
                 }
             });
+
+            // autre emition depuis les joueurs
+            MessagesFromPlayers.onMessageFromPlayers(socket);
         });
     }
 

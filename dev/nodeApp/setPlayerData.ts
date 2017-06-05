@@ -21,7 +21,7 @@ export default class SetPlayerData {
     static sendTo(socket: SocketIO.Socket, players:Players, playerIndexToSend: number, data: PlayerData){
 
         // envoyer data
-        socket.to(players.player[playerIndexToSend].socketId).emit("init", data);
+        socket.to(players.player[playerIndexToSend].socketId).emit("displayEliminatedPlayer", "jorge");
         socket.to(players.player[playerIndexToSend].socketId).emit("log", `players.player[playerIndexToSend].socketId: ${players.player[playerIndexToSend].socketId}`);
         socket.to(players.player[playerIndexToSend].socketId).emit("log", `socket: ${socket}`);
         socket.to(players.player[playerIndexToSend].socketId).emit("log", `players: ${players}`);

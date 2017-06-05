@@ -5,13 +5,15 @@
 // Ce sont les morceaux de code qui sont appelés pendant le déroulement du jeu qui se passe dans script.js
 
 
-// fonction à lancer pour que le joueur 2 puisse choisir sa loi parmi les 2 choix
+// fonction à lancer pour que le Délégué puisse choisir sa loi parmi les 2 choix
 export function playerTwoLawSelection() {
 
     background([0,0,255]);
     createLaws(2);
     setLaws(lawsArray);
-    document.querySelector('.valider').addEventListener('click', displayFinalLaw);
+    document.querySelector('.valider').addEventListener('click', function(e, socket){
+        displayFinalLaw(e, socket);
+    });
 
 }
 
@@ -93,6 +95,7 @@ export function ecouteDesRegles() {
  *
  ***************/
 
+// afficher la phase d'élimination sur ecran
 export function displayElimination() {
 
 
@@ -104,31 +107,34 @@ export function displayElimination() {
 
 }
 
-export function eliminateSomeone() {
+// afficher le potentiometre pour le vote
+export function eliminateSomeone(listeDesMinistresRestant) {
 
     document.querySelector('.potentiometer').style.display = "block";
     placeCursorBeginning();
-    document.body.addEventListener('touchmove', moveCursor);
+    document.body.addEventListener('touchmove', function(e, listeDesMinistresRestant){
+        moveCursor(e, listeDesMinistresRestant);
+    });
     title.innerHTML = "";
     displayMessage("replace", messages.elimination);
     displayButton("valider");
 
 
-    //return playerToEliminate;
+    //return playerToEliminate (nom du ministrer, exemple "Ministre de l'éducation");
 
 }
 
-export function displayEliminatedPlayer() {
+// afficher le joueur elliminé
+export function displayEliminatedPlayer(playerData_Name) {
 
-    displayMessage("replace", messages.joueurElimine + "Nom du joueur");
+    displayMessage("replace", messages.joueurElimine + playerData_Name);
 
 }
 
-export function giveYourVoteToSomeone() {
+export function giveYourVoteToSomeone(nombreDeJouerRestant) {
 
     displayMessage("replace", messages.donneTonVote);
     displayButton("valider");
-
 
 }
 
@@ -156,7 +162,7 @@ export function placeCursorBeginning() {
 
 }
 
-export function moveCursor(e) {
+export function moveCursor(e, listeDesMinistresRestant) {
 
     // on récupère la position x du doigt
     let posX = (e.targetTouches[0].clientX);
@@ -205,13 +211,14 @@ export function moveCursor(e) {
 
 }
 
-export function hasardSelectionJoueur() {
+// animation sur ecran joueur si il y a selection au asard du nouveau joueur suite à un vote de confiance non validé
+export function hasardSelectionJoueur(listeDesMinistresRestant) {
 
     let message;
 
     setInterval(function() {
-        let index = Math.floor(Math.random()*listeDesMinistres.length);
-        message = listeDesMinistres[index];
+        let index = Math.floor(Math.random()*listeDesMinistresRestant.length);
+        message = listeDesMinistresRestant[index];
         console.log('jai lu');
         displayMessage("replace", message);
         // régler le style ? ici le message est un peu haut
@@ -271,7 +278,7 @@ export function createLaws(nbCards) {
  *
  ***************/
 
-// affiche les deux lois choisies par le J1
+// affiche les deux lois choisies par le Ministre actif sur ecran du Délégué
 export function setLaws(lawsArray) {
 
     let laws = document.getElementsByClassName('law');
@@ -295,7 +302,7 @@ export function setLaws(lawsArray) {
 
 }
 
-// permet au J2 de sélectionner une loi à envoyer
+// permet au Délégué de sélectionner une loi à envoyer au serveur
 export function selectOneLaw(e) {
 
     let currentSelectedLaws = document.getElementsByClassName("selectedLaw").length;
@@ -328,8 +335,8 @@ export function selectOneLaw(e) {
 
 }
 
-// reçoit le choix de J2
-export function displayFinalLaw(e) {
+// envois le choix de Délégué au serveur au click sur le validé
+export function displayFinalLaw(e, socket) {
 
     let finalLaw = "";
 
@@ -342,9 +349,13 @@ export function displayFinalLaw(e) {
         console.log("Erreur : le data-type est incorrect");
     }
 
+    // envoyer loie selectionnée au server
+    socket.emit("finalLaw", finalLaw);
     console.log(finalLaw);
 
-    document.querySelector('.valider').removeEventListener('click', displayFinalLaw);
+    document.querySelector('.valider').removeEventListener('click', function(e, socket){
+        displayFinalLaw(e, socket);
+    });
 
 }
 

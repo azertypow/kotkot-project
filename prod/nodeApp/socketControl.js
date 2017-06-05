@@ -6,6 +6,7 @@ const setPlayerData_1 = require("./setPlayerData");
 const _GLOBAL_1 = require("./_GLOBAL");
 const PlayersStatus_1 = require("./PlayersStatus");
 const Events = require("events");
+const MessagesFromPlayers_1 = require("./MessagesFromPlayers");
 class SocketControl {
     static connection(httpServer) {
         let ioServer = io.listen(httpServer);
@@ -40,6 +41,7 @@ class SocketControl {
                     this.createAndAssignationPlayers(socketIp, socketId, socket);
                 }
             });
+            MessagesFromPlayers_1.default.onMessageFromPlayers(socket);
         });
     }
     static createAndAssignationPlayers(socketIp, socketId, socket) {

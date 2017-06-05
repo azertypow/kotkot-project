@@ -108,13 +108,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 // Ce sont les morceaux de code qui sont appelés pendant le déroulement du jeu qui se passe dans script.js
 
 
-// fonction à lancer pour que le joueur 2 puisse choisir sa loi parmi les 2 choix
+// fonction à lancer pour que le Délégué puisse choisir sa loi parmi les 2 choix
 function playerTwoLawSelection() {
 
     background([0,0,255]);
     createLaws(2);
     setLaws(lawsArray);
-    document.querySelector('.valider').addEventListener('click', displayFinalLaw);
+    document.querySelector('.valider').addEventListener('click', function(e, socket){
+        displayFinalLaw(e, socket);
+    });
 
 }
 
@@ -196,6 +198,7 @@ function ecouteDesRegles() {
  *
  ***************/
 
+// afficher la phase d'élimination sur ecran
 function displayElimination() {
 
 
@@ -207,31 +210,34 @@ function displayElimination() {
 
 }
 
-function eliminateSomeone() {
+// afficher le potentiometre pour le vote
+function eliminateSomeone(listeDesMinistresRestant) {
 
     document.querySelector('.potentiometer').style.display = "block";
     placeCursorBeginning();
-    document.body.addEventListener('touchmove', moveCursor);
+    document.body.addEventListener('touchmove', function(e, listeDesMinistresRestant){
+        moveCursor(e, listeDesMinistresRestant);
+    });
     title.innerHTML = "";
     displayMessage("replace", messages.elimination);
     displayButton("valider");
 
 
-    //return playerToEliminate;
+    //return playerToEliminate (nom du ministrer, exemple "Ministre de l'éducation");
 
 }
 
-function displayEliminatedPlayer() {
+// afficher le joueur elliminé
+function displayEliminatedPlayer(playerData_Name) {
 
-    displayMessage("replace", messages.joueurElimine + "Nom du joueur");
+    displayMessage("replace", messages.joueurElimine + playerData_Name);
 
 }
 
-function giveYourVoteToSomeone() {
+function giveYourVoteToSomeone(nombreDeJouerRestant) {
 
     displayMessage("replace", messages.donneTonVote);
     displayButton("valider");
-
 
 }
 
@@ -259,7 +265,7 @@ function placeCursorBeginning() {
 
 }
 
-function moveCursor(e) {
+function moveCursor(e, listeDesMinistresRestant) {
 
     // on récupère la position x du doigt
     let posX = (e.targetTouches[0].clientX);
@@ -308,13 +314,14 @@ function moveCursor(e) {
 
 }
 
-function hasardSelectionJoueur() {
+// animation sur ecran joueur si il y a selection au asard du nouveau joueur suite à un vote de confiance non validé
+function hasardSelectionJoueur(listeDesMinistresRestant) {
 
     let message;
 
     setInterval(function() {
-        let index = Math.floor(Math.random()*listeDesMinistres.length);
-        message = listeDesMinistres[index];
+        let index = Math.floor(Math.random()*listeDesMinistresRestant.length);
+        message = listeDesMinistresRestant[index];
         console.log('jai lu');
         displayMessage("replace", message);
         // régler le style ? ici le message est un peu haut
@@ -374,7 +381,7 @@ function createLaws(nbCards) {
  *
  ***************/
 
-// affiche les deux lois choisies par le J1
+// affiche les deux lois choisies par le Ministre actif sur ecran du Délégué
 function setLaws(lawsArray) {
 
     let laws = document.getElementsByClassName('law');
@@ -398,7 +405,7 @@ function setLaws(lawsArray) {
 
 }
 
-// permet au J2 de sélectionner une loi à envoyer
+// permet au Délégué de sélectionner une loi à envoyer au serveur
 function selectOneLaw(e) {
 
     let currentSelectedLaws = document.getElementsByClassName("selectedLaw").length;
@@ -431,8 +438,8 @@ function selectOneLaw(e) {
 
 }
 
-// reçoit le choix de J2
-function displayFinalLaw(e) {
+// envois le choix de Délégué au serveur au click sur le validé
+function displayFinalLaw(e, socket) {
 
     let finalLaw = "";
 
@@ -445,9 +452,13 @@ function displayFinalLaw(e) {
         console.log("Erreur : le data-type est incorrect");
     }
 
+    // envoyer loie selectionnée au server
+    socket.emit("finalLaw", finalLaw);
     console.log(finalLaw);
 
-    document.querySelector('.valider').removeEventListener('click', displayFinalLaw);
+    document.querySelector('.valider').removeEventListener('click', function(e, socket){
+        displayFinalLaw(e, socket);
+    });
 
 }
 
@@ -700,7 +711,7 @@ exports.default = LocationInfo;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var sequences_js_1 = __webpack_require__(0);
+var sequences = __webpack_require__(0);
 var SocketClientApp = (function () {
     function SocketClientApp() {
     }
@@ -714,7 +725,61 @@ var SocketClientApp = (function () {
         });
         socket.on("init", function (data) {
             console.log(data);
-            sequences_js_1.displayMessage("replace", "vous etes " + data.role);
+            sequences.displayMessage("replace", "vous etes " + data.role);
+        });
+        socket.on("playerTwoLawSelection", function () {
+            sequences.playerTwoLawSelection();
+        });
+        socket.on("playerOneLawSelection", function () {
+            sequences.playerOneLawSelection();
+        });
+        socket.on("elimination", function () {
+            sequences.elimination();
+        });
+        socket.on("brancheCasque", function () {
+            sequences.brancheCasque();
+        });
+        socket.on("installation", function () {
+            sequences.installation();
+        });
+        socket.on("ecouteDesRegles", function () {
+            sequences.ecouteDesRegles();
+        });
+        socket.on("displayElimination", function () {
+            sequences.displayElimination();
+        });
+        socket.on("eliminateSomeone", function (listeDesMinistresRestant) {
+            sequences.eliminateSomeone(listeDesMinistresRestant);
+        });
+        socket.on("displayEliminatedPlayer", function (playerData_Name) {
+            sequences.displayEliminatedPlayer(playerData_Name);
+        });
+        socket.on("giveYourVoteToSomeone", function (nombreDeJouerRestant) {
+            sequences.giveYourVoteToSomeone(nombreDeJouerRestant);
+        });
+        socket.on("hasardSelectionJoueur", function (listeDesMinistresRestant) {
+            sequences.hasardSelectionJoueur(listeDesMinistresRestant);
+        });
+        socket.on("setLaws", function (lawsArray) {
+            sequences.setLaws(lawsArray);
+        });
+        socket.on("displayButton", function (buttonToDisplay) {
+            sequences.displayButton(buttonToDisplay);
+        });
+        socket.on("removeButtons", function () {
+            sequences.removeButtons();
+        });
+        socket.on("displayMessage", function (mode, message) {
+            sequences.displayMessage(mode, message);
+        });
+        socket.on("removeMessage", function () {
+            sequences.removeMessage();
+        });
+        socket.on("displayWarning", function (warning) {
+            sequences.displayWarning(warning);
+        });
+        socket.on("removeWarning", function () {
+            sequences.removeWarning();
         });
         socket.on("log", function (data) {
             console.log(data);
@@ -749,6 +814,8 @@ window.installation = function () { sequences.installation(); };
 window.brancheCasque = function () { sequences.brancheCasque(); };
 window.hasardSelectionJoueur = function () { sequences.hasardSelectionJoueur(); };
 window.ecouteDesRegles = function () { sequences.ecouteDesRegles(); };
+window.displayElimination = function () { sequences.displayElimination(); };
+window.eliminateSomeone = function () { sequences.eliminateSomeone(); };
 
 
 /***/ })

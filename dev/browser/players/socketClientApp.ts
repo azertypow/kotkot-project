@@ -5,7 +5,7 @@
 /// <reference types="socket.io-client" />
 /// <reference path="../../typescriptDeclaration/PlayerData.d.ts" />
 
-import {displayMessage} from "./sequences.js"
+import * as sequences from "./sequences.js"
 
 export default class SocketClientApp {
     public static run(currentHostname: string) {
@@ -25,11 +25,106 @@ export default class SocketClientApp {
         socket.on("init", (data: PlayerData)=>{
             // afficher son status
             console.log(data);
-            displayMessage("replace", `vous etes ${data.role}`);
+            sequences.displayMessage("replace", `vous etes ${data.role}`);
         });
 
-        // afficher un message
+        //——————————
+        // appelle des function dans sequence depuis nodejs par socket
+        //——————————
 
+        // fonction à lancer pour que le joueur 2 puisse choisir sa loi parmi les 2 choix
+        socket.on("playerTwoLawSelection", ()=>{
+            sequences.playerTwoLawSelection();
+        });
+
+        // fonction à lancer pour que le joueur 1 puisse choisir ses 2 lois parmi les 3 choix
+        socket.on("playerOneLawSelection", ()=>{
+            sequences.playerOneLawSelection();
+        });
+
+        // fonction à lancer pour la phase d'élimination
+        socket.on("elimination", ()=>{
+            sequences.elimination();
+        });
+
+        // indique aux joueurs de brancher leurs casques
+        socket.on("brancheCasque", ()=>{
+            sequences.brancheCasque();
+        });
+
+        // indique aux joueurs d'aller s'installer à leur place
+        socket.on("installation", ()=>{
+            sequences.installation();
+        });
+
+        // demande aux joueurs s'ils ont compris ou pas les règles.
+        socket.on("ecouteDesRegles", ()=>{
+            sequences.ecouteDesRegles();
+        });
+
+        // afficher la phase d'élimination sur ecran
+        socket.on("displayElimination", ()=>{
+            sequences.displayElimination();
+            // penser a allumer les leds sur le plateau
+        });
+
+        // afficher le potentiometre pour le vote
+        socket.on("eliminateSomeone", (listeDesMinistresRestant: Array<string>)=>{
+            sequences.eliminateSomeone(listeDesMinistresRestant);
+        });
+
+        // afficher le joueur elliminé
+        socket.on("displayEliminatedPlayer", (playerData_Name: string)=>{
+            sequences.displayEliminatedPlayer(playerData_Name);
+        });
+
+        socket.on("giveYourVoteToSomeone", (nombreDeJouerRestant: number)=>{
+            sequences.giveYourVoteToSomeone(nombreDeJouerRestant);
+        });
+
+        // animation sur ecran joueur si il y a selection au asard du nouveau joueur suite à un vote de confiance non validé
+        socket.on("hasardSelectionJoueur", (listeDesMinistresRestant: Array<string>)=>{
+            sequences.hasardSelectionJoueur(listeDesMinistresRestant);
+        });
+
+        // affiche les deux lois choisies par le Ministre actif sur ecran du Délégué
+        socket.on("setLaws", (lawsArray: Array<string>)=>{
+            sequences.setLaws(lawsArray);
+        });
+
+
+        // on peut soit envoyer un nom de bouton si c'est oui/non ou valider, par ex : displayButton("valider")
+        // soit envoyer un tableau de boutons si on veut "oui"/"non" : displayButton(["oui", "non"])
+        // soit envoyer un ou plusieurs bouton(s) personnalisé(s) (autre) : displayButton(["autre", "nom du bouton", "nom de l'autre bouton"]);
+        socket.on("displayButton", (buttonToDisplay: Array<string>|string)=>{
+            sequences.displayButton(buttonToDisplay);
+        });
+
+        // supprimer tous les boutons
+        socket.on("removeButtons", ()=>{
+            sequences.removeButtons();
+        });
+
+        // envoyer un message
+        // mode-> replace | add, message -> string
+        socket.on("displayMessage", (mode: string, message: string)=>{
+            sequences.displayMessage(mode, message);
+        });
+
+        // supprimer le message
+        socket.on("removeMessage", ()=>{
+            sequences.removeMessage();
+        });
+
+        // afficher un warning
+        socket.on("displayWarning", (warning: string)=>{
+            sequences.displayWarning(warning);
+        });
+
+        // supprimer warning
+        socket.on("removeWarning", ()=>{
+            sequences.removeWarning();
+        });
 
         // log from server
         socket.on("log", (data)=>{
