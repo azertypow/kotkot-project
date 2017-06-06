@@ -8,16 +8,7 @@ function readJsonLevel(jsonLevel, currentNameKey) {
     console.log("––––––––––");
     const jsonKeys = Object.keys(jsonLevel);
     if (typeof jsonLevel === "string") {
-        console.log(`${currentNameKey} est un fichier audio a generer généré dans path`);
-        console.log(jsonLevel);
-        mkdirp(currentNameKey, function (err) {
-            if (err)
-                console.error(err);
-            else {
-                console.log("dossier créé");
-                exportToWav(jsonLevel, currentNameKey);
-            }
-        });
+        console.log(`${currentNameKey}.wav`);
     }
     else {
         currentNameKey += "/";

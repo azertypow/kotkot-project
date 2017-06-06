@@ -16,16 +16,16 @@ function readJsonLevel(jsonLevel: any, currentNameKey: string){
     const jsonKeys: Array<string> = Object.keys(jsonLevel);
 
     if(typeof jsonLevel === "string"){
-        console.log(`${currentNameKey} est un fichier audio a generer généré dans path`);
-        console.log(jsonLevel);
-
-        mkdirp(currentNameKey, function (err: Error) {
-            if (err) console.error(err);
-            else {
-                console.log("dossier créé");
-                exportToWav(jsonLevel, currentNameKey);
-            }
-        });
+        console.log(`${currentNameKey}.wav`);
+        // console.log(jsonLevel);
+        //
+        // mkdirp(currentNameKey, function (err: Error) {
+        //     if (err) console.error(err);
+        //     else {
+        //         console.log("dossier créé");
+        //         exportToWav(jsonLevel, currentNameKey);
+        //     }
+        // });
     }
     else {
         currentNameKey += "/";

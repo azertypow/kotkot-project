@@ -268,3 +268,16 @@ h1 {
   bottom: 1px;
   margin-left: -5px;
 }
+
+
+.copyright {
+  font-size: 60%;
+  color: white;
+  position: fixed;
+  bottom: 20px;
+}
+
+.copyright::before {
+  content: '׃';
+
+}

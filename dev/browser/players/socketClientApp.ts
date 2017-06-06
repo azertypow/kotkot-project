@@ -7,12 +7,19 @@
 /// <reference path="../../typescriptDeclaration/DisplayMessage_data.d.ts" />
 
 import * as sequences from "./sequences.js"
+import PlaySound from "./PlaySound"
 
 export default class SocketClientApp {
+
+    public static socket: SocketIOClient.Socket;
+
     public static run(currentHostname: string) {
 
         // initialiser le socket
         const socket: SocketIOClient.Socket = io.connect(`http://${currentHostname}:1337`);
+
+        // partager le socket
+        this.socket = socket;
 
         // enregistrer le socket pour le script js sequence.js
         sequences._global.socket = socket;
@@ -129,9 +136,32 @@ export default class SocketClientApp {
             sequences.clear();
         });
 
+        // charger des sons et jouer l'intro
+        socket.on("play-intro", (soundToPlay: string)=> {
+            PlaySound.preloadSounds();
+            PlaySound.playSound(soundToPlay, "intro-sound-ended");
+        });
+
+        // jouer l'intro-suite
+        socket.on("play-intro-suite", (soundToPlay: string)=> {
+            PlaySound.playSound(soundToPlay, "intro-suite-sound-ended");
+        });
+
+        // anoncer les roles a chaque joueurs
+        socket.on("play-role", (soundToPlay: string)=>{
+            PlaySound.playSound(soundToPlay, "play-role-ended");
+        });
+
+        // jouer un song
+        socket.on("playSound", (soundToPlay: string)=> {
+            PlaySound.playSound(soundToPlay, "standard-sound-ended");
+        });
+
+        // PERSO //
+
         // log from server
         socket.on("log", (data: any)=>{
-           console.log(data);
+            console.log(data);
         });
     }
 }
