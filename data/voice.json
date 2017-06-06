@@ -171,14 +171,14 @@
     },
     "bonus": {
       "rappel elimination":{
-        "0":"N'oublie pas que le Ministre de l'Education a voté contre toi lors de la denrière élimination",
-        "1":"N'oublie pas que le Ministre de l'Industrie a voté contre toi lors de la denrière élimination",
-        "2":"N'oublie pas que le Ministre de la Justice a voté contre toi lors de la denrière élimination",
-        "3":"N'oublie pas que le Ministre de l'Information a voté contre toi lors de la denrière élimination",
-        "4":"N'oublie pas que le Ministre de la Communication a voté contre toi lors de la denrière élimination",
-        "5":"N'oublie pas que le Ministre de la Santé a voté contre toi lors de la denrière élimination",
-        "6":"N'oublie pas que le Ministre du Travail a voté contre toi lors de la denrière élimination",
-        "7":"N'oublie pas que le Ministre de l'Armée a voté contre toi lors de la denrière élimination"
+        "0":"N'oublie pas que le Ministre de l'Education a voté contre toi lors de la dernière élimination",
+        "1":"N'oublie pas que le Ministre de l'Industrie a voté contre toi lors de la dernière élimination",
+        "2":"N'oublie pas que le Ministre de la Justice a voté contre toi lors de la dernière élimination",
+        "3":"N'oublie pas que le Ministre de l'Information a voté contre toi lors de la dernière élimination",
+        "4":"N'oublie pas que le Ministre de la Communication a voté contre toi lors de la dernière élimination",
+        "5":"N'oublie pas que le Ministre de la Santé a voté contre toi lors de la dernière élimination",
+        "6":"N'oublie pas que le Ministre du Travail a voté contre toi lors de la dernière élimination",
+        "7":"N'oublie pas que le Ministre de l'Armée a voté contre toi lors de la dernière élimination"
       },
       "rappel vote confiance":{
         "0":"N'oublie pas que le Ministre de l'Education ne t'a pas accordé sa confiance quand tu étais Législateur",
