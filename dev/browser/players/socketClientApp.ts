@@ -136,6 +136,15 @@ export default class SocketClientApp {
             sequences.clear();
         });
 
+        // jouer un song
+        socket.on("playSound", (soundToPlay: string)=> {
+            PlaySound.playSound(soundToPlay, "standard-sound-ended");
+        });
+
+        // –––––
+        // ETAPES PRECISES //
+        // –––––
+
         // charger des sons et jouer l'intro
         socket.on("play-intro", (soundToPlay: string)=> {
             PlaySound.preloadSounds();
@@ -152,12 +161,31 @@ export default class SocketClientApp {
             PlaySound.playSound(soundToPlay, "play-role-ended");
         });
 
-        // jouer un song
-        socket.on("playSound", (soundToPlay: string)=> {
-            PlaySound.playSound(soundToPlay, "standard-sound-ended");
+        // demande de confirmation des roles
+        socket.on("displayConfirmeRole", ()=>{
+            sequences.displayWarning("Attention, ton rôle sera affiché sur ton écran, cache-le.");
+
+            sequences._global.emitToServer = "confirmation-role-statut";
+            sequences._global.sequence = "confirmation role";
+            sequences._global.message = "Excellent, on attend que tous les ministres soit prets.";
+
+            sequences.displayButton(["autre", "j'ai compris mon role", "montre moi mon role"]);
         });
 
+        // –––––
         // PERSO //
+        // –––––
+
+        // enregistrer role sur appareil des jouer dans _global
+        socket.on("setRoleOnGlobal", (role: string)=>{
+            sequences._global.role = role;
+        });
+
+        // afficher le role sur appareil
+        socket.on("showRole", ()=>{
+            sequences.displayMessage("replace", `tu es ${sequences._global.role}`);
+            sequences.displayButton(["autre", "j'ai compris mon role"]);
+        });
 
         // log from server
         socket.on("log", (data: any)=>{

@@ -4,13 +4,15 @@
 
 // Ce sont les morceaux de code qui sont appelés pendant le déroulement du jeu qui se passe dans script.js
 
-function Global(socket, sequence, callpackServer) {
+function Global(socket, sequence, callpackServer, role, message) {
     this.socket = socket;
     this.sequence = sequence;
     this.emitToServer = callpackServer;
+    this.role = role;
+    this.message = message;
 }
 
-export var _global = new Global("empty", "empty", "empty");
+export var _global = new Global("empty", "empty", "empty", "empty", "bien recu");
 
 // fonction à lancer pour démarrer une phase de vote des lois
 // node server
@@ -691,7 +693,6 @@ export function displayButton(buttonToDisplay, callback) {
 export function receiveButtonValue(e) {
 
     console.log(e.target.textContent);
-    console.log(_global.socket);
     _global.socket.emit(_global.emitToServer,{
         "sequence": _global.sequence,
         "value": e.target.textContent,
@@ -775,5 +776,5 @@ export function clear() {
 export function bienRecu() {
     clear();
     background([0,0,0]);
-    displayMessage("replace", messages.bienrecu);
+    displayMessage("replace", _global.message);
 }

@@ -19,6 +19,7 @@ export default class Intro{
 
             SetPlayerData.directive("displayMessage", {mode:"replace", message: "Bienvenue dans élise"}, currentPlayer.id);
             //SetPlayerData.directive("play-intro", "pres_intro/narration/histoire.wav", currentPlayer.id);
+            // [debug]
             SetPlayerData.directive("play-intro", "dataJoueurs/liaison/est.wav", currentPlayer.id);
         }
     }

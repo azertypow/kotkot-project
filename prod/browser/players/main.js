@@ -114,13 +114,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 // Ce sont les morceaux de code qui sont appelés pendant le déroulement du jeu qui se passe dans script.js
 
-function Global(socket, sequence, callpackServer) {
+function Global(socket, sequence, callpackServer, role, message) {
     this.socket = socket;
     this.sequence = sequence;
     this.emitToServer = callpackServer;
+    this.role = role;
+    this.message = message;
 }
 
-var _global = new Global("empty", "empty", "empty");
+var _global = new Global("empty", "empty", "empty", "empty", "bien recu");
 
 // fonction à lancer pour démarrer une phase de vote des lois
 // node server
@@ -801,7 +803,6 @@ function displayButton(buttonToDisplay, callback) {
 function receiveButtonValue(e) {
 
     console.log(e.target.textContent);
-    console.log(_global.socket);
     _global.socket.emit(_global.emitToServer,{
         "sequence": _global.sequence,
         "value": e.target.textContent,
@@ -885,7 +886,7 @@ function clear() {
 function bienRecu() {
     clear();
     background([0,0,0]);
-    displayMessage("replace", messages.bienrecu);
+    displayMessage("replace", _global.message);
 }
 
 /***/ }),
@@ -1006,6 +1007,9 @@ var SocketClientApp = (function () {
         socket.on("clear", function () {
             sequences.clear();
         });
+        socket.on("playSound", function (soundToPlay) {
+            PlaySound_1.default.playSound(soundToPlay, "standard-sound-ended");
+        });
         socket.on("play-intro", function (soundToPlay) {
             PlaySound_1.default.preloadSounds();
             PlaySound_1.default.playSound(soundToPlay, "intro-sound-ended");
@@ -1016,8 +1020,19 @@ var SocketClientApp = (function () {
         socket.on("play-role", function (soundToPlay) {
             PlaySound_1.default.playSound(soundToPlay, "play-role-ended");
         });
-        socket.on("playSound", function (soundToPlay) {
-            PlaySound_1.default.playSound(soundToPlay, "standard-sound-ended");
+        socket.on("displayConfirmeRole", function () {
+            sequences.displayWarning("Attention, ton rôle sera affiché sur ton écran, cache-le.");
+            sequences._global.emitToServer = "confirmation-role-statut";
+            sequences._global.sequence = "confirmation role";
+            sequences._global.message = "Excellent, on attend que tous les ministres soit prets.";
+            sequences.displayButton(["autre", "j'ai compris mon role", "montre moi mon role"]);
+        });
+        socket.on("setRoleOnGlobal", function (role) {
+            sequences._global.role = role;
+        });
+        socket.on("showRole", function () {
+            sequences.displayMessage("replace", "tu es " + sequences._global.role);
+            sequences.displayButton(["autre", "j'ai compris mon role"]);
         });
         socket.on("log", function (data) {
             console.log(data);

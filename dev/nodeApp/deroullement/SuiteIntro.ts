@@ -17,6 +17,7 @@ export default class SuiteIntro{
 
             SetPlayerData.directive("displayMessage", {mode:"add", message: "Soyez attentif !"}, currentPlayer.id);
             //SetPlayerData.directive("play-intro-suite", "intro/narration/avertissement.wav", currentPlayer.id);
+            // [debug]
             SetPlayerData.directive("play-intro-suite", "dataJoueurs/liaison/est.wav", currentPlayer.id);
         }
     }

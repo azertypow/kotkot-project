@@ -9,11 +9,13 @@ import ReponseAuCasques from "./deroullement/ReponseAuCasques"
 import _GLOBAL from "./_GLOBAL"
 import SuiteIntro from "./deroullement/SuiteIntro"
 import EnvoiDesObjectifs from "./deroullement/EnvoiDesObjectifs"
+import ConfirmationRole from "./deroullement/ConfirmationRole"
 
 export default class MessagesFromPlayers{
     public static nombreIntroJouee: number = 0;
     public static nombreIntroSuiteJouee: number = 0;
     public static numberRoleEnded: number = 0;
+    public static numberRoleOk: number = 0;
 
     public static onMessageFromPlayers(socket: SocketIO.Socket){
         socket.on("finalLaw",(finalLaw: string)=>{
@@ -59,7 +61,28 @@ export default class MessagesFromPlayers{
             if(this.numberRoleEnded === _GLOBAL.numberOfPlayers){
                 console.log("role annoncé partout");
 
-                // suite
+                // envoyer bonton de confirmation role
+                ConfirmationRole.run();
+            }
+        });
+
+        // reception des statut de compréhension des role par chacun des joueurs
+        socket.on("confirmation-role-statut", (buttonContent: any)=>{
+
+            console.log(buttonContent);
+
+            if(buttonContent.value === "j\'ai compris mon role"){
+                console.log("role ok");
+                this.numberRoleOk++;
+
+                if(this.numberRoleOk === _GLOBAL.numberOfPlayers){
+                    console.log("tous les joueurs ont compris leur role");
+                }
+
+            } else {
+                console.log("role pas ok");
+                socket.emit("log", "envois du role");
+                socket.emit("showRole");
             }
         });
 
