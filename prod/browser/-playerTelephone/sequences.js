@@ -390,6 +390,8 @@ function moveCursor(e, listeDesMinistresRestant) {
     var playerName = subwheel.getElementsByTagName('p')[0];
     playerName.textContent = listeDesMinistresRestant[selectedPlayer];
 
+    document.querySelector('.valider').dataset.value = listeDesMinistresRestant[selectedPlayer];
+
     return selectedPlayer;
 
 
@@ -680,6 +682,10 @@ function receiveButtonValue(e) {
     console.log(e.target.textContent);
     bienRecu(); // quand un joueur appuie sur un bouton, on lui envoie un message comme quoi on a bien reçu sa répons
     e.target.removeEventListener('click', receiveButtonValue);
+
+    if (e.target.dataset.value) {
+        console.log("value " + e.target.dataset.value);
+    }
 
 }
 
