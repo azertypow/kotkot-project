@@ -196,9 +196,11 @@ function elimination() {
     background([255,0,0]);
     displayTitle("Élimination");
 
+    premierTour = false;
+
     setTimeout(function() {
+        title.textContent = ""; // on enlève le titre
         if (premierTour) {
-            title.textContent = "";
             displayMessage("replace", messages.elimination["premier tour"]);
             displayButton(["oui", "non"]);
             document.querySelector('.doublechoix').style.top = "60%"; // on modifie légèrement la marge comme le message est long
@@ -389,6 +391,9 @@ function moveCursor(e, listeDesMinistresRestant) {
     // on affiche le nom du joueur sélectionné
     var playerName = subwheel.getElementsByTagName('p')[0];
     playerName.textContent = listeDesMinistresRestant[selectedPlayer];
+
+    // donne un data-value au bouton valider pour qu'on puisse le récupérer
+    document.querySelector('.valider').dataset.value = listeDesMinistresRestant[selectedPlayer];
 
     return selectedPlayer;
 
@@ -680,6 +685,10 @@ function receiveButtonValue(e) {
     console.log(e.target.textContent);
     bienRecu(); // quand un joueur appuie sur un bouton, on lui envoie un message comme quoi on a bien reçu sa répons
     e.target.removeEventListener('click', receiveButtonValue);
+
+    if (e.target.dataset.value) {
+        console.log("value " + e.target.dataset.value);
+    }
 
 }
 
