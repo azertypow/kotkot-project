@@ -4,13 +4,18 @@
 
 /// <reference types="socket.io-client" />
 /// <reference path="../../typescriptDeclaration/PlayerData.d.ts" />
+/// <reference path="../../typescriptDeclaration/DisplayMessage_data.d.ts" />
 
 import * as sequences from "./sequences.js"
 
 export default class SocketClientApp {
     public static run(currentHostname: string) {
+
         // initialiser le socket
-        let socket: SocketIOClient.Socket = io.connect(`http://${currentHostname}:1337`);
+        const socket: SocketIOClient.Socket = io.connect(`http://${currentHostname}:1337`);
+
+        // enregistrer le socket pour le script js sequence.js
+        sequences._global.socket = socket;
 
         // envois info de connection
         socket.on("connect", ()=>{
@@ -50,6 +55,10 @@ export default class SocketClientApp {
         // indique aux joueurs de brancher leurs casques
         socket.on("brancheCasque", ()=>{
             sequences.brancheCasque();
+
+            // set _global sequence et emit à envoyer au server
+            sequences._global.sequence = "casque";
+            sequences._global.emitToServer = "casque-ok";
         });
 
         // indique aux joueurs d'aller s'installer à leur place
@@ -96,8 +105,8 @@ export default class SocketClientApp {
 
         // envoyer un message
         // mode-> replace | add, message -> string
-        socket.on("displayMessage", (mode: string, message: string)=>{
-            sequences.displayMessage(mode, message);
+        socket.on("displayMessage", (data: DisplayMessage_data)=>{
+            sequences.displayMessage(data.mode, data.message);
         });
 
         // supprimer le message

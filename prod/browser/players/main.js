@@ -72,6 +72,7 @@
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_global", function() { return _global; });
 /* harmony export (immutable) */ __webpack_exports__["startVote"] = startVote;
 /* harmony export (immutable) */ __webpack_exports__["choisiDelegue"] = choisiDelegue;
 /* harmony export (immutable) */ __webpack_exports__["choisiDeuxMinistres"] = choisiDeuxMinistres;
@@ -113,10 +114,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 // Ce sont les morceaux de code qui sont appelés pendant le déroulement du jeu qui se passe dans script.js
 
+function Global(socket, sequence, callpackServer) {
+    this.socket = socket;
+    this.sequence = sequence;
+    this.emitToServer = callpackServer;
+}
 
-
+var _global = new Global("empty", "empty", "empty");
 
 // fonction à lancer pour démarrer une phase de vote des lois
+// node server
 function startVote() {
 
     clear();
@@ -142,6 +149,7 @@ function startVote() {
 
 
 // sauf au premier tour - choisi au hasard le délégué
+// node server
 function choisiDelegue(ministres) {
 
 
@@ -157,6 +165,7 @@ function choisiDelegue(ministres) {
 
 // si on est au premier tour, choisi les deux ministres qui seronts respectivement
 // ministre actif et délégué
+// node server
 function choisiDeuxMinistres(ministresRestants) {
 
     // on crée une liste temporaire pour pouvoir en retirer le ministre actif
@@ -345,6 +354,7 @@ function brancheCasque() {
     displayMessage("replace", "Est-ce que ton casque est bien branché ?");
     displayButton("oui", ()=>{
         var returnMessage = function () {
+            console.log("coucou");
             displayMessage("replace", "Merci.<br>Votre assignation ministairielle va vous être envoyée.");
             document.querySelector(".oui").removeEventListener("click", returnMessage);
         };
@@ -791,6 +801,12 @@ function displayButton(buttonToDisplay, callback) {
 function receiveButtonValue(e) {
 
     console.log(e.target.textContent);
+    console.log(_global.socket);
+    _global.socket.emit(_global.emitToServer,{
+        "sequence": _global.sequence,
+        "value": e.target.textContent,
+    });
+
     bienRecu(); // quand un joueur appuie sur un bouton, on lui envoie un message comme quoi on a bien reçu sa répons
     e.target.removeEventListener('click', receiveButtonValue);
 
@@ -924,6 +940,7 @@ var SocketClientApp = (function () {
     }
     SocketClientApp.run = function (currentHostname) {
         var socket = io.connect("http://" + currentHostname + ":1337");
+        sequences._global.socket = socket;
         socket.on("connect", function () {
             console.log("socket client player connected");
             socket.emit('player-connected', {
@@ -945,6 +962,8 @@ var SocketClientApp = (function () {
         });
         socket.on("brancheCasque", function () {
             sequences.brancheCasque();
+            sequences._global.sequence = "casque";
+            sequences._global.emitToServer = "casque-ok";
         });
         socket.on("installation", function () {
             sequences.installation();
@@ -970,8 +989,8 @@ var SocketClientApp = (function () {
         socket.on("removeButtons", function () {
             sequences.removeButtons();
         });
-        socket.on("displayMessage", function (mode, message) {
-            sequences.displayMessage(mode, message);
+        socket.on("displayMessage", function (data) {
+            sequences.displayMessage(data.mode, data.message);
         });
         socket.on("removeMessage", function () {
             sequences.removeMessage();
@@ -1016,9 +1035,7 @@ window.playerTwoLawSelection = function () { sequences.playerTwoLawSelection(); 
 window.elimination = function () { sequences.elimination(); };
 window.installation = function () { sequences.installation(); };
 window.brancheCasque = function () { sequences.brancheCasque(); };
-window.hasardSelectionJoueur = function () { sequences.hasardSelectionJoueur(); };
 window.ecouteDesRegles = function () { sequences.ecouteDesRegles(); };
-window.displayElimination = function () { sequences.displayElimination(); };
 window.eliminateSomeone = function () { sequences.eliminateSomeone(); };
 
 

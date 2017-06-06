@@ -14,9 +14,13 @@ class SetPlayerData {
         return players.player[playerIndex];
     }
     static directive(functionName, functionArguments, playerIndexToSend) {
-        socketControl_1.default.ioServer.to(socketControl_1.default.players.player[playerIndexToSend].socketId).emit(functionName, functionArguments);
-        socketControl_1.default.ioServer.to(socketControl_1.default.players.player[playerIndexToSend].socketId).emit("log", functionName);
-        socketControl_1.default.ioServer.to(socketControl_1.default.players.player[playerIndexToSend].socketId).emit("log", functionArguments);
+        const currentPlayer = socketControl_1.default.players.player[playerIndexToSend];
+        socketControl_1.default.ioServer.to(currentPlayer.socketId).emit(functionName, functionArguments);
+        currentPlayer.data.action = {
+            options: functionArguments,
+            emit: functionName,
+        };
+        console.log(currentPlayer);
     }
     ;
 }

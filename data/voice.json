@@ -118,7 +118,7 @@
            "4":"Vous avez choisi d’éliminer le Ministre de la Communication",
            "5":"Vous avez choisi d’éliminer le Ministre de la Santé",
            "6":"Vous avez choisi d’éliminer le Ministre du Travail",
-           "7":"Vous avez choisi d’éliminer le Ministre de l'Armée",
+           "7":"Vous avez choisi d’éliminer le Ministre de l'Armée"
         },
         "egalite": {
           "premiere": "Attention, si vous n’arrivez pas à vous mettre d’accord c’est moi qui trancherai",
@@ -209,11 +209,11 @@
         "un progressiste":"un de tes voisins appartiennent au Parti du Progrès",
         "un humaniste":"un de tes voisins appartiennent au Parti du de l'Homme",
         "deux progressistes":"tes deux voisins appartiennent au Parti du Progrès",
-        "deux humanistes":"tes deux voisins appartiennent au Parti du de l'Homme",
+        "deux humanistes":"tes deux voisins appartiennent au Parti du de l'Homme"
       },
       "vote loi":{
           "humaniste":"Le dernier délégué n'a pas eu le choix, il a été obligé de valider une loi Humaniste",
-          "progressiste":"Le dernier délégué n'a pas eu le choix, il a été obligé de valider une loi Progressiste",
+          "progressiste":"Le dernier délégué n'a pas eu le choix, il a été obligé de valider une loi Progressiste"
       },
       "majorite num":{
         "humaniste":"les Humanistes sont en majorité dans le conseil",

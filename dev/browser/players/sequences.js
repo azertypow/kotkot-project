@@ -4,10 +4,16 @@
 
 // Ce sont les morceaux de code qui sont appelés pendant le déroulement du jeu qui se passe dans script.js
 
+function Global(socket, sequence, callpackServer) {
+    this.socket = socket;
+    this.sequence = sequence;
+    this.emitToServer = callpackServer;
+}
 
-
+export var _global = new Global("empty", "empty", "empty");
 
 // fonction à lancer pour démarrer une phase de vote des lois
+// node server
 export function startVote() {
 
     clear();
@@ -33,6 +39,7 @@ export function startVote() {
 
 
 // sauf au premier tour - choisi au hasard le délégué
+// node server
 export function choisiDelegue(ministres) {
 
 
@@ -48,6 +55,7 @@ export function choisiDelegue(ministres) {
 
 // si on est au premier tour, choisi les deux ministres qui seronts respectivement
 // ministre actif et délégué
+// node server
 export function choisiDeuxMinistres(ministresRestants) {
 
     // on crée une liste temporaire pour pouvoir en retirer le ministre actif
@@ -236,6 +244,7 @@ export function brancheCasque() {
     displayMessage("replace", "Est-ce que ton casque est bien branché ?");
     displayButton("oui", ()=>{
         var returnMessage = function () {
+            console.log("coucou");
             displayMessage("replace", "Merci.<br>Votre assignation ministairielle va vous être envoyée.");
             document.querySelector(".oui").removeEventListener("click", returnMessage);
         };
@@ -682,6 +691,12 @@ export function displayButton(buttonToDisplay, callback) {
 export function receiveButtonValue(e) {
 
     console.log(e.target.textContent);
+    console.log(_global.socket);
+    _global.socket.emit(_global.emitToServer,{
+        "sequence": _global.sequence,
+        "value": e.target.textContent,
+    });
+
     bienRecu(); // quand un joueur appuie sur un bouton, on lui envoie un message comme quoi on a bien reçu sa répons
     e.target.removeEventListener('click', receiveButtonValue);
 

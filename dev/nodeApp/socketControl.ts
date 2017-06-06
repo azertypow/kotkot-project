@@ -22,7 +22,7 @@ export default class SocketControl{
     public static ioServer: SocketIO.Server;
     public static socket: SocketIO.Socket;
 
-    static players: Players = {
+    public static players: Players = {
         allIp: [],
         count: 0,
         player: []
