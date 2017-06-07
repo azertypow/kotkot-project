@@ -269,7 +269,17 @@ function ecouteDesRegles() {
 
 }
 
+// écran lors du "Bienvenue dans l'équipe ministérielle"
+function speechIntro() {
 
+    setInterval(function() {
+        var greyscale = Math.floor(Math.random()*40);
+        background([greyscale,greyscale,greyscale]);
+    }, 50);
+
+
+
+}
 
 
 /***************
