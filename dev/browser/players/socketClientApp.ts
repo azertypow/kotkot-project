@@ -4,13 +4,25 @@
 
 /// <reference types="socket.io-client" />
 /// <reference path="../../typescriptDeclaration/PlayerData.d.ts" />
+/// <reference path="../../typescriptDeclaration/DisplayMessage_data.d.ts" />
 
 import * as sequences from "./sequences.js"
+import PlaySound from "./PlaySound"
 
 export default class SocketClientApp {
+
+    public static socket: SocketIOClient.Socket;
+
     public static run(currentHostname: string) {
+
         // initialiser le socket
-        let socket: SocketIOClient.Socket = io.connect(`http://${currentHostname}:1337`);
+        const socket: SocketIOClient.Socket = io.connect(`http://${currentHostname}:1337`);
+
+        // partager le socket
+        this.socket = socket;
+
+        // enregistrer le socket pour le script js sequence.js
+        sequences._global.socket = socket;
 
         // envois info de connection
         socket.on("connect", ()=>{
@@ -50,6 +62,10 @@ export default class SocketClientApp {
         // indique aux joueurs de brancher leurs casques
         socket.on("brancheCasque", ()=>{
             sequences.brancheCasque();
+
+            // set _global sequence et emit à envoyer au server
+            sequences._global.sequence = "casque";
+            sequences._global.emitToServer = "casque-ok";
         });
 
         // indique aux joueurs d'aller s'installer à leur place
@@ -96,8 +112,8 @@ export default class SocketClientApp {
 
         // envoyer un message
         // mode-> replace | add, message -> string
-        socket.on("displayMessage", (mode: string, message: string)=>{
-            sequences.displayMessage(mode, message);
+        socket.on("displayMessage", (data: DisplayMessage_data)=>{
+            sequences.displayMessage(data.mode, data.message);
         });
 
         // supprimer le message
@@ -120,9 +136,60 @@ export default class SocketClientApp {
             sequences.clear();
         });
 
+        // jouer un song
+        socket.on("playSound", (soundToPlay: string)=> {
+            PlaySound.playSound(soundToPlay, "standard-sound-ended");
+        });
+
+        // –––––
+        // ETAPES PRECISES //
+        // –––––
+
+        // charger des sons et jouer l'intro
+        socket.on("play-intro", (soundToPlay: string)=> {
+            PlaySound.preloadSounds();
+            PlaySound.playSound(soundToPlay, "intro-sound-ended");
+        });
+
+        // jouer l'intro-suite
+        socket.on("play-intro-suite", (soundToPlay: string)=> {
+            PlaySound.playSound(soundToPlay, "intro-suite-sound-ended");
+        });
+
+        // anoncer les roles a chaque joueurs
+        socket.on("play-role", (soundToPlay: string)=>{
+            PlaySound.playSound(soundToPlay, "play-role-ended");
+        });
+
+        // demande de confirmation des roles
+        socket.on("displayConfirmeRole", ()=>{
+            sequences.displayWarning("Attention, ton rôle sera affiché sur ton écran, cache-le.");
+
+            sequences._global.emitToServer = "confirmation-role-statut";
+            sequences._global.sequence = "confirmation role";
+            sequences._global.message = "Excellent, on attend que tous les ministres soit prets.";
+
+            sequences.displayButton(["autre", "j'ai compris mon role", "montre moi mon role"]);
+        });
+
+        // –––––
+        // PERSO //
+        // –––––
+
+        // enregistrer role sur appareil des jouer dans _global
+        socket.on("setRoleOnGlobal", (role: string)=>{
+            sequences._global.role = role;
+        });
+
+        // afficher le role sur appareil
+        socket.on("showRole", ()=>{
+            sequences.displayMessage("replace", `tu es ${sequences._global.role}`);
+            sequences.displayButton(["autre", "j'ai compris mon role"]);
+        });
+
         // log from server
         socket.on("log", (data: any)=>{
-           console.log(data);
+            console.log(data);
         });
     }
 }

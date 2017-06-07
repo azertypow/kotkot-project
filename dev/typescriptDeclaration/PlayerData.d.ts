@@ -5,7 +5,7 @@
 interface PlayerData {
     action: {
         emit: string,
-        options: string,
+        options: string | Object,
     },
     emplacement: string, // ministaire, emplacement sur le plateau "écologie, …"
     nom: string, // phrase avec son emplacement, son affectation "ministre de l'écologie, …"

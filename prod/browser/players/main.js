@@ -72,6 +72,7 @@
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "_global", function() { return _global; });
 /* harmony export (immutable) */ __webpack_exports__["startVote"] = startVote;
 /* harmony export (immutable) */ __webpack_exports__["choisiDelegue"] = choisiDelegue;
 /* harmony export (immutable) */ __webpack_exports__["choisiDeuxMinistres"] = choisiDeuxMinistres;
@@ -113,10 +114,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 // Ce sont les morceaux de code qui sont appelés pendant le déroulement du jeu qui se passe dans script.js
 
+function Global(socket, sequence, callpackServer, role, message) {
+    this.socket = socket;
+    this.sequence = sequence;
+    this.emitToServer = callpackServer;
+    this.role = role;
+    this.message = message;
+}
 
-
+var _global = new Global("empty", "empty", "empty", "empty", "bien recu");
 
 // fonction à lancer pour démarrer une phase de vote des lois
+// node server
 function startVote() {
 
     clear();
@@ -142,6 +151,7 @@ function startVote() {
 
 
 // sauf au premier tour - choisi au hasard le délégué
+// node server
 function choisiDelegue(ministres) {
 
 
@@ -157,6 +167,7 @@ function choisiDelegue(ministres) {
 
 // si on est au premier tour, choisi les deux ministres qui seronts respectivement
 // ministre actif et délégué
+// node server
 function choisiDeuxMinistres(ministresRestants) {
 
     // on crée une liste temporaire pour pouvoir en retirer le ministre actif
@@ -343,8 +354,9 @@ function brancheCasque() {
     clear();
     background([0,0,0]);
     displayMessage("replace", "Est-ce que ton casque est bien branché ?");
-    displayButton("oui", ()=>{
+    displayButton("oui", function (){
         var returnMessage = function () {
+            console.log("coucou");
             displayMessage("replace", "Merci.<br>Votre assignation ministairielle va vous être envoyée.");
             document.querySelector(".oui").removeEventListener("click", returnMessage);
         };
@@ -791,6 +803,11 @@ function displayButton(buttonToDisplay, callback) {
 function receiveButtonValue(e) {
 
     console.log(e.target.textContent);
+    _global.socket.emit(_global.emitToServer,{
+        "sequence": _global.sequence,
+        "value": e.target.textContent,
+    });
+
     bienRecu(); // quand un joueur appuie sur un bouton, on lui envoie un message comme quoi on a bien reçu sa répons
     e.target.removeEventListener('click', receiveButtonValue);
 
@@ -869,7 +886,7 @@ function clear() {
 function bienRecu() {
     clear();
     background([0,0,0]);
-    displayMessage("replace", messages.bienrecu);
+    displayMessage("replace", _global.message);
 }
 
 /***/ }),
@@ -919,11 +936,14 @@ exports.default = LocationInfo;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var sequences = __webpack_require__(0);
+var PlaySound_1 = __webpack_require__(5);
 var SocketClientApp = (function () {
     function SocketClientApp() {
     }
     SocketClientApp.run = function (currentHostname) {
         var socket = io.connect("http://" + currentHostname + ":1337");
+        this.socket = socket;
+        sequences._global.socket = socket;
         socket.on("connect", function () {
             console.log("socket client player connected");
             socket.emit('player-connected', {
@@ -945,6 +965,8 @@ var SocketClientApp = (function () {
         });
         socket.on("brancheCasque", function () {
             sequences.brancheCasque();
+            sequences._global.sequence = "casque";
+            sequences._global.emitToServer = "casque-ok";
         });
         socket.on("installation", function () {
             sequences.installation();
@@ -970,8 +992,8 @@ var SocketClientApp = (function () {
         socket.on("removeButtons", function () {
             sequences.removeButtons();
         });
-        socket.on("displayMessage", function (mode, message) {
-            sequences.displayMessage(mode, message);
+        socket.on("displayMessage", function (data) {
+            sequences.displayMessage(data.mode, data.message);
         });
         socket.on("removeMessage", function () {
             sequences.removeMessage();
@@ -984,6 +1006,33 @@ var SocketClientApp = (function () {
         });
         socket.on("clear", function () {
             sequences.clear();
+        });
+        socket.on("playSound", function (soundToPlay) {
+            PlaySound_1.default.playSound(soundToPlay, "standard-sound-ended");
+        });
+        socket.on("play-intro", function (soundToPlay) {
+            PlaySound_1.default.preloadSounds();
+            PlaySound_1.default.playSound(soundToPlay, "intro-sound-ended");
+        });
+        socket.on("play-intro-suite", function (soundToPlay) {
+            PlaySound_1.default.playSound(soundToPlay, "intro-suite-sound-ended");
+        });
+        socket.on("play-role", function (soundToPlay) {
+            PlaySound_1.default.playSound(soundToPlay, "play-role-ended");
+        });
+        socket.on("displayConfirmeRole", function () {
+            sequences.displayWarning("Attention, ton rôle sera affiché sur ton écran, cache-le.");
+            sequences._global.emitToServer = "confirmation-role-statut";
+            sequences._global.sequence = "confirmation role";
+            sequences._global.message = "Excellent, on attend que tous les ministres soit prets.";
+            sequences.displayButton(["autre", "j'ai compris mon role", "montre moi mon role"]);
+        });
+        socket.on("setRoleOnGlobal", function (role) {
+            sequences._global.role = role;
+        });
+        socket.on("showRole", function () {
+            sequences.displayMessage("replace", "tu es " + sequences._global.role);
+            sequences.displayButton(["autre", "j'ai compris mon role"]);
         });
         socket.on("log", function (data) {
             console.log(data);
@@ -1016,10 +1065,180 @@ window.playerTwoLawSelection = function () { sequences.playerTwoLawSelection(); 
 window.elimination = function () { sequences.elimination(); };
 window.installation = function () { sequences.installation(); };
 window.brancheCasque = function () { sequences.brancheCasque(); };
-window.hasardSelectionJoueur = function () { sequences.hasardSelectionJoueur(); };
 window.ecouteDesRegles = function () { sequences.ecouteDesRegles(); };
-window.displayElimination = function () { sequences.displayElimination(); };
 window.eliminateSomeone = function () { sequences.eliminateSomeone(); };
+
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var socketClientApp_1 = __webpack_require__(3);
+var PlaySound = (function () {
+    function PlaySound() {
+    }
+    PlaySound.playSound = function (soundName, serverCallback) {
+        var sound = document.querySelector("[data-name='" + soundName + "']");
+        sound.play();
+        sound.onended = function () {
+            console.log("fini");
+            socketClientApp_1.default.socket.emit(serverCallback);
+        };
+    };
+    PlaySound.preloadSounds = function () {
+        for (var i = 0; i < this.sounds.length; i++) {
+            var audiotag = document.createElement('audio');
+            audiotag.preload = "auto";
+            document.body.appendChild(audiotag);
+            var source = document.createElement('source');
+            source.src = "./audiofiles/" + this.sounds[i];
+            source.type = "audio/mpeg";
+            audiotag.dataset.name = this.sounds[i];
+            audiotag.appendChild(source);
+        }
+    };
+    return PlaySound;
+}());
+PlaySound.sounds = [
+    "dataJoueurs/nomsJoueurs/education.wav",
+    "dataJoueurs/nomsJoueurs/industrie.wav",
+    "dataJoueurs/nomsJoueurs/justice.wav",
+    "dataJoueurs/nomsJoueurs/information.wav",
+    "dataJoueurs/nomsJoueurs/communication.wav",
+    "dataJoueurs/nomsJoueurs/sante.wav",
+    "dataJoueurs/nomsJoueurs/travail.wav",
+    "dataJoueurs/nomsJoueurs/armee.wav",
+    "dataJoueurs/roles/progressiste.wav",
+    "dataJoueurs/roles/humaniste.wav",
+    "dataJoueurs/roles/cyborg.wav",
+    "dataJoueurs/liaison/est.wav",
+    "dataJoueurs/liaison/le.wav",
+    "pres_intro/narration/connection_ok.wav",
+    "pres_intro/narration/histoire.wav",
+    "pres_intro/bonus/trop_long/0.wav",
+    "pres_intro/bonus/trop_long/1.wav",
+    "pres_intro/bonus/trop_long/2.wav",
+    "intro/narration/avertissement.wav",
+    "intro/narration/roles/progressiste.wav",
+    "intro/narration/roles/humaniste.wav",
+    "intro/narration/roles/cyborg.wav",
+    "votation/narration/intro.wav",
+    "votation/narration/premier_tour.wav",
+    "votation/narration/tour_standard/vote_de_confiance/ministre_actif.wav",
+    "votation/narration/tour_standard/vote_de_confiance/delegue.wav",
+    "votation/narration/tour_standard/vote_de_confiance/autres_joueurs.wav",
+    "votation/narration/tour_standard/vote_de_confiance/tous/rejet.wav",
+    "votation/narration/tour_standard/vote_de_confiance/tous/nouveau/0.wav",
+    "votation/narration/tour_standard/vote_de_confiance/tous/nouveau/1.wav",
+    "votation/narration/tour_standard/vote_de_confiance/tous/nouveau/2.wav",
+    "votation/narration/tour_standard/vote_de_confiance/tous/nouveau/3.wav",
+    "votation/narration/tour_standard/vote_de_confiance/tous/nouveau/4.wav",
+    "votation/narration/tour_standard/vote_de_confiance/tous/nouveau/5.wav",
+    "votation/narration/tour_standard/vote_de_confiance/tous/nouveau/6.wav",
+    "votation/narration/tour_standard/vote_de_confiance/tous/nouveau/7.wav",
+    "votation/narration/tour_standard/choix_lois_ministre/ministre_actif.wav",
+    "votation/narration/tour_standard/choix_lois_ministre/delegue.wav",
+    "votation/narration/tour_standard/choix_lois_ministre/autres_joueurs.wav",
+    "votation/narration/tour_standard/choix_loi_delegue/ministre_actif_et_autres.wav",
+    "votation/narration/tour_standard/choix_loi_delegue/delegue.wav",
+    "votation/narration/tour_standard/bien_recu.wav",
+    "votation/narration/tour_standard/annonce_loi/progressiste.wav",
+    "votation/narration/tour_standard/annonce_loi/humaniste.wav",
+    "votation/narration/tour_standard/choix_du_prochain/delegue.wav",
+    "votation/narration/tour_standard/choix_du_prochain/autres_joueurs.wav",
+    "votation/narration/tour_standard/choix_du_prochain/conclusion/0.wav",
+    "votation/narration/tour_standard/choix_du_prochain/conclusion/1.wav",
+    "votation/narration/tour_standard/choix_du_prochain/conclusion/2.wav",
+    "votation/narration/tour_standard/choix_du_prochain/conclusion/3.wav",
+    "votation/narration/tour_standard/choix_du_prochain/conclusion/4.wav",
+    "votation/narration/tour_standard/choix_du_prochain/conclusion/5.wav",
+    "votation/narration/tour_standard/choix_du_prochain/conclusion/6.wav",
+    "votation/narration/tour_standard/choix_du_prochain/conclusion/7.wav",
+    "elimination/narration/premier_tour.wav",
+    "elimination/narration/tour_standard/intro.wav",
+    "elimination/narration/tour_standard/qui_eliminer.wav",
+    "elimination/narration/tour_standard/elimination_normale/0.wav",
+    "elimination/narration/tour_standard/elimination_normale/1.wav",
+    "elimination/narration/tour_standard/elimination_normale/2.wav",
+    "elimination/narration/tour_standard/elimination_normale/3.wav",
+    "elimination/narration/tour_standard/elimination_normale/4.wav",
+    "elimination/narration/tour_standard/elimination_normale/5.wav",
+    "elimination/narration/tour_standard/elimination_normale/6.wav",
+    "elimination/narration/tour_standard/elimination_normale/7.wav",
+    "elimination/narration/tour_standard/egalite/deuxieme.wav",
+    "elimination/narration/tour_standard/egalite/elimination/0.wav",
+    "elimination/narration/tour_standard/egalite/elimination/1.wav",
+    "elimination/narration/tour_standard/egalite/elimination/2.wav",
+    "elimination/narration/tour_standard/egalite/elimination/3.wav",
+    "elimination/narration/tour_standard/egalite/elimination/4.wav",
+    "elimination/narration/tour_standard/egalite/elimination/5.wav",
+    "elimination/narration/tour_standard/egalite/elimination/6.wav",
+    "elimination/narration/tour_standard/egalite/elimination/7.wav",
+    "elimination/narration/tour_standard/passation_du_vote/joueur_elimine.wav",
+    "elimination/narration/tour_standard/passation_du_vote/autres_joueurs/0.wav",
+    "elimination/narration/tour_standard/passation_du_vote/autres_joueurs/1.wav",
+    "elimination/narration/tour_standard/passation_du_vote/autres_joueurs/2.wav",
+    "elimination/narration/tour_standard/passation_du_vote/autres_joueurs/3.wav",
+    "elimination/narration/tour_standard/passation_du_vote/autres_joueurs/4.wav",
+    "elimination/narration/tour_standard/passation_du_vote/autres_joueurs/5.wav",
+    "elimination/narration/tour_standard/passation_du_vote/autres_joueurs/6.wav",
+    "elimination/narration/tour_standard/passation_du_vote/autres_joueurs/7.wav",
+    "elimination/narration/tour_standard/passation_du_vote/annonce_resultat/0.wav",
+    "elimination/narration/tour_standard/passation_du_vote/annonce_resultat/1.wav",
+    "elimination/narration/tour_standard/passation_du_vote/annonce_resultat/2.wav",
+    "elimination/narration/tour_standard/passation_du_vote/annonce_resultat/3.wav",
+    "elimination/narration/tour_standard/passation_du_vote/annonce_resultat/4.wav",
+    "elimination/narration/tour_standard/passation_du_vote/annonce_resultat/5.wav",
+    "elimination/narration/tour_standard/passation_du_vote/annonce_resultat/6.wav",
+    "elimination/narration/tour_standard/passation_du_vote/annonce_resultat/7.wav",
+    "elimination/narration/tour_standard/message_adieu/0.wav",
+    "elimination/narration/tour_standard/message_adieu/1.wav",
+    "elimination/narration/tour_standard/message_adieu/2.wav",
+    "elimination/narration/tour_standard/message_adieu/3.wav",
+    "elimination/narration/tour_standard/message_adieu/4.wav",
+    "elimination/narration/tour_standard/message_adieu/5.wav",
+    "elimination/narration/tour_standard/message_adieu/6.wav",
+    "elimination/narration/tour_standard/message_adieu/7.wav",
+    "elimination/bonus/rappel_elimination/0.wav",
+    "elimination/bonus/rappel_elimination/1.wav",
+    "elimination/bonus/rappel_elimination/2.wav",
+    "elimination/bonus/rappel_elimination/3.wav",
+    "elimination/bonus/rappel_elimination/4.wav",
+    "elimination/bonus/rappel_elimination/5.wav",
+    "elimination/bonus/rappel_elimination/6.wav",
+    "elimination/bonus/rappel_elimination/7.wav",
+    "elimination/bonus/rappel_vote_confiance/0.wav",
+    "elimination/bonus/rappel_vote_confiance/1.wav",
+    "elimination/bonus/rappel_vote_confiance/2.wav",
+    "elimination/bonus/rappel_vote_confiance/3.wav",
+    "elimination/bonus/rappel_vote_confiance/4.wav",
+    "elimination/bonus/rappel_vote_confiance/5.wav",
+    "elimination/bonus/rappel_vote_confiance/6.wav",
+    "elimination/bonus/rappel_vote_confiance/7.wav",
+    "indices_cyborgs/narration/nom_du_coequipier/0.wav",
+    "indices_cyborgs/narration/nom_du_coequipier/1.wav",
+    "indices_cyborgs/narration/nom_du_coequipier/2.wav",
+    "indices_cyborgs/narration/nom_du_coequipier/3.wav",
+    "indices_cyborgs/narration/nom_du_coequipier/4.wav",
+    "indices_cyborgs/narration/nom_du_coequipier/5.wav",
+    "indices_cyborgs/narration/nom_du_coequipier/6.wav",
+    "indices_cyborgs/narration/nom_du_coequipier/7.wav",
+    "indices_cyborgs/narration/voisins/un_progressiste.wav",
+    "indices_cyborgs/narration/voisins/un_humaniste.wav",
+    "indices_cyborgs/narration/voisins/deux_progressistes.wav",
+    "indices_cyborgs/narration/voisins/deux_humanistes.wav",
+    "indices_cyborgs/narration/vote_loi/humaniste.wav",
+    "indices_cyborgs/narration/vote_loi/progressiste.wav",
+    "indices_cyborgs/narration/majorite_num/humaniste.wav",
+    "indices_cyborgs/narration/majorite_num/progressiste.wav",
+    "indices_cyborgs/narration/majorite_num/aucun.wav",
+    "indices_cyborgs/narration/majorite_voix/humaniste.wav",
+    "indices_cyborgs/narration/majorite_voix/progressiste.wav",
+];
+exports.default = PlaySound;
 
 
 /***/ })

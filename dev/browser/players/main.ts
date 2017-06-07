@@ -30,9 +30,7 @@ interface MyWindow extends Window{
     elimination: Function,
     installation: Function,
     brancheCasque: Function,
-    hasardSelectionJoueur: Function,
     ecouteDesRegles: Function,
-    displayElimination: Function,
     eliminateSomeone: Function,
 }
 declare const window: MyWindow;
@@ -41,7 +39,5 @@ window.playerTwoLawSelection =  ()=>{sequences.playerTwoLawSelection();};
 window.elimination           =  ()=>{sequences.elimination();};
 window.installation          =  ()=>{sequences.installation();};
 window.brancheCasque         =  ()=>{sequences.brancheCasque();};
-window.hasardSelectionJoueur =  ()=>{sequences.hasardSelectionJoueur();};
 window.ecouteDesRegles       =  ()=>{sequences.ecouteDesRegles();};
-window.displayElimination    =  ()=>{sequences.displayElimination() };
 window.eliminateSomeone      =  ()=>{sequences.eliminateSomeone()};
