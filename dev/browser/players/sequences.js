@@ -244,7 +244,7 @@ export function brancheCasque() {
     clear();
     background([0,0,0]);
     displayMessage("replace", "Est-ce que ton casque est bien branché ?");
-    displayButton("oui", ()=>{
+    displayButton("oui", function (){
         var returnMessage = function () {
             console.log("coucou");
             displayMessage("replace", "Merci.<br>Votre assignation ministairielle va vous être envoyée.");

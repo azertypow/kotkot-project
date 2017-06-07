@@ -7,7 +7,7 @@ import SocketClientApp from "./socketClientApp"
 export default class PlaySound{
 
     // jouer un fichier audio
-    public static playSound(soundName: string, serverCallback) {
+    public static playSound(soundName: string, serverCallback: string) {
 
         // récupérer ellement audio
         const sound: HTMLAudioElement = <HTMLAudioElement>document.querySelector(`[data-name='${soundName}']`);
