@@ -890,28 +890,7 @@ function bienRecu() {
 }
 
 /***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var LoadJs = (function () {
-    function LoadJs() {
-    }
-    LoadJs.load = function (file) {
-        var jsElement = document.createElement("script");
-        jsElement.type = "text/javascript";
-        jsElement.src = file;
-        document.body.appendChild(jsElement);
-        return jsElement;
-    };
-    return LoadJs;
-}());
-exports.default = LoadJs;
-
-
-/***/ }),
+/* 1 */,
 /* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1051,14 +1030,11 @@ exports.default = SocketClientApp;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var socketClientApp_1 = __webpack_require__(3);
-var LoadJs_1 = __webpack_require__(1);
 var locationInfo_1 = __webpack_require__(2);
 var sequences = __webpack_require__(0);
 var locationInfo = new locationInfo_1.default(window.location.href);
-var currentHostname = locationInfo.parse.hostname;
-LoadJs_1.default.load("http://" + currentHostname + ":1337/socket.io/socket.io.js").addEventListener("load", function () {
-    socketClientApp_1.default.run(currentHostname);
-});
+var currentHostname = "172.20.12.201";
+socketClientApp_1.default.run(currentHostname);
 console.log(radius);
 window.playerOneLawSelection = function () { sequences.playerOneLawSelection(); };
 window.playerTwoLawSelection = function () { sequences.playerTwoLawSelection(); };
@@ -1081,12 +1057,22 @@ var PlaySound = (function () {
     function PlaySound() {
     }
     PlaySound.playSound = function (soundName, serverCallback) {
-        var sound = document.querySelector("[data-name='" + soundName + "']");
-        sound.play();
-        sound.onended = function () {
-            console.log("fini");
-            socketClientApp_1.default.socket.emit(serverCallback);
-        };
+        if (navigator.userAgent.match(/(Macintosh)/)) {
+            var sound = document.querySelector("[data-name='" + soundName + "']");
+            console.log(sound);
+            sound.play();
+            console.log("play");
+            sound.onended = function () {
+                console.log("fini");
+                socketClientApp_1.default.socket.emit(serverCallback);
+            };
+        }
+        else {
+            var media_1 = new Media("audiofiles/" + soundName, function () {
+                console.log(media_1.getCurrentPosition());
+                console.log(media_1.getDuration());
+            });
+        }
     };
     PlaySound.preloadSounds = function () {
         for (var i = 0; i < this.sounds.length; i++) {

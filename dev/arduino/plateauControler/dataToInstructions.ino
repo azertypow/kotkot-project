@@ -19,4 +19,8 @@ void dataToInstructions(){
     run_RandomPlacement = true;
     
   }
+
+  else if(directive == "partie intro"){
+    Serial.println("partie introoooooooooooo");
+  }
 }

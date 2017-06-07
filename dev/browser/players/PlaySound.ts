@@ -3,23 +3,38 @@
  */
 
 import SocketClientApp from "./socketClientApp"
+declare let Media: any;
 
 export default class PlaySound{
 
     // jouer un fichier audio
     public static playSound(soundName: string, serverCallback: string) {
 
-        // récupérer ellement audio
-        const sound: HTMLAudioElement = <HTMLAudioElement>document.querySelector(`[data-name='${soundName}']`);
+        if (navigator.userAgent.match(/(Macintosh)/)) {
+            // récupérer ellement audio
+            const sound: HTMLAudioElement = <HTMLAudioElement>document.querySelector(`[data-name='${soundName}']`);
 
-        // le jouer
-        sound.play();
+            console.log(sound);
 
-        // signaler la fin d'un son
-        sound.onended = function() {
-            console.log("fini");
-            SocketClientApp.socket.emit(serverCallback);
+            // le jouer
+            sound.play();
+            console.log("play");
+
+            // signaler la fin d'un son
+            /// web
+            sound.onended = function () {
+                console.log("fini");
+                SocketClientApp.socket.emit(serverCallback);
+            };
+        } else {
+            /// app
+            let media = new Media("audiofiles/"+soundName, ()=>{
+                console.log(media.getCurrentPosition());
+                console.log(media.getDuration());
+                //setInterval(checkTime, 500, );
+            });
         }
+
     }
 
     // preload des sounds

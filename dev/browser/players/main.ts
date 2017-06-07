@@ -13,13 +13,14 @@ declare let radius: number;
 
 // ajouter js dinamiqument le file pour la connection socket (à cause de l'adresse ip)
 const locationInfo: LocationInfo = new LocationInfo(window.location.href);
-const currentHostname = locationInfo.parse.hostname;
+const currentHostname = "172.20.12.201";
 
-LoadJs.load(`http://${currentHostname}:1337/socket.io/socket.io.js`).addEventListener("load", ()=>{
-    // lancer le socket
-    SocketClientApp.run(currentHostname);
-});
+// LoadJs.load(`http://${currentHostname}:1337/socket.io/socket.io.js`).addEventListener("load", ()=>{
+//     // lancer le socket
+//     SocketClientApp.run(currentHostname);
+// });
 
+SocketClientApp.run(currentHostname);
 
 //teste function Mathilde
 console.log(radius);

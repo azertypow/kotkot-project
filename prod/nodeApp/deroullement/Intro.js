@@ -10,6 +10,7 @@ class Intro {
             setPlayerData_1.default.directive("displayMessage", { mode: "replace", message: "Bienvenue dans élise" }, currentPlayer.id);
             setPlayerData_1.default.directive("play-intro", "dataJoueurs/liaison/est.wav", currentPlayer.id);
         }
+        _GLOBAL_1.default.ARDUINO.portSerial.sendDirectiveToArduino("partie intro");
     }
 }
 exports.default = Intro;

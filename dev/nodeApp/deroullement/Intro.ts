@@ -22,5 +22,8 @@ export default class Intro{
             // [debug]
             SetPlayerData.directive("play-intro", "dataJoueurs/liaison/est.wav", currentPlayer.id);
         }
+
+        // envoyer a arduino
+        _GLOBAL.ARDUINO.portSerial.sendDirectiveToArduino("partie intro");
     }
 }

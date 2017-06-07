@@ -92,6 +92,9 @@ export default class PortSerial {
                             console.log("intro envoyé");
                         }, reconnectionDelay)
                     }
+                    else if (value === "intro ok"){
+                        this.arduino.emit("introyes");
+                    }
                     else{
                         // retour de l'arduino inconnu
                         console.log("retour de l'arduino incorrect");
@@ -191,6 +194,8 @@ export default class PortSerial {
     sendDirectiveToArduino(dataToSend: string){
         // si données deja recu, on peut envoyer les suivantes
         if(this.wasReceivedByArduino && this.wasTreatedByArduino && !this.anAnimationIsPlaying){
+
+            this.dataToSend_standBay = "";
 
             // notifier que des data sont envoyé à l'arduino (attente de reception et attente de traitement)
             this.wasReceivedByArduino = false;

@@ -50,6 +50,9 @@ class PortSerial {
                             console.log("intro envoyé");
                         }, reconnectionDelay);
                     }
+                    else if (value === "intro ok") {
+                        this.arduino.emit("introyes");
+                    }
                     else {
                         console.log("retour de l'arduino incorrect");
                         console.log(`tentative de nouvelle connection dans ${reconnectionDelay}`);
@@ -108,6 +111,7 @@ class PortSerial {
     }
     sendDirectiveToArduino(dataToSend) {
         if (this.wasReceivedByArduino && this.wasTreatedByArduino && !this.anAnimationIsPlaying) {
+            this.dataToSend_standBay = "";
             this.wasReceivedByArduino = false;
             this.wasTreatedByArduino = false;
             this.sendData(dataToSend);
