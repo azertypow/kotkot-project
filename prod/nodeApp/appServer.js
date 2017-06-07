@@ -9,7 +9,7 @@ class AppServer {
         const httpServer = staticServer_1.default.run(port);
         if (_GLOBAL_1.default.debug) {
             for (let i = 0; i < _GLOBAL_1.default.numberOfPlayers - 1; i++) {
-                child_process.exec("/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome\ --app=http://localhost:1337/prod/browser/players", function (error, stdout, stderr) {
+                child_process.exec("/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome\ --app=http://localhost:1337/prod/browser/players/", function (error, stdout, stderr) {
                     console.log('stdout: ' + stdout);
                     console.log('stderr: ' + stderr);
                     if (error !== null) {

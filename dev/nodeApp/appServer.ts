@@ -18,7 +18,7 @@ export default class AppServer {
         if(_GLOBAL.debug){
             for(let i: number = 0; i < _GLOBAL.numberOfPlayers - 1; i++){
                 // ouvrire les simulation d'app
-                child_process.exec("/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome\ --app=http://localhost:1337/prod/browser/players", function(error, stdout, stderr) {
+                child_process.exec("/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome\ --app=http://localhost:1337/prod/browser/players/", function(error, stdout, stderr) {
                     console.log('stdout: ' + stdout);
                     console.log('stderr: ' + stderr);
                     if (error !== null) {
