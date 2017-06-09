@@ -31,6 +31,7 @@ Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, LEDPIN, NEO_GRB + NEO_KH
 // directive sur les leds
 boolean run_Intro = false;
 boolean run_RandomPlacement = false;
+boolean run_partieIntro = false;
 
 // init string for serialPort
 String reception = "";
@@ -112,6 +113,19 @@ void loop() {
   }
   else if (run_RandomPlacement){
     play_random_placement();
+  }
+  else if(run_partieIntro){
+
+    // preparer leds
+    smoothIntroColors();
+
+    // afficher
+    if(Serial.available() > 0){
+      Serial.println("des donnees sont arrivees en cour de route");
+    }
+    else {
+      pixels.show();
+    }
   }
 
   //delay(3000);

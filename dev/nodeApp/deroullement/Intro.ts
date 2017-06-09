@@ -18,9 +18,9 @@ export default class Intro{
             const currentPlayer: Player = SetPlayerData.getPlayer(SocketControl.players, i);
 
             SetPlayerData.directive("displayMessage", {mode:"replace", message: "Bienvenue dans élise"}, currentPlayer.id);
-            //SetPlayerData.directive("play-intro", "pres_intro/narration/histoire.wav", currentPlayer.id);
+            SetPlayerData.directive("play-intro", "pres_intro/narration/histoire.wav", currentPlayer.id);
             // [debug]
-            SetPlayerData.directive("play-intro", "dataJoueurs/liaison/est.wav", currentPlayer.id);
+            //SetPlayerData.directive("play-intro", "dataJoueurs/liaison/est.wav", currentPlayer.id);
         }
 
         // envoyer a arduino

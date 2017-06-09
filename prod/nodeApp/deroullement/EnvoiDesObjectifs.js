@@ -8,21 +8,21 @@ class EnvoiDesObjectifs {
         for (let i = 0; i < playersProgressistes.length; i++) {
             const currentPlayer = playersProgressistes[i];
             setPlayerData_1.default.directive("clear", "", currentPlayer.id);
-            setPlayerData_1.default.directive("play-role", "dataJoueurs/liaison/est.wav", currentPlayer.id);
+            setPlayerData_1.default.directive("play-role", "intro/narration/roles/progressiste.wav", currentPlayer.id);
             setPlayerData_1.default.directive("setRoleOnGlobal", "Progressiste", currentPlayer.id);
         }
         const playersHumanistes = GetPlayer_1.default.role("Humaniste");
         for (let i = 0; i < playersHumanistes.length; i++) {
             const currentPlayer = playersHumanistes[i];
             setPlayerData_1.default.directive("clear", "", currentPlayer.id);
-            setPlayerData_1.default.directive("play-role", "dataJoueurs/liaison/est.wav", currentPlayer.id);
+            setPlayerData_1.default.directive("play-role", "intro/narration/roles/humaniste.wav", currentPlayer.id);
             setPlayerData_1.default.directive("setRoleOnGlobal", "Humaniste", currentPlayer.id);
         }
         const playersCyborgs = GetPlayer_1.default.role("Cyborg");
         for (let i = 0; i < playersCyborgs.length; i++) {
             const currentPlayer = playersCyborgs[i];
             setPlayerData_1.default.directive("clear", "", currentPlayer.id);
-            setPlayerData_1.default.directive("play-role", "dataJoueurs/liaison/est.wav", currentPlayer.id);
+            setPlayerData_1.default.directive("play-role", "intro/narration/roles/cyborg.wav", currentPlayer.id);
             setPlayerData_1.default.directive("setRoleOnGlobal", "Cyborg", currentPlayer.id);
         }
     }

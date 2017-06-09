@@ -21,9 +21,9 @@ export default class EnvoiDesObjectifs {
             SetPlayerData.directive("clear", "", currentPlayer.id);
 
             // lancer le role en son
-            //SetPlayerData.directive("play-role", "intro/narration/roles/progressiste.wav", currentPlayer.id);
+            SetPlayerData.directive("play-role", "intro/narration/roles/progressiste.wav", currentPlayer.id);
             // [debug]
-            SetPlayerData.directive("play-role", "dataJoueurs/liaison/est.wav", currentPlayer.id);
+            //SetPlayerData.directive("play-role", "dataJoueurs/liaison/est.wav", currentPlayer.id);
 
             // stocker le role de chacun sur son appareil dans sequence._global
             SetPlayerData.directive("setRoleOnGlobal", "Progressiste", currentPlayer.id);
@@ -41,9 +41,9 @@ export default class EnvoiDesObjectifs {
             SetPlayerData.directive("clear", "", currentPlayer.id);
 
             // effecaer interface précédente
-            //SetPlayerData.directive("play-role", "intro/narration/roles/humaniste.wav", currentPlayer.id);
+            SetPlayerData.directive("play-role", "intro/narration/roles/humaniste.wav", currentPlayer.id);
             // [debug]
-            SetPlayerData.directive("play-role", "dataJoueurs/liaison/est.wav", currentPlayer.id);
+            //SetPlayerData.directive("play-role", "dataJoueurs/liaison/est.wav", currentPlayer.id);
 
             // stocker le role de chacun sur son appareil dans sequence._global
             SetPlayerData.directive("setRoleOnGlobal", "Humaniste", currentPlayer.id);
@@ -61,9 +61,9 @@ export default class EnvoiDesObjectifs {
             SetPlayerData.directive("clear", "", currentPlayer.id);
 
             // effecaer interface précédente
-            //SetPlayerData.directive("play-role", "intro/narration/roles/cyborg.wav", currentPlayer.id);
+            SetPlayerData.directive("play-role", "intro/narration/roles/cyborg.wav", currentPlayer.id);
             // [debug]
-            SetPlayerData.directive("play-role", "dataJoueurs/liaison/est.wav", currentPlayer.id);
+            //SetPlayerData.directive("play-role", "dataJoueurs/liaison/est.wav", currentPlayer.id);
 
             // stocker le role de chacun sur son appareil dans sequence._global
             SetPlayerData.directive("setRoleOnGlobal", "Cyborg", currentPlayer.id);

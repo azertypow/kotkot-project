@@ -38,20 +38,20 @@ void lightUpPlayersStrip(){
 }
 
 // nombre de lois humaniste [LAWNUMBER]
-void lightUpHumanisteLeds(){
-  for(int i = 0; i < PLAYERSNUMBER; i++){
-    
-  }
-  pixels.show();
-}
+//void lightUpHumanisteLeds(){
+//  for(int i = 0; i < PLAYERSNUMBER; i++){
+//    
+//  }
+//  pixels.show();
+//}
 
 // nombre de lois progressiste [LAWNUMBER]
-void lightUpProgressisteLeds(){
-  for(int i = 0; i < PLAYERSNUMBER; i++){
-    
-  }
-  pixels.show();
-}
+//void lightUpProgressisteLeds(){
+//  for(int i = 0; i < PLAYERSNUMBER; i++){
+//    
+//  }
+//  pixels.show();
+//}
 
 // leds devant les jouers [1][PLAYERSNUMBER]
 void lightUpPlayersLeds(){
@@ -70,7 +70,7 @@ void lightUpCoefficientLeds(){
 }
 
 // led seul au centre
-void lightUpAloneCenterLed(int r, int g, int b){
-  pixels.setPixelColor(NUMPIXELS, pixels.Color(r,g,b));
-  pixels.show();
-}
+//void lightUpAloneCenterLed(int r, int g, int b){
+//  pixels.setPixelColor(NUMPIXELS, pixels.Color(r,g,b));
+//  pixels.show();
+//}

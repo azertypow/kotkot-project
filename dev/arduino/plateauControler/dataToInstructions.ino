@@ -22,5 +22,6 @@ void dataToInstructions(){
 
   else if(directive == "partie intro"){
     Serial.println("partie introoooooooooooo");
+    run_partieIntro = true;
   }
 }

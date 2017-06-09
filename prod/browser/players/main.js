@@ -1057,22 +1057,14 @@ var PlaySound = (function () {
     function PlaySound() {
     }
     PlaySound.playSound = function (soundName, serverCallback) {
-        if (navigator.userAgent.match(/(Macintosh)/)) {
-            var sound = document.querySelector("[data-name='" + soundName + "']");
-            console.log(sound);
-            sound.play();
-            console.log("play");
-            sound.onended = function () {
-                console.log("fini");
-                socketClientApp_1.default.socket.emit(serverCallback);
-            };
-        }
-        else {
-            var media_1 = new Media("audiofiles/" + soundName, function () {
-                console.log(media_1.getCurrentPosition());
-                console.log(media_1.getDuration());
-            });
-        }
+        var sound = document.querySelector("[data-name='" + soundName + "']");
+        console.log(sound);
+        sound.play();
+        console.log("play");
+        sound.onended = function () {
+            console.log("fini");
+            socketClientApp_1.default.socket.emit(serverCallback);
+        };
     };
     PlaySound.preloadSounds = function () {
         for (var i = 0; i < this.sounds.length; i++) {
